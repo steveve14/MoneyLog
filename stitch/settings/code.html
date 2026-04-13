@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "surface": "#f8f9fa",
+                  "on-tertiary-fixed-variant": "#005236",
+                  "on-tertiary-fixed": "#002113",
+                  "surface-container-high": "#e7e8e9",
+                  "on-surface-variant": "#464555",
+                  "on-secondary-container": "#006172",
+                  "error-container": "#ffdad6",
+                  "on-surface": "#191c1d",
+                  "on-background": "#191c1d",
+                  "primary-fixed": "#e2dfff",
+                  "surface-container-lowest": "#ffffff",
+                  "on-secondary-fixed": "#001f26",
+                  "inverse-surface": "#2e3132",
+                  "tertiary": "#005338",
+                  "background": "#f8f9fa",
+                  "surface-variant": "#e1e3e4",
+                  "on-primary-fixed-variant": "#3323cc",
+                  "tertiary-container": "#006e4b",
+                  "on-primary-container": "#dad7ff",
+                  "inverse-on-surface": "#f0f1f2",
+                  "secondary-fixed-dim": "#4cd7f6",
+                  "surface-container-low": "#f3f4f5",
+                  "tertiary-fixed": "#6ffbbe",
+                  "surface-dim": "#d9dadb",
+                  "outline": "#777587",
+                  "surface-tint": "#4d44e3",
+                  "on-tertiary": "#ffffff",
+                  "primary": "#3525cd",
+                  "surface-container": "#edeeef",
+                  "on-tertiary-container": "#67f4b7",
+                  "secondary-fixed": "#acedff",
+                  "on-secondary-fixed-variant": "#004e5c",
+                  "on-error-container": "#93000a",
+                  "on-error": "#ffffff",
+                  "surface-bright": "#f8f9fa",
+                  "primary-container": "#4f46e5",
+                  "surface-container-highest": "#e1e3e4",
+                  "secondary-container": "#57dffe",
+                  "on-secondary": "#ffffff",
+                  "on-primary-fixed": "#001f26",
+                  "inverse-primary": "#c3c0ff",
+                  "error": "#ba1a1a",
+                  "secondary": "#00687a",
+                  "tertiary-fixed-dim": "#4edea3",
+                  "on-primary": "#ffffff",
+                  "outline-variant": "#c7c4d8",
+                  "primary-fixed-dim": "#c3c0ff"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "fontFamily": {
+                  "headline": ["Manrope"],
+                  "body": ["Inter"],
+                  "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    .glass-ai {
+      background: rgba(87, 223, 254, 0.1);
+      backdrop-filter: blur(12px);
+    }
+    .no-line-card {
+      transition: transform 0.2s ease;
+    }
+    .no-line-card:active {
+      transform: scale(0.98);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-sm dark:shadow-none flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-indigo-600 dark:text-indigo-400 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-manrope font-bold text-xl tracking-tight text-indigo-700 dark:text-indigo-300">Settings</h1>
+</div>
+<div class="text-indigo-600 dark:text-indigo-400 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-2xl mx-auto space-y-10">
+<!-- Editorial Page Header -->
+<section>
+<p class="text-label text-indigo-600 font-semibold uppercase tracking-wider mb-2">Preferences</p>
+<h2 class="text-3xl font-headline font-bold text-on-surface leading-tight">Control your financial footprint</h2>
+</section>
+<!-- Data Management Group -->
+<section class="space-y-4">
+<h3 class="text-lg font-headline font-semibold px-2">Data Management</h3>
+<div class="bg-surface-container-low rounded-3xl p-2 space-y-2">
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex items-center justify-between no-line-card">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<p class="font-medium">Fixed Transactions</p>
+<p class="text-sm text-on-surface-variant">Manage your recurring bills</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex items-center justify-between no-line-card">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+</div>
+<div>
+<p class="font-medium">Category Management</p>
+<p class="text-sm text-on-surface-variant">Edit icons and colors</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Backup & Sync Group -->
+<section class="space-y-4">
+<h3 class="text-lg font-headline font-semibold px-2">Backup &amp; Sync</h3>
+<div class="bg-surface-container-low rounded-3xl p-6 space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="cloud_done">cloud_done</span>
+</div>
+<div>
+<p class="font-semibold text-primary">Google Drive Connected</p>
+<p class="text-sm text-on-surface-variant">Last backup: Oct 24, 2023</p>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-primary text-on-primary py-3 px-4 rounded-full font-medium flex items-center justify-center gap-2 active:scale-[0.96] transition-all bg-gradient-to-br from-primary to-primary-container">
+<span class="material-symbols-outlined text-sm" data-icon="backup">backup</span>
+            Backup Now
+          </button>
+<button class="flex-1 bg-surface-container-high text-on-surface-variant py-3 px-4 rounded-full font-medium flex items-center justify-center gap-2 active:scale-[0.96] transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="restore">restore</span>
+            Restore
+          </button>
+</div>
+</div>
+</section>
+<!-- AI Features (Editorial Glassmorphism) -->
+<section class="space-y-4">
+<h3 class="text-lg font-headline font-semibold px-2">AI Insights</h3>
+<div class="relative overflow-hidden rounded-3xl p-6 glass-ai border border-secondary-container/20">
+<div class="flex items-start justify-between">
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<p class="font-bold text-on-secondary-container tracking-tight">Gemini Nano Status</p>
+</div>
+<p class="text-on-secondary-container/80 text-sm max-w-[200px]">On-device processing active for enhanced privacy.</p>
+</div>
+<span class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold rounded-full uppercase tracking-tighter">Supported</span>
+</div>
+</div>
+</section>
+<!-- Security & Appearance Group -->
+<section class="space-y-4">
+<h3 class="text-lg font-headline font-semibold px-2">Device Preferences</h3>
+<div class="bg-surface-container-low rounded-3xl p-2 space-y-2">
+<!-- Security -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+</div>
+<p class="font-medium">Change PIN</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="fingerprint">fingerprint</span>
+</div>
+<div>
+<p class="font-medium">Biometrics</p>
+<p class="text-xs text-secondary font-semibold">Enabled</p>
+</div>
+</div>
+<div class="w-10 h-5 bg-primary rounded-full relative flex items-center px-1">
+<div class="w-3 h-3 bg-white rounded-full ml-auto"></div>
+</div>
+</div>
+<!-- Appearance -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex items-center justify-between mt-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</div>
+<div>
+<p class="font-medium">Appearance</p>
+<p class="text-xs text-on-surface-variant">System default</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</section>
+<!-- Danger Zone -->
+<section class="pt-6">
+<button class="w-full bg-error-container text-on-error-container py-4 rounded-2xl font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined" data-icon="delete_forever">delete_forever</span>
+        Reset All Data
+      </button>
+<p class="text-center text-xs text-on-surface-variant mt-4 px-10">This action is permanent and cannot be undone. All your logs, categories and settings will be deleted.</p>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-white dark:bg-slate-950 shadow-[0_-4px_20px_rgba(0,0,0,0.04)] rounded-t-[1.5rem] z-50">
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-all duration-200 active:scale-90">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-all duration-200 active:scale-90">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-all duration-200 active:scale-90">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-all duration-200 active:scale-90">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-200 rounded-2xl p-3 active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="settings" style="font-variation-settings: 'FILL' 1;">settings</span>
+</div>
+</nav>
+</body></html>
