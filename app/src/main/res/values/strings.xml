@@ -2,13 +2,6 @@
     <string name="app_name">MoneyLog</string>
     <string name="app_subtitle">THE FINANCIAL SANCTUARY</string>
 
-    <!-- PIN -->
-    <string name="pin_enter">PIN을 입력하세요</string>
-    <string name="pin_enter_subtitle">4자리 코드를 입력해주세요</string>
-    <string name="pin_setup">PIN 설정</string>
-    <string name="pin_confirm">PIN 확인</string>
-    <string name="pin_forgot">PIN을 잊으셨나요?</string>
-    <string name="biometric_unlock">지문으로 잠금 해제</string>
 
     <!-- 네비게이션 탭 -->
     <string name="nav_home">홈</string>
@@ -17,7 +10,6 @@
     <string name="nav_statistics">통계</string>
     <string name="nav_settings">설정</string>
     <string name="nav_ai">AI 분석</string>
-    <string name="nav_recurring">고정</string>
     <string name="nav_recurring_form">고정 거래</string>
     <string name="nav_category">카테고리</string>
 
@@ -122,10 +114,6 @@
     <string name="settings_gemini_status">Gemini Nano 상태</string>
     <string name="settings_gemini_desc">향상된 프라이버시를 위한 온디바이스 분석.</string>
     <string name="settings_device_preferences">기기 설정</string>
-    <string name="settings_change_pin">PIN 변경</string>
-    <string name="settings_biometrics">생체인증</string>
-    <string name="settings_appearance">화면 표시</string>
-    <string name="settings_appearance_system">시스템 기본값</string>
     <string name="settings_reset_all_data">모든 데이터 초기화</string>
     <string name="settings_reset_warning">이 작업은 되돌릴 수 없습니다. 모든 기록, 카테고리, 설정이 삭제됩니다.</string>
     <string name="settings_language">언어</string>

@@ -118,7 +118,8 @@
 
 - [x] `DateUtils.java` — 날짜 포맷, 월 계산, yearMonth 헬퍼
 - [x] `FormatUtils.java` — 금액 콤마 포맷, 퍼센트 포맷, 입력 파싱
-- [x] `CryptoUtils.java` — PBKDF2WithHmacSHA256 PIN 해시/검증 (salt + 120k iterations + timing-safe 비교)
+- [x] `IconHelper.java` — 카테고리 아이콘 헬퍼
+- [x] `YearMonthPickerDialog.java` — 년/월 선택 다이얼로그
 
 ### 2-7. 거래 관련 UI (F02)
 
@@ -147,17 +148,11 @@
 > **디자인 참조**: stitch/fixed_transactions/
 
 - [x] `RecurringViewModel.java` — 반복 거래 ViewModel
-- [x] `RecurringFragment.java` — 고정 수입·지출 관리 화면
-  - "MONTHLY COMMITMENT" 헤더 카드 — primary 그라디언트 배경, 총 고정 지출 금액, "N items scheduled this month"
-  - "Fixed Expenses" / "Fixed Income" 섹션 (Headline, 우측 "N ITEMS" 카운터)
-  - 반복 거래 카드: 이름 + "매월 N일" + DEBIT/CREDIT 라벨 + 활성/비활성 토글 스위치
-  - 하단 **AI Insight 카드**: 고정 지출 후 남은 여유 예산 분석
 - [x] `RecurringFormFragment.java` — 반복 거래 등록/수정 폼 (금액, 카테고리, 매월 N일, 메모, 결제수단)
-- [x] `item_recurring.xml` — 반복 거래 카드 레이아웃
-- [x] `fragment_recurring.xml` — 반복 거래 목록 레이아웃
 - [x] `fragment_recurring_form.xml` — 반복 거래 폼 레이아웃
 - [x] 반복 거래 수정 — 편집 모드 (loadById)
 - [x] 반복 거래 비활성화/활성화 토글
+- [ ] `RecurringFragment.java` — 고정 수입·지출 관리 목록 화면 (미구현)
 
 ### 3-2. WorkManager 자동 실행
 
@@ -249,18 +244,13 @@
 - [ ] 자동 백업 (WorkManager 주기적 실행: 매일/매주) — P2
 - [ ] 백업 파일 AES 암호화 — P2
 
-### 5-3. 앱 잠금 (F01)
+### 5-3. 설정 화면
 
-- [x] `PinLockFragment.java` + `fragment_pin_lock.xml` — PIN 입력/설정 화면
-- [x] PIN 4자리 설정 (EncryptedSharedPreferences + Android Keystore)
-- [x] PBKDF2WithHmacSHA256 해시 (salt + 120k iterations + timing-safe 비교)
-- [x] 브루트포스 보호 (5회 실패 → 5분 잠금)
 - [x] `SettingsFragment.java` + `fragment_settings.xml` — 설정 화면
 - [x] `BackupRepository.java` — stub 구현
-- [ ] 생체인증 (AndroidX Biometric) — P1
-- [ ] 자동 잠금 (5분 비활성) — P1
-- [ ] PIN 변경 (기존 PIN 확인 후) — P1
-- [ ] PIN 초기화 (Google 계정 인증) — P1
+- [x] 언어 선택 (한국어/English/日本語)
+- [x] 금액 텍스트 표시 모드 토글
+- [x] 카테고리 관리 네비게이션
 
 ### 5-4. 설정 화면 (F10)
 
@@ -279,9 +269,8 @@
     - Gemini Nano Status 카드 (글래스모피즘) + "SUPPORTED"/"UNSUPPORTED" 뱃지
     - "On-device processing active for enhanced privacy." 설명
   - **Device Preferences 섹션**:
-    - "Change PIN" → PIN 변경 화면
-    - "Biometrics" 토글 (Enabled/Disabled)
-    - "Appearance" 드롭다운 (System default / Light / Dark)
+    - "Language" 선택 (한국어/English/日本語)
+    - "Amount Text Mode" 토글
   - **위험 영역**:
     - "Reset All Data" 빨간 버튼 (error-container 배경)
     - "This action is permanent and cannot be undone." 경고 텍스트
@@ -304,7 +293,8 @@
 ### 6-1. Gemini Nano 연동 (F08)
 
 - [x] `AiSummaryRepository.java` — scaffold + isAvailable() 체크
-- [x] `AiSummaryViewModel.java` + `AiSummaryFragment.java` + `fragment_ai_summary.xml`
+- [x] `AiSummaryViewModel.java` — 월 선택 + 거래 데이터 기반 프롬프트 생성
+- [x] `AiSummaryFragment.java` + `fragment_ai_summary.xml` — 월 네비게이션 UI 포함
 - [ ] Google AI Edge SDK 의존성 추가 (`libs.versions.toml` 주석 해제)
 - [ ] `AndroidManifest.xml`에 AICore 메타데이터 추가
 - [ ] `AiSummaryRepository.java` — Gemini Nano 호출 + 폴백 로직
@@ -335,22 +325,23 @@
 ## 유틸리티 & 공통
 
 - [x] `DateUtils.java` — 날짜 포맷 유틸리티 (yyyy-MM-dd, 월 시작/끝일 계산)
-- [x] `CryptoUtils.java` — PBKDF2WithHmacSHA256 PIN 해시 (salt + 120k iterations + timing-safe)
 - [x] `FormatUtils.java` — 금액 포맷 (1,000 단위 콤마 + "원" 단위 표시)
+- [x] `IconHelper.java` — 카테고리 아이콘 리소스 매핑
+- [x] `YearMonthPickerDialog.java` — 년/월 선택 다이얼로그 (NumberPicker 기반)
+- [x] `LocaleHelper.java` — 다국어 지원 (한국어/영어/일본어)
 
 ---
 
 ## 보안 강화 (OWASP Mobile Top 10 대응) ✅ 완료
 
-- [x] **CRITICAL**: `CryptoUtils.java` — SHA-256 raw hash → PBKDF2WithHmacSHA256 + salt(16B) + 120k iterations
-- [x] **CRITICAL**: `CryptoUtils.verifyPin()` — `String.equals()` → `MessageDigest.isEqual()` (timing-safe)
-- [x] **HIGH**: `PinLockFragment.java` — 브루트포스 보호 (5회 실패 → 5분 잠금, EncryptedSharedPreferences 에 저장)
 - [x] **HIGH**: `RecurringWorker.java` — 민감 재무 데이터 Log.d/Log.e 제거
 - [x] **양호**: `backup_rules.xml` + `data_extraction_rules.xml` — DB/SharedPrefs 백업 제외
 - [x] **양호**: Room @Query + Prepared statements — SQL Injection 방어
 - [x] **양호**: Release `isMinifyEnabled=true` + R8 난독화
 - [x] **양호**: WebView 미사용 — XSS 위험 없음
 - [x] **양호**: 하드코드된 시크릿 없음
+
+> ❌ PIN 잠금 기능 제거됨 (2026-04-13) — CryptoUtils.java, PinLockFragment 관련 코드 전체 삭제
 
 ---
 
@@ -363,7 +354,6 @@
 - [ ] `TransactionRepository` 단위 테스트
 - [ ] `RecurringRepository` — 자동 실행 로직 테스트 (밀린 달 처리)
 - [ ] `BackupRepository` — 백업 & 복원 테스트
-- [ ] `CryptoUtils` — PBKDF2 해시/검증 테스트
 - [ ] Room 마이그레이션 테스트 (`room-testing`)
 
 ---
@@ -374,7 +364,6 @@
 |---|---|---|
 | 디자인 시스템 | `stitch/indigo_ledger/DESIGN.md` | "The Sovereign Ledger" 전체 디자인 규칙 |
 | 전체 명세 | `stitch/moneylog_ui_design_specification.html` | UI 설계 명세 HTML |
-| PIN 잠금 | `stitch/pin_lock/code.html` | PIN 입력 화면 |
 | 대시보드 | `stitch/dashboard/code.html` | 메인 대시보드 |
 | 거래 등록 | `stitch/add_transaction/code.html` | 거래 등록 폼 |
 | 거래 내역 | `stitch/history/code.html` | 거래 목록 |

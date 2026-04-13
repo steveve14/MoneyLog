@@ -2,13 +2,6 @@
     <string name="app_name">MoneyLog</string>
     <string name="app_subtitle">THE FINANCIAL SANCTUARY</string>
 
-    <!-- PIN -->
-    <string name="pin_enter">PINを入力してください</string>
-    <string name="pin_enter_subtitle">4桁のコードを入力してください</string>
-    <string name="pin_setup">PINの設定</string>
-    <string name="pin_confirm">PINの確認</string>
-    <string name="pin_forgot">PINをお忘れですか？</string>
-    <string name="biometric_unlock">指紋でロック解除</string>
 
     <!-- ナビゲーション -->
     <string name="nav_home">ホーム</string>
@@ -17,7 +10,6 @@
     <string name="nav_statistics">統計</string>
     <string name="nav_settings">設定</string>
     <string name="nav_ai">AI分析</string>
-    <string name="nav_recurring">固定</string>
     <string name="nav_recurring_form">固定取引</string>
     <string name="nav_category">カテゴリ</string>
 
@@ -119,10 +111,6 @@
     <string name="settings_gemini_status">Gemini Nanoステータス</string>
     <string name="settings_gemini_desc">プライバシー向上のためオンデバイス処理が有効です。</string>
     <string name="settings_device_preferences">デバイス設定</string>
-    <string name="settings_change_pin">PIN変更</string>
-    <string name="settings_biometrics">生体認証</string>
-    <string name="settings_appearance">表示設定</string>
-    <string name="settings_appearance_system">システムデフォルト</string>
     <string name="settings_reset_all_data">すべてのデータをリセット</string>
     <string name="settings_reset_warning">この操作は元に戻せません。すべての記録、カテゴリ、設定が削除されます。</string>
     <string name="settings_language">言語</string>

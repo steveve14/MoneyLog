@@ -63,17 +63,6 @@
         android:name="com.moneylog.ui.fragment.StatisticsFragment"
         android:label="@string/nav_statistics" />
 
-    <!-- Phase 3: 반복 거래 관리 -->
-    <fragment
-        android:id="@+id/recurringFragment"
-        android:name="com.moneylog.ui.fragment.RecurringFragment"
-        android:label="@string/nav_recurring">
-
-        <action
-            android:id="@+id/action_recurring_to_form"
-            app:destination="@id/recurringFormFragment" />
-    </fragment>
-
     <fragment
         android:id="@+id/recurringFormFragment"
         android:name="com.moneylog.ui.fragment.RecurringFormFragment"
@@ -91,11 +80,6 @@
         android:name="com.moneylog.ui.fragment.CategoryFragment"
         android:label="@string/nav_category" />
 
-    <!-- Phase 5: PIN 잠금 -->
-    <fragment
-        android:id="@+id/pinLockFragment"
-        android:name="com.moneylog.ui.fragment.PinLockFragment"
-        android:label="PIN" />
 
     <!-- Phase 5: 설정 -->
     <fragment
