@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class TransactionFormFragment extends Fragment {
     private String selectedRecurringInterval = "MONTHLY";
     private boolean isEdit = false;
     private TransactionEntity editingTx = null;
+    private boolean categoriesExpanded = false;
 
     @Nullable
     @Override
@@ -179,6 +181,7 @@ public class TransactionFormFragment extends Fragment {
 
     private void buildCategoryChips(List<CategoryEntity> allCategories) {
         binding.chipGroupCategory.removeAllViews();
+        categoriesExpanded = false;
         for (CategoryEntity cat : allCategories) {
             if (!cat.type.equals(selectedType)) continue;
             Chip chip = new Chip(requireContext());
@@ -188,6 +191,38 @@ public class TransactionFormFragment extends Fragment {
             chip.setOnClickListener(v -> selectedCategoryId = cat.id);
             binding.chipGroupCategory.addView(chip);
         }
+
+        int collapsedHeight = (int) (48 * getResources().getDisplayMetrics().density);
+        binding.chipGroupCategory.getLayoutParams().height = collapsedHeight;
+        binding.chipGroupCategory.requestLayout();
+
+        binding.chipGroupCategory.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        binding.chipGroupCategory.getViewTreeObserver()
+                                .removeOnGlobalLayoutListener(this);
+                        int fullHeight = binding.chipGroupCategory.getMeasuredHeight();
+                        if (fullHeight > collapsedHeight) {
+                            binding.tvExpandCategories.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.tvExpandCategories.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+        binding.tvExpandCategories.setOnClickListener(v -> {
+            categoriesExpanded = !categoriesExpanded;
+            ViewGroup.LayoutParams lp = binding.chipGroupCategory.getLayoutParams();
+            if (categoriesExpanded) {
+                lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                binding.tvExpandCategories.setText(getString(R.string.collapse_categories));
+            } else {
+                lp.height = collapsedHeight;
+                binding.tvExpandCategories.setText(getString(R.string.expand_categories));
+            }
+            binding.chipGroupCategory.setLayoutParams(lp);
+        });
     }
 
     private void showDatePicker() {

@@ -22,13 +22,21 @@
             android:paddingTop="24dp"
             android:paddingBottom="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_preferences"
-                android:textAppearance="?attr/textAppearanceLabelSmall"
-                android:textColor="?attr/colorPrimary"
-                android:letterSpacing="0.15" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/settings_preferences"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
+                    android:textColor="?attr/colorPrimary"
+                    android:letterSpacing="0.15" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -330,59 +338,6 @@
                         android:id="@+id/switchAmountText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- ── 보안 설정 ────────────────────────────────────── -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="보안"
-            android:textAppearance="?attr/textAppearanceLabelMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:paddingHorizontal="24dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/md_theme_surface_container_low">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- PIN 변경 -->
-                <LinearLayout
-                    android:id="@+id/rowChangePin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="16dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackground">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/settings_change_pin"
-                        android:textAppearance="?attr/textAppearanceBodyLarge" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_chevron_right_24"
-                        android:tint="?attr/colorOnSurfaceVariant" />
                 </LinearLayout>
 
             </LinearLayout>

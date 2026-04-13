@@ -93,9 +93,24 @@
             android:id="@+id/chip_group_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:maxHeight="48dp"
+            android:clipChildren="true"
+            android:clipToPadding="true"
             app:singleSelection="true"
             app:selectionRequired="true" />
+
+        <TextView
+            android:id="@+id/tv_expand_categories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="더보기 ▼"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="4dp"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone" />
 
         <!-- 날짜 선택 -->
         <TextView

@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.moneylog.data.db.dao.CategorySummary;
+import com.moneylog.data.db.dao.DailySummary;
 import com.moneylog.data.db.dao.MonthlySummary;
 import com.moneylog.data.db.entity.CategoryEntity;
 import com.moneylog.data.db.entity.TransactionEntity;
@@ -40,6 +41,9 @@ public class TransactionViewModel extends ViewModel {
     // ── 카테고리별 지출 ───────────────────────────────────────
     public final LiveData<List<CategorySummary>> categoryExpenses;
 
+    // ── 일별 수입·지출 합계 ──────────────────────────────────
+    public final LiveData<List<DailySummary>> dailySummary;
+
     // ── 전체 카테고리 ─────────────────────────────────────────
     public final LiveData<List<CategoryEntity>> categories;
 
@@ -62,6 +66,8 @@ public class TransactionViewModel extends ViewModel {
             ym -> transactionRepo.getMonthlySummary(ym));
         categoryExpenses = Transformations.switchMap(selectedYearMonth,
             ym -> transactionRepo.getMonthlyExpenseByCategory(ym));
+        dailySummary = Transformations.switchMap(selectedYearMonth,
+            ym -> transactionRepo.getDailySummary(ym));
         categories = categoryRepo.getAll();
     }
 
@@ -89,6 +95,10 @@ public class TransactionViewModel extends ViewModel {
     public void nextMonth() {
         String cur = selectedYearMonth.getValue();
         if (cur != null) selectedYearMonth.setValue(DateUtils.nextMonth(cur));
+    }
+
+    public void setYearMonth(String yearMonth) {
+        selectedYearMonth.setValue(yearMonth);
     }
 
     public void setTypeFilter(String filter) {

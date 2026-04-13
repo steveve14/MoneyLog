@@ -19,7 +19,9 @@ import com.moneylog.databinding.FragmentStatisticsBinding;
 import com.moneylog.ui.viewmodel.StatisticsViewModel;
 import com.moneylog.util.DateUtils;
 import com.moneylog.util.FormatUtils;
+import com.moneylog.util.YearMonthPickerDialog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,12 @@ public class StatisticsFragment extends Fragment {
 
         binding.btnPrevMonth.setOnClickListener(v -> viewModel.goToPreviousMonth());
         binding.btnNextMonth.setOnClickListener(v -> viewModel.goToNextMonth());
+        binding.tvYearMonth.setOnClickListener(v -> {
+            String current = viewModel.getSelectedYearMonth().getValue();
+            if (current != null) {
+                YearMonthPickerDialog.show(requireContext(), current, viewModel::setYearMonth);
+            }
+        });
 
         viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym ->
                 binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym)));
@@ -79,10 +87,19 @@ public class StatisticsFragment extends Fragment {
     private void renderBreakdown(List<CategorySummary> summaries) {
         binding.llCategoryBreakdown.removeAllViews();
         if (summaries == null || summaries.isEmpty()) {
+            binding.pieChart.setVisibility(View.GONE);
             binding.tvNoData.setVisibility(View.VISIBLE);
             return;
         }
         binding.tvNoData.setVisibility(View.GONE);
+        binding.pieChart.setVisibility(View.VISIBLE);
+
+        // PieChart 데이터 설정
+        List<Float> pieValues = new ArrayList<>();
+        for (CategorySummary cs : summaries) {
+            pieValues.add((float) cs.total);
+        }
+        binding.pieChart.setData(pieValues);
 
         long totalExpense = 0;
         for (CategorySummary cs : summaries) totalExpense += cs.total;

@@ -59,4 +59,8 @@ public class DashboardViewModel extends ViewModel {
             selectedYearMonth.setValue(DateUtils.nextMonth(current));
         }
     }
+
+    public void setYearMonth(String yearMonth) {
+        selectedYearMonth.setValue(yearMonth);
+    }
 }

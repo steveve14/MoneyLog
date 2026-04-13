@@ -78,10 +78,11 @@ public class PieChartView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w = MeasureSpec.getSize(widthMeasureSpec);
-        int h = MeasureSpec.getSize(heightMeasureSpec);
+        int defaultSize = (int) (160 * getResources().getDisplayMetrics().density);
+        int w = resolveSize(defaultSize, widthMeasureSpec);
+        int h = resolveSize(defaultSize, heightMeasureSpec);
         int size = Math.min(w, h);
-        if (size == 0) size = (int) (160 * getResources().getDisplayMetrics().density);
+        if (size <= 0) size = defaultSize;
         setMeasuredDimension(size, size);
     }
 

@@ -1,9 +1,13 @@
 package com.moneylog.ui.fragment;
 
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.moneylog.R;
+import com.moneylog.data.db.dao.DailySummary;
 import com.moneylog.data.db.dao.MonthlySummary;
 import com.moneylog.data.db.entity.CategoryEntity;
 import com.moneylog.data.db.entity.TransactionEntity;
@@ -22,12 +27,15 @@ import com.moneylog.ui.adapter.TransactionAdapter;
 import com.moneylog.ui.viewmodel.TransactionViewModel;
 import com.moneylog.util.DateUtils;
 import com.moneylog.util.FormatUtils;
+import com.moneylog.util.YearMonthPickerDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.DayOfWeek;
+import java.time.YearMonth;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -39,6 +47,7 @@ public class TransactionFragment extends Fragment
     private TransactionViewModel viewModel;
     private TransactionAdapter adapter;
     private Map<Long, CategoryEntity> categoryMap = new HashMap<>();
+    private boolean calendarExpanded = false;
 
     @Nullable
     @Override
@@ -63,6 +72,12 @@ public class TransactionFragment extends Fragment
         // 월 선택 헤더
         binding.btnPrevMonth.setOnClickListener(v -> viewModel.previousMonth());
         binding.btnNextMonth.setOnClickListener(v -> viewModel.nextMonth());
+        binding.tvYearMonth.setOnClickListener(v -> {
+            String current = viewModel.getSelectedYearMonth().getValue();
+            if (current != null) {
+                YearMonthPickerDialog.show(requireContext(), current, viewModel::setYearMonth);
+            }
+        });
 
         // 타입 필터 칩
         binding.chipAll.setOnClickListener(v -> viewModel.setTypeFilter("ALL"));
@@ -73,6 +88,12 @@ public class TransactionFragment extends Fragment
         // FAB → TransactionFormFragment
         binding.fabAdd.setOnClickListener(v ->
             Navigation.findNavController(v).navigate(R.id.action_transaction_to_form));
+
+        // 달력 토글
+        binding.btnToggleCalendar.setOnClickListener(v -> {
+            calendarExpanded = !calendarExpanded;
+            binding.layoutCalendar.setVisibility(calendarExpanded ? View.VISIBLE : View.GONE);
+        });
 
         // -- Observers ---
         viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym ->
@@ -94,6 +115,11 @@ public class TransactionFragment extends Fragment
             binding.tvExpense.setText(FormatUtils.formatAmountWithUnit(summary.totalExpense));
             binding.tvBalance.setText(
                 FormatUtils.formatAmountWithUnit(summary.totalIncome - summary.totalExpense));
+        });
+
+        viewModel.dailySummary.observe(getViewLifecycleOwner(), dailyList -> {
+            String ym = viewModel.getSelectedYearMonth().getValue();
+            if (ym != null) renderCalendar(ym, dailyList);
         });
     }
 
@@ -142,5 +168,79 @@ public class TransactionFragment extends Fragment
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void renderCalendar(String yearMonthStr, List<DailySummary> dailyList) {
+        binding.llCalendarGrid.removeAllViews();
+        YearMonth ym = YearMonth.parse(yearMonthStr);
+        int daysInMonth = ym.lengthOfMonth();
+        // 1일의 요일: SUNDAY=7 → 0, MONDAY=1→1, ...
+        DayOfWeek firstDow = ym.atDay(1).getDayOfWeek();
+        int startOffset = firstDow.getValue() % 7; // SUN=0
+
+        // 일별 합계 맵: day(1~31) → DailySummary
+        Map<Integer, DailySummary> dayMap = new HashMap<>();
+        if (dailyList != null) {
+            for (DailySummary ds : dailyList) {
+                if (ds.date != null && ds.date.length() >= 10) {
+                    int day = Integer.parseInt(ds.date.substring(8, 10));
+                    dayMap.put(day, ds);
+                }
+            }
+        }
+
+        int day = 1;
+        int totalCells = startOffset + daysInMonth;
+        int weeks = (totalCells + 6) / 7;
+
+        for (int w = 0; w < weeks; w++) {
+            LinearLayout weekRow = new LinearLayout(requireContext());
+            weekRow.setOrientation(LinearLayout.HORIZONTAL);
+            weekRow.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            for (int d = 0; d < 7; d++) {
+                int cellIndex = w * 7 + d;
+                LinearLayout cell = new LinearLayout(requireContext());
+                cell.setOrientation(LinearLayout.VERTICAL);
+                cell.setGravity(Gravity.CENTER_HORIZONTAL);
+                LinearLayout.LayoutParams cellLp = new LinearLayout.LayoutParams(
+                        0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+                cellLp.setMargins(1, 2, 1, 2);
+                cell.setLayoutParams(cellLp);
+
+                if (cellIndex >= startOffset && day <= daysInMonth) {
+                    // 날짜 텍스트
+                    TextView tvDay = new TextView(requireContext());
+                    tvDay.setText(String.valueOf(day));
+                    tvDay.setGravity(Gravity.CENTER);
+                    tvDay.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    if (d == 0) tvDay.setTextColor(requireContext().getColor(R.color.expense_color));
+                    else if (d == 6) tvDay.setTextColor(requireContext().getColor(R.color.income_color));
+                    cell.addView(tvDay);
+
+                    // 일별 합계
+                    DailySummary ds = dayMap.get(day);
+                    if (ds != null) {
+                        long net = ds.totalIncome - ds.totalExpense;
+                        TextView tvSum = new TextView(requireContext());
+                        tvSum.setGravity(Gravity.CENTER);
+                        tvSum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+                        tvSum.setMaxLines(1);
+                        if (net >= 0) {
+                            tvSum.setText("+" + FormatUtils.formatAmount(net));
+                            tvSum.setTextColor(requireContext().getColor(R.color.income_color));
+                        } else {
+                            tvSum.setText(FormatUtils.formatAmount(net));
+                            tvSum.setTextColor(requireContext().getColor(R.color.expense_color));
+                        }
+                        cell.addView(tvSum);
+                    }
+                    day++;
+                }
+                weekRow.addView(cell);
+            }
+            binding.llCalendarGrid.addView(weekRow);
+        }
     }
 }

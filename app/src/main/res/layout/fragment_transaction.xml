@@ -6,177 +6,261 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
-    <!-- 월 선택 헤더 -->
-    <LinearLayout
-        android:id="@+id/layout_month_header"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingVertical="4dp">
-
-        <ImageButton
-            android:id="@+id/btn_prev_month"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_chevron_left_24"
-            android:contentDescription="이전 달" />
-
-        <TextView
-            android:id="@+id/tv_year_month"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-        <ImageButton
-            android:id="@+id/btn_next_month"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_chevron_right_24"
-            android:contentDescription="다음 달" />
-    </LinearLayout>
-
-    <!-- 요약 카드 -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_summary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="64dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:strokeWidth="0dp">
+        android:background="?attr/colorSurface"
+        app:elevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingVertical="16dp">
+            android:orientation="vertical"
+            app:layout_scrollFlags="scroll|enterAlways|snap">
 
+            <!-- ── 헤더 ───────────────────────────────────────────── -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:id="@+id/layout_month_header"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:paddingHorizontal="24dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="8dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="수입"
-                    android:textAppearance="?attr/textAppearanceLabelSmall"
-                    android:textColor="?attr/colorOnSurfaceVariant" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/tv_income"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/statistics_financial_insight_history"
+                        android:textAppearance="?attr/textAppearanceLabelSmall"
+                        android:textColor="?attr/colorPrimary"
+                        android:letterSpacing="0.15" />
+
+                    <ImageButton
+                        android:id="@+id/btn_toggle_calendar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_calendar_24"
+                        android:contentDescription="달력 열기/닫기" />
+                </LinearLayout>
+
+                <!-- 월 네비게이션 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0원"
-                    android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:textColor="@color/income_color" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="4dp">
+
+                    <ImageButton
+                        android:id="@+id/btn_prev_month"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_chevron_left_24"
+                        android:contentDescription="이전 달" />
+
+                    <TextView
+                        android:id="@+id/tv_year_month"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAppearance="?attr/textAppearanceTitleLarge"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/btn_next_month"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_chevron_right_24"
+                        android:contentDescription="다음 달" />
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- ── 달력 영역 (기본 숨김) ──────────────────────────── -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:id="@+id/layout_calendar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:visibility="gone"
+                android:paddingHorizontal="8dp"
+                android:paddingBottom="8dp">
 
-                <TextView
+                <!-- 요일 헤더 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="4dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="일" android:textAppearance="?attr/textAppearanceLabelSmall" android:textColor="@color/expense_color" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="월" android:textAppearance="?attr/textAppearanceLabelSmall" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="화" android:textAppearance="?attr/textAppearanceLabelSmall" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="수" android:textAppearance="?attr/textAppearanceLabelSmall" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="목" android:textAppearance="?attr/textAppearanceLabelSmall" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="금" android:textAppearance="?attr/textAppearanceLabelSmall" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="토" android:textAppearance="?attr/textAppearanceLabelSmall" android:textColor="@color/income_color" />
+                </LinearLayout>
+
+                <!-- 달력 그리드 (코드에서 동적 생성) -->
+                <LinearLayout
+                    android:id="@+id/ll_calendar_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- ── 요약 카드 ─────────────────────────────────────── -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="16dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="수입"
+                            android:textAppearance="?attr/textAppearanceLabelSmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+
+                        <TextView
+                            android:id="@+id/tv_income"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0원"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:textColor="@color/income_color" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="지출"
+                            android:textAppearance="?attr/textAppearanceLabelSmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+
+                        <TextView
+                            android:id="@+id/tv_expense"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0원"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:textColor="@color/expense_color" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="잔액"
+                            android:textAppearance="?attr/textAppearanceLabelSmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+
+                        <TextView
+                            android:id="@+id/tv_balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0원"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:textColor="?attr/colorPrimary" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ── 타입 필터 ─────────────────────────────────────── -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="전체"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:checked="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_expense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="지출"
-                    android:textAppearance="?attr/textAppearanceLabelSmall"
-                    android:textColor="?attr/colorOnSurfaceVariant" />
+                    style="@style/Widget.Material3.Chip.Filter" />
 
-                <TextView
-                    android:id="@+id/tv_expense"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_income"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0원"
-                    android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:textColor="@color/expense_color" />
-            </LinearLayout>
+                    android:text="수입"
+                    style="@style/Widget.Material3.Chip.Filter" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <TextView
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_recurring"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="잔액"
-                    android:textAppearance="?attr/textAppearanceLabelSmall"
-                    android:textColor="?attr/colorOnSurfaceVariant" />
-
-                <TextView
-                    android:id="@+id/tv_balance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0원"
-                    android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:textColor="?attr/colorPrimary" />
-            </LinearLayout>
+                    android:text="@string/filter_recurring_expense"
+                    style="@style/Widget.Material3.Chip.Filter" />
+            </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- 타입 필터 -->
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chip_group_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
-        android:layout_marginStart="16dp"
-        app:singleSelection="true"
-        app:selectionRequired="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="전체"
-            style="@style/Widget.Material3.Chip.Filter"
-            android:checked="true" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_expense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지출"
-            style="@style/Widget.Material3.Chip.Filter" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_income"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="수입"
-            style="@style/Widget.Material3.Chip.Filter" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_recurring"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/filter_recurring_expense"
-            style="@style/Widget.Material3.Chip.Filter" />
-    </com.google.android.material.chip.ChipGroup>
-
-    <!-- 거래 목록 -->
+    <!-- ── 거래 목록 ─────────────────────────────────────────── -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_transactions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
         android:paddingHorizontal="16dp"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false" />
+        android:paddingBottom="80dp"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <!-- 빈 상태 -->
     <TextView

@@ -56,4 +56,13 @@ public interface TransactionDao {
            "WHERE category_id = :categoryId AND date LIKE :yearMonth || '%' " +
            "AND type = 'EXPENSE' AND is_deleted = 0")
     long getMonthlyExpenseForCategory(long categoryId, String yearMonth);
+
+    /** 일별 수입·지출 합계 */
+    @Query("SELECT date, " +
+           "COALESCE(SUM(CASE WHEN type = 'INCOME'  THEN amount ELSE 0 END), 0) AS totalIncome, " +
+           "COALESCE(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END), 0) AS totalExpense " +
+           "FROM transactions " +
+           "WHERE date LIKE :yearMonth || '%' AND is_deleted = 0 " +
+           "GROUP BY date ORDER BY date")
+    LiveData<List<DailySummary>> getDailySummary(String yearMonth);
 }

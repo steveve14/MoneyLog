@@ -56,9 +56,6 @@ public class SettingsFragment extends Fragment {
         binding.rowCategory.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.categoryFragment));
 
-        binding.rowChangePin.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.pinLockFragment));
-
         binding.rowBackupNow.setOnClickListener(v -> {
             Toast.makeText(requireContext(), "백업 중...", Toast.LENGTH_SHORT).show();
             backupRepository.backupToGoogleDrive(new BackupRepository.BackupCallback() {

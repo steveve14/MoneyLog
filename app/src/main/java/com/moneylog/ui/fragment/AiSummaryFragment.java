@@ -11,8 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.moneylog.R;
+import com.moneylog.data.db.entity.TransactionEntity;
 import com.moneylog.databinding.FragmentAiSummaryBinding;
 import com.moneylog.ui.viewmodel.AiSummaryViewModel;
+import com.moneylog.util.YearMonthPickerDialog;
+
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -21,6 +25,7 @@ public class AiSummaryFragment extends Fragment {
 
     private FragmentAiSummaryBinding binding;
     private AiSummaryViewModel viewModel;
+    private List<TransactionEntity> currentTransactions;
 
     @Nullable
     @Override
@@ -35,6 +40,27 @@ public class AiSummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(AiSummaryViewModel.class);
+
+        // 월 선택 UI
+        viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym -> {
+            if (ym != null) {
+                String[] parts = ym.split("-");
+                binding.tvYearMonth.setText(parts[0] + "년 " + Integer.parseInt(parts[1]) + "월");
+            }
+        });
+
+        binding.btnPrevMonth.setOnClickListener(v -> viewModel.prevMonth());
+        binding.btnNextMonth.setOnClickListener(v -> viewModel.nextMonth());
+        binding.tvYearMonth.setOnClickListener(v -> {
+            String current = viewModel.getSelectedYearMonth().getValue();
+            if (current != null) {
+                YearMonthPickerDialog.show(requireContext(), current, viewModel::setYearMonth);
+            }
+        });
+
+        // 거래 데이터 관찰
+        viewModel.monthlyTransactions.observe(getViewLifecycleOwner(), transactions ->
+                currentTransactions = transactions);
 
         viewModel.getIsAvailable().observe(getViewLifecycleOwner(), available -> {
             if (Boolean.TRUE.equals(available)) {
@@ -57,7 +83,7 @@ public class AiSummaryFragment extends Fragment {
         });
 
         binding.btnAnalyze.setOnClickListener(v ->
-                viewModel.analyze("이번 달 지출 패턴 분석 요청"));
+                viewModel.analyze(currentTransactions));
     }
 
     @Override

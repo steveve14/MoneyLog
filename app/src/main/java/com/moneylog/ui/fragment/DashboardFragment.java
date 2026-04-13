@@ -21,6 +21,7 @@ import com.moneylog.databinding.FragmentDashboardBinding;
 import com.moneylog.ui.viewmodel.DashboardViewModel;
 import com.moneylog.util.DateUtils;
 import com.moneylog.util.FormatUtils;
+import com.moneylog.util.YearMonthPickerDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +53,12 @@ public class DashboardFragment extends Fragment {
 
         binding.btnPrevMonth.setOnClickListener(v -> viewModel.goToPreviousMonth());
         binding.btnNextMonth.setOnClickListener(v -> viewModel.goToNextMonth());
+        binding.tvYearMonth.setOnClickListener(v -> {
+            String current = viewModel.getSelectedYearMonth().getValue();
+            if (current != null) {
+                YearMonthPickerDialog.show(requireContext(), current, viewModel::setYearMonth);
+            }
+        });
         binding.btnSettings.setOnClickListener(v ->
                 Navigation.findNavController(view)
                         .navigate(R.id.settingsFragment));

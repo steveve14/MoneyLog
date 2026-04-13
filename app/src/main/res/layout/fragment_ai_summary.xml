@@ -39,6 +39,43 @@
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
+        <!-- ── 월 선택 ───────────────────────────────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="8dp">
+
+            <ImageButton
+                android:id="@+id/btn_prev_month"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="이전 달"
+                android:src="@drawable/ic_chevron_left_24"
+                app:tint="?attr/colorOnSurface" />
+
+            <TextView
+                android:id="@+id/tv_year_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btn_next_month"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="다음 달"
+                android:src="@drawable/ic_chevron_right_24"
+                app:tint="?attr/colorOnSurface" />
+        </LinearLayout>
+
         <!-- ── Gemini 상태 카드 ──────────────────────────────── -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
