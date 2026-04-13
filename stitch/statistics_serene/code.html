@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MoneyLog | Statistics &amp; AI Insights</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffeedb",
+                    "error": "#9f403d",
+                    "secondary-fixed-dim": "#c5d9cb",
+                    "surface-container-high": "#e6e9e4",
+                    "surface-container-highest": "#e0e4de",
+                    "surface-container": "#edeeea",
+                    "tertiary": "#695d4f",
+                    "inverse-primary": "#e9ffee",
+                    "surface-dim": "#d6dbd5",
+                    "secondary-dim": "#45574c",
+                    "tertiary-container": "#ffeedb",
+                    "primary-fixed": "#d2e8d8",
+                    "error-container": "#fe8983",
+                    "inverse-on-surface": "#9d9d9a",
+                    "surface-container-low": "#f4f4f0",
+                    "on-surface": "#2f3430",
+                    "on-primary-fixed": "#314338",
+                    "inverse-surface": "#0d0f0d",
+                    "surface-variant": "#e0e4de",
+                    "on-tertiary": "#fff8f2",
+                    "on-error": "#fff7f6",
+                    "on-surface-variant": "#5c605c",
+                    "on-secondary-container": "#43564b",
+                    "outline-variant": "#afb3ae",
+                    "error-dim": "#4e0309",
+                    "outline": "#777c77",
+                    "primary-container": "#d2e8d8",
+                    "on-error-container": "#752121",
+                    "on-primary": "#e8fded",
+                    "on-secondary-fixed": "#314339",
+                    "secondary": "#516358",
+                    "primary": "#506356",
+                    "on-background": "#2f3430",
+                    "primary-dim": "#44574b",
+                    "surface": "#faf9f6",
+                    "tertiary-fixed-dim": "#f0e0cd",
+                    "on-primary-container": "#43564a",
+                    "secondary-container": "#d3e8d9",
+                    "background": "#faf9f6",
+                    "surface-bright": "#faf9f6",
+                    "primary-fixed-dim": "#c5daca",
+                    "on-tertiary-fixed": "#514639",
+                    "on-secondary-fixed-variant": "#4d6055",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#6e6354",
+                    "surface-tint": "#506356",
+                    "tertiary-dim": "#5c5143",
+                    "secondary-fixed": "#d3e8d9",
+                    "on-tertiary-container": "#63584a",
+                    "on-primary-fixed-variant": "#4d6053",
+                    "on-secondary": "#e9feef"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0 8px 24px rgba(47, 52, 48, 0.06);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-[#FAF9F6] dark:bg-[#1A1C1A] flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="professional headshot of a person with a friendly expression in a minimalist studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDa7hTdgnlxBMZQKvr77nfx8M2iN7DcuYqHeRPWThRahr1hVYVTiKFwGqwLq_w5MdaJBw5uGro-Un0u2XD4xHYOYN_Yj1O1zE2QtdnTWgibrD_NRoADzSkE8bD30nwC8zdg2_ttV8gIgGKDsHe1ae9siNNlLY1N-HsZC9NRsaU6YlKebSVPOcv7HKjEI4ZKhy_sx7szZtRJWSIJ1xVhR039YPynhHNGXY6Lw7DDeiRGD6zK_iIdDKLbRErer9LqBYUQympO-UfNRQDz"/>
+</div>
+<h1 class="text-2xl font-bold tracking-tighter text-[#2F3430] dark:text-[#FAF9F6] font-headline">MoneyLog</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#506356] dark:text-[#A3B7A9] hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 pt-8 space-y-10">
+<!-- Header & Date Range -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-1">
+<p class="font-label text-[10px] uppercase tracking-[0.05em] text-on-surface-variant font-medium">Performance Review</p>
+<h2 class="text-4xl font-extrabold tracking-tighter text-on-surface leading-tight">Monthly Insights</h2>
+</div>
+<div class="inline-flex bg-surface-container-low p-1.5 rounded-xl self-start">
+<button class="px-4 py-1.5 rounded-lg bg-surface-container-lowest editorial-shadow text-sm font-semibold text-on-surface">September</button>
+<button class="px-4 py-1.5 rounded-lg text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors">August</button>
+<button class="px-4 py-1.5 rounded-lg text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors">July</button>
+</div>
+</section>
+<!-- AI Smart Analysis Card (Glassmorphism / Soft Mint) -->
+<section class="relative group overflow-hidden rounded-[2rem] bg-gradient-to-br from-secondary-container/40 to-primary-container/20 p-1">
+<div class="bg-surface-container-lowest/80 backdrop-blur-xl rounded-[1.9rem] p-8 relative overflow-hidden">
+<!-- Decorative Glow -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-secondary-container/30 blur-[100px] rounded-full"></div>
+<div class="flex flex-col md:flex-row gap-8 items-start relative z-10">
+<div class="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-on-primary shrink-0">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="space-y-4 max-w-2xl">
+<h3 class="text-2xl font-bold tracking-tight text-on-surface">AI Smart Analysis</h3>
+<p class="text-lg text-on-surface-variant leading-relaxed">
+                            Your <span class="font-bold text-primary italic">Lifestyle &amp; Dining</span> expenses are 12% lower than last month. This trend suggests you'll reach your "European Summer" savings goal 3 weeks earlier than projected.
+                        </p>
+<div class="flex flex-wrap gap-3">
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-xs font-semibold tracking-wide">INSIGHT SAVED</span>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-semibold tracking-wide">OPTIMIZATION READY</span>
+</div>
+</div>
+<div class="md:ml-auto self-center">
+<button class="bg-primary hover:bg-primary-dim text-on-primary px-6 py-3 rounded-xl font-bold transition-all active:scale-95 shadow-lg shadow-primary/10">
+                            Apply Strategy
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid for Stats -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Comparison Card -->
+<div class="md:col-span-4 bg-surface-container-low rounded-[2rem] p-8 flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-primary mb-4">compare_arrows</span>
+<p class="font-label text-[10px] uppercase tracking-[0.05em] text-on-surface-variant font-bold">VS LAST MONTH</p>
+<div class="mt-4 space-y-4">
+<div class="flex justify-between items-end">
+<div>
+<p class="text-sm text-on-surface-variant">Spending</p>
+<p class="text-2xl font-bold tracking-tighter text-on-surface">-$1,240.00</p>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-xs font-bold">-12.4%</div>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant mt-8 leading-snug">You've successfully reduced unnecessary recurring subscriptions this month.</p>
+</div>
+<!-- Spending Trend (Main Chart) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-[2rem] p-8 editorial-shadow">
+<div class="flex items-center justify-between mb-10">
+<div>
+<h4 class="text-xl font-bold tracking-tight text-on-surface">Spending Trend</h4>
+<p class="text-xs text-on-surface-variant">Daily expense distribution for September</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">more_horiz</span>
+</div>
+<!-- Mock Line Chart Area -->
+<div class="relative h-64 w-full flex items-end justify-between gap-1">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20">
+<div class="border-b border-outline"></div>
+<div class="border-b border-outline"></div>
+<div class="border-b border-outline"></div>
+<div class="border-b border-outline"></div>
+</div>
+<!-- Trend Path Simulation -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 800 200">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#506356" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#506356" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,150 Q50,140 100,160 T200,120 T300,140 T400,80 T500,100 T600,60 T700,90 T800,40 V200 H0 Z" fill="url(#chartGradient)"></path>
+<path d="M0,150 Q50,140 100,160 T200,120 T300,140 T400,80 T500,100 T600,60 T700,90 T800,40" fill="none" stroke="#506356" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="400" cy="80" fill="#FAF9F6" r="6" stroke="#506356" stroke-width="2"></circle>
+</svg>
+<!-- X-Axis Labels -->
+<div class="absolute -bottom-8 left-0 w-full flex justify-between text-[10px] font-bold text-on-surface-variant uppercase tracking-widest px-2">
+<span>Sep 01</span>
+<span>Sep 10</span>
+<span>Sep 20</span>
+<span>Sep 30</span>
+</div>
+</div>
+</div>
+<!-- Category Breakdown (Bar Chart Editorial) -->
+<div class="md:col-span-7 bg-surface-container-low rounded-[2rem] p-8">
+<h4 class="text-xl font-bold tracking-tight text-on-surface mb-8">Category Breakdown</h4>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-semibold">
+<span>Housing &amp; Utilities</span>
+<span class="text-on-surface-variant">$2,450.00</span>
+</div>
+<div class="h-10 w-full bg-surface-container-high rounded-xl overflow-hidden relative">
+<div class="h-full bg-primary/20 absolute top-0 left-0 w-full"></div>
+<div class="h-full bg-primary rounded-xl transition-all duration-1000" style="width: 45%;"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-semibold">
+<span>Food &amp; Dining</span>
+<span class="text-on-surface-variant">$820.00</span>
+</div>
+<div class="h-10 w-full bg-surface-container-high rounded-xl overflow-hidden relative">
+<div class="h-full bg-primary/20 absolute top-0 left-0 w-full"></div>
+<div class="h-full bg-primary rounded-xl transition-all duration-1000" style="width: 25%;"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-semibold">
+<span>Entertainment</span>
+<span class="text-on-surface-variant">$450.00</span>
+</div>
+<div class="h-10 w-full bg-surface-container-high rounded-xl overflow-hidden relative">
+<div class="h-full bg-primary/20 absolute top-0 left-0 w-full"></div>
+<div class="h-full bg-primary rounded-xl transition-all duration-1000" style="width: 15%;"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-semibold">
+<span>Transport</span>
+<span class="text-on-surface-variant">$310.00</span>
+</div>
+<div class="h-10 w-full bg-surface-container-high rounded-xl overflow-hidden relative">
+<div class="h-full bg-primary/20 absolute top-0 left-0 w-full"></div>
+<div class="h-full bg-primary rounded-xl transition-all duration-1000" style="width: 10%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Savings Focus -->
+<div class="md:col-span-5 bg-[#D3E8D9] rounded-[2rem] p-8 flex flex-col justify-between overflow-hidden relative">
+<!-- Abstract Texture -->
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[160px]" style="font-variation-settings: 'FILL' 1;">savings</span>
+</div>
+<div class="relative z-10">
+<div class="w-12 h-12 bg-white/40 backdrop-blur rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary">psychology</span>
+</div>
+<h4 class="text-2xl font-bold tracking-tight text-on-secondary-container">Wealth Mindset</h4>
+<p class="mt-4 text-on-secondary-container/80 text-lg leading-snug">
+                        "Financial freedom is not about having a lot of money, it's about having a lot of options."
+                    </p>
+</div>
+<div class="mt-12 relative z-10">
+<p class="text-sm font-bold text-on-secondary-container uppercase tracking-widest opacity-60 mb-2">SAVINGS PROGRESS</p>
+<p class="text-4xl font-extrabold tracking-tighter text-on-secondary-container">$18,402.50</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#FAF9F6]/80 dark:bg-[#1A1C1A]/80 backdrop-blur-md rounded-t-[1.5rem] shadow-[0_-8px_24px_rgba(80,99,86,0.06)]">
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined text-4xl">add_circle</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Add</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#506356]/10 text-[#506356] dark:text-[#A3B7A9] rounded-2xl p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Statistics</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

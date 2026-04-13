@@ -1,0 +1,152 @@
+<resources>
+    <string name="app_name">MoneyLog</string>
+    <string name="app_subtitle">THE FINANCIAL SANCTUARY</string>
+
+    <!-- PIN -->
+    <string name="pin_enter">PIN을 입력하세요</string>
+    <string name="pin_enter_subtitle">4자리 코드를 입력해주세요</string>
+    <string name="pin_setup">PIN 설정</string>
+    <string name="pin_confirm">PIN 확인</string>
+    <string name="pin_forgot">PIN을 잊으셨나요?</string>
+    <string name="biometric_unlock">지문으로 잠금 해제</string>
+
+    <!-- 네비게이션 탭 -->
+    <string name="nav_home">홈</string>
+    <string name="nav_transactions">내역</string>
+    <string name="nav_add">추가</string>
+    <string name="nav_statistics">통계</string>
+    <string name="nav_settings">설정</string>
+    <string name="nav_ai">AI 분석</string>
+    <string name="nav_recurring">고정</string>
+    <string name="nav_recurring_form">고정 거래</string>
+    <string name="nav_category">카테고리</string>
+
+    <!-- 거래 -->
+    <string name="transaction_income">수입</string>
+    <string name="transaction_expense">지출</string>
+    <string name="transaction_save">거래 저장</string>
+    <string name="transaction_amount_hint">0</string>
+    <string name="transaction_memo_hint">메모를 입력하세요…</string>
+    <string name="badge_auto">자동</string>
+
+    <!-- 결제 수단 -->
+    <string name="payment_card">카드</string>
+    <string name="payment_cash">현금</string>
+    <string name="payment_transfer">이체</string>
+    <string name="payment_other">기타</string>
+
+    <!-- AI -->
+    <string name="ai_summary_title">AI 요약</string>
+    <string name="ai_smart_analysis">AI 스마트 분석</string>
+    <string name="ai_insight">AI 인사이트</string>
+    <string name="ai_editorial_insight">분석</string>
+    <string name="ai_recommend_prefix">AI 추천:</string>
+    <string name="ai_view_details">자세히 보기 →</string>
+    <string name="ai_reanalyze">다시 분석</string>
+    <string name="gemini_status_supported">지원됨</string>
+    <string name="gemini_status_unsupported">미지원</string>
+
+    <!-- 대시보드 -->
+    <string name="dashboard_financial_overview">홈</string>
+    <string name="dashboard_total_balance">총 잔액</string>
+    <string name="dashboard_monthly_income">월 수입</string>
+    <string name="dashboard_monthly_expense">월 지출</string>
+    <string name="dashboard_pending_updates">대기 중인 업데이트</string>
+    <string name="dashboard_confirm_now">지금 확인</string>
+    <string name="dashboard_spending_distribution">거래 분포</string>
+    <string name="dashboard_recent_transactions">최근 거래</string>
+    <string name="dashboard_see_all">전체 보기</string>
+    <string name="dashboard_top_category">최다 지출</string>
+
+    <!-- 통계 -->
+    <string name="statistics_financial_insight">재정 인사이트</string>
+    <string name="statistics_title">통계</string>
+    <string name="statistics_monthly_total">월간 합계</string>
+    <string name="statistics_spending_trend">지출 추이</string>
+    <string name="statistics_last_6_months">최근 6개월</string>
+    <string name="statistics_category_breakdown">카테고리별 분석</string>
+
+    <!-- 반복 거래 -->
+    <string name="recurring_monthly_commitment">월간 고정 항목</string>
+    <string name="recurring_items_scheduled">건 예정</string>
+    <string name="recurring_fixed_expenses">고정 지출</string>
+    <string name="recurring_fixed_income">고정 수입</string>
+    <string name="recurring_add">+ 고정 거래 추가</string>
+    <string name="recurring_label_debit">출금</string>
+    <string name="recurring_label_credit">입금</string>
+    <string name="recurring_label_inactive">비활성</string>
+    <string name="recurring_schedule_format">매월 %d일</string>
+    <string name="schedule_daily">매일</string>
+    <string name="schedule_weekly">매주 %s요일</string>
+    <string name="schedule_yearly">매년 %d월 %d일</string>
+    <string name="recurring_interval_label">반복 주기</string>
+    <string name="interval_daily">매일</string>
+    <string name="interval_weekly">매주</string>
+    <string name="interval_monthly">매월</string>
+    <string name="interval_yearly">매년</string>
+    <string name="recurring_day_hint">실행일 (1~28)</string>
+    <string name="recurring_month_hint">실행 월 (1~12)</string>
+    <string name="recurring_toggle_label">고정 거래로 등록</string>
+    <string name="filter_recurring_expense">고정</string>
+    <string name="day_mon">월</string>
+    <string name="day_tue">화</string>
+    <string name="day_wed">수</string>
+    <string name="day_thu">목</string>
+    <string name="day_fri">금</string>
+    <string name="day_sat">토</string>
+    <string name="day_sun">일</string>
+    <string-array name="day_of_week_names">
+        <item>월</item>
+        <item>화</item>
+        <item>수</item>
+        <item>목</item>
+        <item>금</item>
+        <item>토</item>
+        <item>일</item>
+    </string-array>
+
+    <!-- 설정 -->
+    <string name="settings_preferences">환경설정</string>
+    <string name="settings_headline">나의 재정을 관리하세요</string>
+    <string name="settings_data_management">데이터 관리</string>
+    <string name="settings_category_management">카테고리 관리</string>
+    <string name="settings_category_management_desc">아이콘과 색상을 편집합니다</string>
+    <string name="settings_backup_sync">백업 &amp; 동기화</string>
+    <string name="settings_gdrive_connected">Google Drive 연결</string>
+    <string name="settings_backup_now">지금 백업</string>
+    <string name="settings_restore">복원</string>
+    <string name="settings_ai_insights">AI 인사이트</string>
+    <string name="settings_gemini_status">Gemini Nano 상태</string>
+    <string name="settings_gemini_desc">향상된 프라이버시를 위한 온디바이스 분석.</string>
+    <string name="settings_device_preferences">기기 설정</string>
+    <string name="settings_change_pin">PIN 변경</string>
+    <string name="settings_biometrics">생체인증</string>
+    <string name="settings_appearance">화면 표시</string>
+    <string name="settings_appearance_system">시스템 기본값</string>
+    <string name="settings_reset_all_data">모든 데이터 초기화</string>
+    <string name="settings_reset_warning">이 작업은 되돌릴 수 없습니다. 모든 기록, 카테고리, 설정이 삭제됩니다.</string>
+    <string name="settings_language">언어</string>
+    <string name="settings_language_desc">앱 표시 언어를 변경합니다</string>
+    <string name="settings_amount_format">금액 글자 표시</string>
+    <string name="settings_amount_format_desc">100,000,000 → 약 1억</string>
+
+    <!-- 언어 선택 -->
+    <string name="language_dialog_title">언어 선택</string>
+    <string name="language_korean">한국어</string>
+    <string name="language_english">English</string>
+    <string name="language_japanese">日本語</string>
+    <string name="language_system_default">시스템 기본값</string>
+
+    <!-- 온보딩 -->
+    <string name="onboarding_welcome">환영합니다</string>
+    <string name="onboarding_select_language">사용할 언어를 선택하세요</string>
+    <string name="onboarding_continue">시작하기</string>
+
+    <!-- 공통 -->
+    <string name="currency_unit">원</string>
+    <string name="cancel">취소</string>
+    <string name="confirm">확인</string>
+    <string name="delete">삭제</string>
+    <string name="edit">편집</string>
+    <string name="save">저장</string>
+</resources>

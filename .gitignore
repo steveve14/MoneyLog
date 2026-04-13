@@ -1,0 +1,64 @@
+# ============================================================
+#  MoneyLog — Android .gitignore
+# ============================================================
+
+# --- 빌드 결과물 ---
+*.apk
+*.aar
+*.aab
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+release/
+build/
+.gradle/
+
+# --- 로컬 설정 (SDK 경로 등) ---
+local.properties
+
+# --- Android Studio / IntelliJ ---
+*.iml
+.idea/
+*.ipr
+*.iws
+.navigation/
+captures/
+*.hprof
+
+# --- 서명 키스토어 (절대 커밋 금지) ---
+*.jks
+*.keystore
+keystore.properties
+
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- Windows ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Linux ---
+*~
+
+# --- 로그 ---
+*.log
+
+# --- Kotlin/JVM 빌드 캐시 ---
+.kotlin/
+kotlin-js-store/
+
+# --- 외부 네이티브 빌드 ---
+.externalNativeBuild
+.cxx/
+
+# --- ProGuard 매핑 (릴리스 빌드 후 생성 — 별도 보관) ---
+/app/mapping.txt
+
+# --- 테스트 결과 ---
+test-results/

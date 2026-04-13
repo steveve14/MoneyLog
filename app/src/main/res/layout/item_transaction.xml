@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="?attr/colorSurface"
+    android:paddingHorizontal="16dp">
+
+    <!-- 카테고리 아이콘 배경 -->
+    <View
+        android:id="@+id/view_icon_bg"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_category_circle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- 카테고리 아이콘 -->
+    <ImageView
+        android:id="@+id/iv_category_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:tint="?attr/colorOnSurfaceVariant"
+        android:contentDescription="카테고리 아이콘"
+        app:layout_constraintStart_toStartOf="@id/view_icon_bg"
+        app:layout_constraintEnd_toEndOf="@id/view_icon_bg"
+        app:layout_constraintTop_toTopOf="@id/view_icon_bg"
+        app:layout_constraintBottom_toBottomOf="@id/view_icon_bg" />
+
+    <!-- 카테고리명 -->
+    <TextView
+        android:id="@+id/tv_category"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        app:layout_constraintStart_toEndOf="@id/view_icon_bg"
+        app:layout_constraintEnd_toStartOf="@id/tv_amount"
+        app:layout_constraintTop_toTopOf="@id/view_icon_bg"
+        app:layout_constraintBottom_toTopOf="@id/tv_memo" />
+
+    <!-- 메모 -->
+    <TextView
+        android:id="@+id/tv_memo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintStart_toEndOf="@id/view_icon_bg"
+        app:layout_constraintEnd_toStartOf="@id/tv_amount"
+        app:layout_constraintTop_toBottomOf="@id/tv_category"
+        app:layout_constraintBottom_toBottomOf="@id/view_icon_bg" />
+
+    <!-- 금액 -->
+    <TextView
+        android:id="@+id/tv_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

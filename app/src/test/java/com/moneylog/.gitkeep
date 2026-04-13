@@ -1,0 +1,4 @@
+# 단위 테스트 루트
+# Phase 2에서 생성:
+# - data/repository/TransactionRepositoryTest.kt
+# - data/db/dao/TransactionDaoTest.kt 등

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MoneyLog Settings - Serene Ledger</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffeedb",
+                    "error": "#9f403d",
+                    "secondary-fixed-dim": "#c5d9cb",
+                    "surface-container-high": "#e6e9e4",
+                    "surface-container-highest": "#e0e4de",
+                    "surface-container": "#edeeea",
+                    "tertiary": "#695d4f",
+                    "inverse-primary": "#e9ffee",
+                    "surface-dim": "#d6dbd5",
+                    "secondary-dim": "#45574c",
+                    "tertiary-container": "#ffeedb",
+                    "primary-fixed": "#d2e8d8",
+                    "error-container": "#fe8983",
+                    "inverse-on-surface": "#9d9d9a",
+                    "surface-container-low": "#f4f4f0",
+                    "on-surface": "#2f3430",
+                    "on-primary-fixed": "#314338",
+                    "inverse-surface": "#0d0f0d",
+                    "surface-variant": "#e0e4de",
+                    "on-tertiary": "#fff8f2",
+                    "on-error": "#fff7f6",
+                    "on-surface-variant": "#5c605c",
+                    "on-secondary-container": "#43564b",
+                    "outline-variant": "#afb3ae",
+                    "error-dim": "#4e0309",
+                    "outline": "#777c77",
+                    "primary-container": "#d2e8d8",
+                    "on-error-container": "#752121",
+                    "on-primary": "#e8fded",
+                    "on-secondary-fixed": "#314339",
+                    "secondary": "#516358",
+                    "primary": "#506356",
+                    "on-background": "#2f3430",
+                    "primary-dim": "#44574b",
+                    "surface": "#faf9f6",
+                    "tertiary-fixed-dim": "#f0e0cd",
+                    "on-primary-container": "#43564a",
+                    "secondary-container": "#d3e8d9",
+                    "background": "#faf9f6",
+                    "surface-bright": "#faf9f6",
+                    "primary-fixed-dim": "#c5daca",
+                    "on-tertiary-fixed": "#514639",
+                    "on-secondary-fixed-variant": "#4d6055",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#6e6354",
+                    "surface-tint": "#506356",
+                    "tertiary-dim": "#5c5143",
+                    "secondary-fixed": "#d3e8d9",
+                    "on-tertiary-container": "#63584a",
+                    "on-primary-fixed-variant": "#4d6053",
+                    "on-secondary": "#e9feef"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .editorial-shadow {
+            box-shadow: 0 8px 48px -12px rgba(47, 52, 48, 0.06);
+        }
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen pb-28">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-[#FAF9F6] dark:bg-[#1A1C1A] flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant/15">
+<img class="w-full h-full object-cover" data-alt="close up studio portrait of a young man with a serene expression and soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBObMUvsYRauYByhkwm7WJTPWa5oGz-Yuinknt0SXKe6NpqpncnO8gFTJUjW90U3GkjnrhFNXMWGyAuj08lNyECPxkBM6xGpl84633bM5CNX7rczq7UyA8GiQ2x0Ox32SilLCDYxMUr8daLduTnKRpiL7nGrcrHHskeOATj0voLlF0yoQfw3LdvMszJXqzvSZO-F-0zL_e7gR2UXh9rYYcuyXc8l1kCufCpTWtEHdzs-mwYYeHLJkHz7QlIWoH46IZJsol_L9q3dpg"/>
+</div>
+<h1 class="text-2xl font-bold tracking-tighter text-[#2F3430] dark:text-[#FAF9F6]">MoneyLog</h1>
+</div>
+<button class="text-[#506356] dark:text-[#A3B7A9] hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="max-w-2xl mx-auto px-6 pt-8 space-y-10">
+<!-- Header Section -->
+<section class="space-y-2">
+<p class="text-[10px] uppercase tracking-[0.1em] font-bold text-primary/60">Preferences</p>
+<h2 class="text-4xl font-extrabold tracking-tight text-on-surface">Settings</h2>
+</section>
+<!-- Profile Card (Asymmetric Layout) -->
+<div class="bg-surface-container-low rounded-[2rem] p-8 editorial-shadow flex flex-col md:flex-row gap-8 items-start relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<div class="z-10">
+<p class="text-[10px] uppercase tracking-[0.05em] font-semibold text-on-surface/40 mb-1">Current Plan</p>
+<h3 class="text-xl font-bold text-on-surface">Premium Archive</h3>
+<p class="text-on-surface-variant mt-2 text-sm max-w-[200px] leading-relaxed">Your financial sanctuary is synchronized across 3 active devices.</p>
+</div>
+<div class="mt-auto md:mt-0 md:ml-auto z-10">
+<button class="bg-gradient-to-br from-primary to-primary-dim text-on-primary px-6 py-3 rounded-xl font-semibold text-sm hover:opacity-90 transition-all active:scale-95">
+                    Manage Subscription
+                </button>
+</div>
+</div>
+<!-- Settings Groups -->
+<div class="space-y-12">
+<!-- Group 1: Core Systems -->
+<section>
+<h4 class="text-[10px] uppercase tracking-[0.15em] font-bold text-on-surface/30 mb-6 pl-2">Core Systems</h4>
+<div class="space-y-1">
+<!-- Data Management -->
+<div class="group flex items-center justify-between p-4 rounded-2xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex items-center gap-5">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Data Management</p>
+<p class="text-xs text-on-surface-variant">Export logs, CSV, and local storage</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface/20 group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Backup & Sync -->
+<div class="group flex items-center justify-between p-4 rounded-2xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex items-center gap-5">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="cloud_sync">cloud_sync</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Backup &amp; Sync</p>
+<p class="text-xs text-on-surface-variant">Last synced: 12 minutes ago</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface/20 group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Group 2: Intelligence -->
+<section>
+<h4 class="text-[10px] uppercase tracking-[0.15em] font-bold text-on-surface/30 mb-6 pl-2">Intelligence</h4>
+<div class="space-y-1">
+<!-- AI Insights -->
+<div class="group flex items-center justify-between p-4 rounded-2xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex items-center gap-5">
+<div class="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">AI Insights</p>
+<p class="text-xs text-on-surface-variant">Personalized spending patterns and forecasting</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-[10px] font-bold bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full uppercase tracking-tighter">Active</span>
+<span class="material-symbols-outlined text-on-surface/20 group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Group 3: Environment -->
+<section>
+<h4 class="text-[10px] uppercase tracking-[0.15em] font-bold text-on-surface/30 mb-6 pl-2">Environment</h4>
+<div class="space-y-1">
+<!-- Device Preferences -->
+<div class="group flex items-center justify-between p-4 rounded-2xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex items-center gap-5">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="devices">devices</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Device Preferences</p>
+<p class="text-xs text-on-surface-variant">Theme, Haptics, and Font Scaling</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface/20 group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Dangerous Area -->
+<section class="pt-8 border-t border-outline-variant/15">
+<button class="w-full flex items-center justify-center gap-3 p-6 rounded-2xl bg-error-container/10 hover:bg-error-container/20 text-error transition-colors group active:scale-95 duration-200">
+<span class="material-symbols-outlined text-xl" data-icon="delete_forever">delete_forever</span>
+<span class="font-bold tracking-tight">Reset All Data</span>
+</button>
+<p class="text-center text-[11px] text-on-surface-variant mt-4 leading-relaxed max-w-[280px] mx-auto">
+                    This action is permanent and will securely purge all financial logs, preferences, and encrypted backups.
+                </p>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#FAF9F6]/80 dark:bg-[#1A1C1A]/80 backdrop-blur-md rounded-t-[1.5rem] shadow-[0_-8px_24px_rgba(80,99,86,0.06)]">
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined text-4xl" data-icon="add_circle" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Statistics</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#506356]/10 text-[#506356] dark:text-[#A3B7A9] rounded-2xl p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

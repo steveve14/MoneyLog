@@ -1,0 +1,4 @@
+# Instrumented 테스트 루트
+# Phase 2에서 생성:
+# - Compose UI 테스트
+# - Room 마이그레이션 테스트

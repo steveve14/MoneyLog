@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingHorizontal="32dp"
+    android:background="?attr/colorSurface">
+
+    <!-- 제목 -->
+    <TextView
+        android:id="@+id/tvPinTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pin_setup"
+        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+        android:textStyle="bold"
+        android:layout_marginTop="80dp" />
+
+    <TextView
+        android:id="@+id/tvPinSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pin_enter_subtitle"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:layout_marginTop="8dp" />
+
+    <!-- PIN 입력 표시 (점 4개) -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="40dp">
+
+        <View
+            android:id="@+id/pinDot1"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/pin_dot_empty" />
+
+        <View
+            android:id="@+id/pinDot2"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/pin_dot_empty" />
+
+        <View
+            android:id="@+id/pinDot3"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/pin_dot_empty" />
+
+        <View
+            android:id="@+id/pinDot4"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/pin_dot_empty" />
+    </LinearLayout>
+
+    <!-- 오류 메시지 -->
+    <TextView
+        android:id="@+id/tvPinError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorError"
+        android:layout_marginTop="12dp"
+        android:visibility="invisible" />
+
+    <!-- 공간 확보 -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- 숫자 키패드 -->
+    <GridLayout
+        android:id="@+id/pinKeypad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="4"
+        android:layout_marginBottom="40dp">
+
+        <!-- 1 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn1"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="1"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 2 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn2"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="2"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 3 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn3"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="3"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 4 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn4"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="4"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 5 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn5"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="5"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 6 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn6"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="6"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 7 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn7"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="7"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 8 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn8"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="8"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 9 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn9"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="9"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 빈칸 -->
+        <Space
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp" />
+
+        <!-- 0 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn0"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="0"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+        <!-- 삭제 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBackspace"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_margin="6dp"
+            android:text="⌫"
+            android:textAppearance="?attr/textAppearanceTitleLarge" />
+
+    </GridLayout>
+
+</LinearLayout>

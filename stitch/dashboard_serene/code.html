@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MoneyLog - Serene Ledger</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffeedb",
+                        "error": "#9f403d",
+                        "secondary-fixed-dim": "#c5d9cb",
+                        "surface-container-high": "#e6e9e4",
+                        "surface-container-highest": "#e0e4de",
+                        "surface-container": "#edeeea",
+                        "tertiary": "#695d4f",
+                        "inverse-primary": "#e9ffee",
+                        "surface-dim": "#d6dbd5",
+                        "secondary-dim": "#45574c",
+                        "tertiary-container": "#ffeedb",
+                        "primary-fixed": "#d2e8d8",
+                        "error-container": "#fe8983",
+                        "inverse-on-surface": "#9d9d9a",
+                        "surface-container-low": "#f4f4f0",
+                        "on-surface": "#2f3430",
+                        "on-primary-fixed": "#314338",
+                        "inverse-surface": "#0d0f0d",
+                        "surface-variant": "#e0e4de",
+                        "on-tertiary": "#fff8f2",
+                        "on-error": "#fff7f6",
+                        "on-surface-variant": "#5c605c",
+                        "on-secondary-container": "#43564b",
+                        "outline-variant": "#afb3ae",
+                        "error-dim": "#4e0309",
+                        "outline": "#777c77",
+                        "primary-container": "#d2e8d8",
+                        "on-error-container": "#752121",
+                        "on-primary": "#e8fded",
+                        "on-secondary-fixed": "#314339",
+                        "secondary": "#516358",
+                        "primary": "#506356",
+                        "on-background": "#2f3430",
+                        "primary-dim": "#44574b",
+                        "surface": "#faf9f6",
+                        "tertiary-fixed-dim": "#f0e0cd",
+                        "on-primary-container": "#43564a",
+                        "secondary-container": "#d3e8d9",
+                        "background": "#faf9f6",
+                        "surface-bright": "#faf9f6",
+                        "primary-fixed-dim": "#c5daca",
+                        "on-tertiary-fixed": "#514639",
+                        "on-secondary-fixed-variant": "#4d6055",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#6e6354",
+                        "surface-tint": "#506356",
+                        "tertiary-dim": "#5c5143",
+                        "secondary-fixed": "#d3e8d9",
+                        "on-tertiary-container": "#63584a",
+                        "on-primary-fixed-variant": "#4d6053",
+                        "on-secondary": "#e9feef"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .text-display-lg { font-size: 2.5rem; line-height: 1.2; letter-spacing: -0.02em; font-weight: 700; }
+        .text-display-sm { font-size: 1.5rem; line-height: 1.3; letter-spacing: -0.01em; font-weight: 600; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface selection:bg-primary-container min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#FAF9F6] dark:bg-[#1A1C1A] shadow-none flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Profile" class="w-10 h-10 rounded-full object-cover border-2 border-primary-container active:scale-95 transition-transform duration-200 cursor-pointer" data-alt="Soft-lit portrait of a professional individual with a neutral background, minimalist aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBCwfpciaGdLIfeYmpKQf90nxWA4IuXvUq8FmFWy8FM56xU5F8oh_HerUqP4Ta3th6hRxD1-WPF-OFMnIuAhCPrdbBaBrB39gZt0fGIMWSrSEh9tWK21-NDLZXNPMLTxkfh12Z9HuYpr1cYEXMlrc040T9FreEAUpZjQB2MgbIK3FRzOCtIn6gDtYXhIhnf6BFL6vEbP9S0LXU82XfHbxxGhao7FfoiJ-tro-eoI-X_AVdUr1KtRdNo8LpnHDRdN5_fv2C81mz-WZq"/>
+<h1 class="text-2xl font-bold tracking-tighter text-[#2F3430] dark:text-[#FAF9F6]">MoneyLog</h1>
+</div>
+<button class="material-symbols-outlined text-[#506356] dark:text-[#A3B7A9] text-2xl hover:opacity-80 transition-opacity active:scale-95 duration-200">
+            notifications
+        </button>
+</header>
+<main class="max-w-5xl mx-auto px-6 pt-8 pb-32">
+<!-- Hero Section: Financial Sanctuary Card -->
+<section class="mb-10">
+<div class="bg-primary text-on-primary rounded-[2rem] p-8 relative overflow-hidden shadow-[0_24px_48px_rgba(80,99,86,0.12)]">
+<!-- Signature Glow -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-container opacity-20 rounded-full blur-[80px]"></div>
+<div class="relative z-10">
+<span class="font-label uppercase tracking-[0.1em] text-xs opacity-80 block mb-2">Total Balance</span>
+<h2 class="text-display-lg mb-8">$12,450.80</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-primary-dim/30 rounded-2xl p-4 backdrop-blur-sm">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span class="font-label uppercase tracking-widest text-[10px]">Income</span>
+</div>
+<p class="text-xl font-bold">$4,200.00</p>
+</div>
+<div class="bg-primary-dim/30 rounded-2xl p-4 backdrop-blur-sm">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-sm">arrow_downward</span>
+<span class="font-label uppercase tracking-widest text-[10px]">Expenses</span>
+</div>
+<p class="text-xl font-bold">$1,840.20</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Layout: AI Summary & Spending -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-10">
+<!-- AI Summary Card (Soft Cyan/Glass) -->
+<div class="md:col-span-7 bg-[#E0F2F1] dark:bg-[#1B2B2A] rounded-[2rem] p-8 flex flex-col justify-between border-none shadow-none">
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label uppercase tracking-widest text-xs font-semibold text-primary">AI Insights</span>
+</div>
+<p class="text-lg leading-relaxed text-on-surface font-medium">
+                        Your spending on <span class="text-primary font-bold">Dining</span> is down by 12% this week. You're on track to save an extra <span class="text-primary font-bold">$450</span> for your travel fund.
+                    </p>
+</div>
+<div class="mt-6 flex gap-3">
+<button class="bg-primary text-on-primary px-5 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-all active:scale-95">View Trends</button>
+<button class="bg-white/50 px-5 py-2 rounded-full text-sm font-semibold hover:bg-white/80 transition-all active:scale-95">Dismiss</button>
+</div>
+</div>
+<!-- Spending Distribution Donut (Simulated) -->
+<div class="md:col-span-5 bg-surface-container-low rounded-[2rem] p-8 flex flex-col items-center justify-center text-center">
+<span class="font-label uppercase tracking-widest text-xs mb-6 block text-on-surface/60">Spending Distribution</span>
+<!-- Visual Donut Chart Representation -->
+<div class="relative w-40 h-40 mb-6">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-secondary-fixed fill-none stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="100, 100" stroke-width="4"></path>
+<path class="text-primary fill-none stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="45, 100" stroke-width="4"></path>
+<path class="text-error-container fill-none stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="25, 100" stroke-dashoffset="-45" stroke-width="4"></path>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-display-sm">45%</span>
+<span class="text-[10px] uppercase font-bold text-on-surface/40">Fixed</span>
+</div>
+</div>
+<div class="flex flex-wrap justify-center gap-4">
+<div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-primary"></div><span class="text-[10px] font-bold opacity-60 uppercase">Housing</span></div>
+<div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-error-container"></div><span class="text-[10px] font-bold opacity-60 uppercase">Food</span></div>
+<div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-secondary-fixed"></div><span class="text-[10px] font-bold opacity-60 uppercase">Other</span></div>
+</div>
+</div>
+</div>
+<!-- Recent Transactions: Pulse List -->
+<section>
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-2xl font-bold tracking-tight px-2">Recent Transactions</h3>
+<button class="text-primary font-bold text-sm hover:underline">View All</button>
+</div>
+<div class="space-y-4">
+<!-- Transaction Item 1 -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 rounded-[1.5rem] p-5 flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-6">
+<div class="w-14 h-14 bg-secondary-container rounded-2xl flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-2xl">shopping_bag</span>
+</div>
+<div>
+<p class="font-bold text-lg">Whole Foods Market</p>
+<span class="font-label uppercase tracking-widest text-[10px] opacity-40">Oct 24 • Groceries</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-display-sm text-error">-$142.50</p>
+</div>
+</div>
+<!-- Transaction Item 2 -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 rounded-[1.5rem] p-5 flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-6">
+<div class="w-14 h-14 bg-primary-container rounded-2xl flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-2xl">work</span>
+</div>
+<div>
+<p class="font-bold text-lg">TechCorp Salary</p>
+<span class="font-label uppercase tracking-widest text-[10px] opacity-40">Oct 23 • Income</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-display-sm text-primary">+$4,200.00</p>
+</div>
+</div>
+<!-- Transaction Item 3 -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 rounded-[1.5rem] p-5 flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-6">
+<div class="w-14 h-14 bg-tertiary-container rounded-2xl flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined text-2xl">coffee</span>
+</div>
+<div>
+<p class="font-bold text-lg">Blue Bottle Coffee</p>
+<span class="font-label uppercase tracking-widest text-[10px] opacity-40">Oct 22 • Dining</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-display-sm text-error">-$6.75</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#FAF9F6]/80 dark:bg-[#1A1C1A]/80 backdrop-blur-md rounded-t-[1.5rem] shadow-[0_-8px_24px_rgba(80,99,86,0.06)]">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center bg-[#506356]/10 text-[#506356] dark:text-[#A3B7A9] rounded-2xl p-2 transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">Home</span>
+</a>
+<!-- History -->
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">History</span>
+</a>
+<!-- Add -->
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined text-3xl text-primary" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">Add</span>
+</a>
+<!-- Statistics -->
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">Stats</span>
+</a>
+<!-- Settings -->
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">Settings</span>
+</a>
+</nav>
+</body></html>

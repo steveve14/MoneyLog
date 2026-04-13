@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffeedb",
+                    "error": "#9f403d",
+                    "secondary-fixed-dim": "#c5d9cb",
+                    "surface-container-high": "#e6e9e4",
+                    "surface-container-highest": "#e0e4de",
+                    "surface-container": "#edeeea",
+                    "tertiary": "#695d4f",
+                    "inverse-primary": "#e9ffee",
+                    "surface-dim": "#d6dbd5",
+                    "secondary-dim": "#45574c",
+                    "tertiary-container": "#ffeedb",
+                    "primary-fixed": "#d2e8d8",
+                    "error-container": "#fe8983",
+                    "inverse-on-surface": "#9d9d9a",
+                    "surface-container-low": "#f4f4f0",
+                    "on-surface": "#2f3430",
+                    "on-primary-fixed": "#314338",
+                    "inverse-surface": "#0d0f0d",
+                    "surface-variant": "#e0e4de",
+                    "on-tertiary": "#fff8f2",
+                    "on-error": "#fff7f6",
+                    "on-surface-variant": "#5c605c",
+                    "on-secondary-container": "#43564b",
+                    "outline-variant": "#afb3ae",
+                    "error-dim": "#4e0309",
+                    "outline": "#777c77",
+                    "primary-container": "#d2e8d8",
+                    "on-error-container": "#752121",
+                    "on-primary": "#e8fded",
+                    "on-secondary-fixed": "#314339",
+                    "secondary": "#516358",
+                    "primary": "#506356",
+                    "on-background": "#2f3430",
+                    "primary-dim": "#44574b",
+                    "surface": "#faf9f6",
+                    "tertiary-fixed-dim": "#f0e0cd",
+                    "on-primary-container": "#43564a",
+                    "secondary-container": "#d3e8d9",
+                    "background": "#faf9f6",
+                    "surface-bright": "#faf9f6",
+                    "primary-fixed-dim": "#c5daca",
+                    "on-tertiary-fixed": "#514639",
+                    "on-secondary-fixed-variant": "#4d6055",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#6e6354",
+                    "surface-tint": "#506356",
+                    "tertiary-dim": "#5c5143",
+                    "secondary-fixed": "#d3e8d9",
+                    "on-tertiary-container": "#63584a",
+                    "on-primary-fixed-variant": "#4d6053",
+                    "on-secondary": "#e9feef"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32 overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-[#FAF9F6] dark:bg-[#1A1C1A]">
+<div class="flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional man with a kind expression in soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArHkRfvuGomhVCXXb7HPN3TxrgChkaP0Q_5W6lyQz1OS-Q_xe0oiW2cGzlt3G8Dpo7ASyntaclmg9N1CJsOrxCg_LbRL5qgUY5Gb3rEOAvkVhrSq1t5DQw_S8PEpnKe2YhkpQ5HW3vom3YkBq55zarWt2mMQuW5HgIpTTdLiTwuQ3ir8p_SMoeBeFg53Pf9Ba69SGiDKwnkIHATaVDosueWmVnwT_vqiUWwkH0cgLEbQJqrHyvz8tFD-xT4AoMeDz9s98Zqla1Ab9i"/>
+</div>
+<h1 class="text-2xl font-bold tracking-tighter text-[#2F3430] dark:text-[#FAF9F6]">MoneyLog</h1>
+</div>
+<button class="text-[#506356] dark:text-[#A3B7A9] hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-xl mx-auto px-6 mt-8">
+<!-- Editorial Header Section -->
+<div class="mb-10 text-center md:text-left">
+<span class="font-label uppercase tracking-[0.05em] text-xs text-on-surface-variant opacity-70">Journal Entry</span>
+<h2 class="text-4xl font-headline font-extrabold tracking-tight mt-1 text-on-surface">New Transaction</h2>
+</div>
+<!-- Transaction Canvas -->
+<div class="space-y-10">
+<!-- Type Toggle -->
+<div class="flex justify-center md:justify-start">
+<div class="bg-surface-container-low p-1.5 rounded-xl flex gap-1 w-full max-w-[320px]">
+<button class="flex-1 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all duration-300 bg-surface-container-lowest shadow-sm text-primary">Expense</button>
+<button class="flex-1 py-2.5 px-6 rounded-lg text-sm font-medium transition-all duration-300 text-on-surface-variant hover:bg-surface-container">Income</button>
+</div>
+</div>
+<!-- Amount Input (The Focal Point) -->
+<div class="flex flex-col items-center py-6">
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-light text-on-surface-variant">$</span>
+<input class="bg-transparent border-none text-7xl md:text-8xl font-headline font-bold tracking-tighter text-center focus:ring-0 p-0 w-[240px] md:w-[320px] placeholder-on-surface-variant/20" placeholder="0.00" type="text" value="0.00"/>
+</div>
+<div class="mt-4 px-4 py-1.5 bg-secondary-container/30 text-on-secondary-container rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-xs font-semibold tracking-wide uppercase">AI Recommended: Cafe &amp; Dining</span>
+</div>
+</div>
+<!-- Detail Layers -->
+<div class="grid grid-cols-1 gap-8">
+<!-- Date & Note (Ghost Inputs) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="group border-b border-outline-variant/15 py-2 transition-all focus-within:border-primary">
+<label class="block text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold mb-1">Transaction Date</label>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-dim text-xl">calendar_today</span>
+<input class="bg-transparent border-none p-0 focus:ring-0 text-on-surface font-medium w-full" type="text" value="Today, Oct 24"/>
+</div>
+</div>
+<div class="group border-b border-outline-variant/15 py-2 transition-all focus-within:border-primary">
+<label class="block text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold mb-1">Description</label>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-dim text-xl">notes</span>
+<input class="bg-transparent border-none p-0 focus:ring-0 text-on-surface font-medium w-full placeholder-on-surface-variant/30" placeholder="Morning espresso at The Sanctuary..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Category Bento Grid -->
+<div>
+<label class="block text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold mb-6 text-center md:text-left">Select Category</label>
+<div class="grid grid-cols-3 md:grid-cols-4 gap-4">
+<!-- Category Item: Active -->
+<button class="flex flex-col items-center justify-center p-4 rounded-3xl bg-primary-container/20 border-2 border-primary/20 transition-all active:scale-95">
+<div class="w-12 h-12 rounded-2xl bg-primary-container flex items-center justify-center text-primary-dim mb-3">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">coffee</span>
+</div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-primary-container">Cafe</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-3xl bg-surface-container-low transition-all hover:bg-surface-container-high active:scale-95 group">
+<div class="w-12 h-12 rounded-2xl bg-secondary-container/40 flex items-center justify-center text-secondary-dim mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">restaurant</span>
+</div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Food</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-3xl bg-surface-container-low transition-all hover:bg-surface-container-high active:scale-95 group">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-container/40 flex items-center justify-center text-tertiary-dim mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">commute</span>
+</div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Transport</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-3xl bg-surface-container-low transition-all hover:bg-surface-container-high active:scale-95 group">
+<div class="w-12 h-12 rounded-2xl bg-primary-fixed-dim/30 flex items-center justify-center text-primary-dim mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">shopping_bag</span>
+</div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Retail</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-3xl bg-surface-container-low transition-all hover:bg-surface-container-high active:scale-95 group">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-fixed-dim/30 flex items-center justify-center text-tertiary-dim mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">fitness_center</span>
+</div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Health</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-3xl bg-surface-container-low transition-all hover:bg-surface-container-high active:scale-95 group">
+<div class="w-12 h-12 rounded-2xl bg-secondary-fixed-dim/30 flex items-center justify-center text-secondary-dim mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">cottage</span>
+</div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Home</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="mt-16 mb-12">
+<button class="w-full py-5 rounded-2xl bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold text-lg shadow-xl shadow-primary/20 active:scale-[0.98] transition-all">
+                Log Transaction
+            </button>
+<p class="text-center text-[11px] text-on-surface-variant/40 mt-4 uppercase tracking-[0.2em]">Encrypted and secured by Sanctuary Protocol</p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#FAF9F6]/80 dark:bg-[#1A1C1A]/80 backdrop-blur-md shadow-[0_-8px_24px_rgba(80,99,86,0.06)] rounded-t-[1.5rem]">
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">history</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">History</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#506356]/10 text-[#506356] dark:text-[#A3B7A9] rounded-2xl p-2 active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">Add</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">leaderboard</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">Statistics</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2F3430]/40 dark:text-[#FAF9F6]/40 p-2 hover:bg-[#506356]/5 transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium">Settings</span>
+</a>
+</nav>
+</body></html>
