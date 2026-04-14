@@ -1,5 +1,9 @@
 package com.moneylog.util;
 
+import android.content.Context;
+
+import com.moneylog.R;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -8,8 +12,6 @@ public final class DateUtils {
 
     private static final DateTimeFormatter DATE_FMT        = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter YEAR_MONTH_FMT  = DateTimeFormatter.ofPattern("yyyy-MM");
-    private static final DateTimeFormatter DISPLAY_FMT     = DateTimeFormatter.ofPattern("M월 d일");
-    private static final DateTimeFormatter DISPLAY_YM_FMT  = DateTimeFormatter.ofPattern("yyyy년 M월");
 
     private DateUtils() {}
 
@@ -33,14 +35,26 @@ public final class DateUtils {
         return date.format(DATE_FMT);
     }
 
-    /** "yyyy-MM-dd" → "M월 d일" */
-    public static String toDisplayDate(String dateStr) {
-        return parseDate(dateStr).format(DISPLAY_FMT);
+    /** "yyyy-MM-dd" → locale-aware display (e.g., "4월 14일" / "Apr 14") */
+    public static String toDisplayDate(String dateStr, Context context) {
+        String pattern = context.getString(R.string.date_format_md);
+        return parseDate(dateStr).format(DateTimeFormatter.ofPattern(pattern));
     }
 
-    /** "yyyy-MM" → "yyyy년 M월" */
+    /** "yyyy-MM-dd" → locale-aware display (fallback without context) */
+    public static String toDisplayDate(String dateStr) {
+        return parseDate(dateStr).format(DateTimeFormatter.ofPattern("M/d"));
+    }
+
+    /** "yyyy-MM" → locale-aware display (e.g., "2026년 4월" / "April 2026") */
+    public static String toDisplayYearMonth(String yearMonth, Context context) {
+        String pattern = context.getString(R.string.date_format_ym);
+        return YearMonth.parse(yearMonth, YEAR_MONTH_FMT).format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /** "yyyy-MM" → locale-aware display (fallback without context) */
     public static String toDisplayYearMonth(String yearMonth) {
-        return YearMonth.parse(yearMonth, YEAR_MONTH_FMT).format(DISPLAY_YM_FMT);
+        return YearMonth.parse(yearMonth, YEAR_MONTH_FMT).format(DateTimeFormatter.ofPattern("yyyy-MM"));
     }
 
     /** 이전 달 → "yyyy-MM" */

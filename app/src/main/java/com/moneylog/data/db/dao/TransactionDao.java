@@ -73,4 +73,8 @@ public interface TransactionDao {
     /** 특정 날짜 이전의 거래 소프트 삭제 (데이터 정리용) */
     @Query("UPDATE transactions SET is_deleted = 1, updated_at = :now WHERE date < :beforeDate AND is_deleted = 0")
     int softDeleteBefore(String beforeDate, long now);
+
+    /** 전체 거래 삭제 (데이터 초기화용) */
+    @Query("DELETE FROM transactions")
+    void deleteAll();
 }

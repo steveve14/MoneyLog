@@ -45,7 +45,7 @@ public class AiSummaryFragment extends Fragment {
         viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym -> {
             if (ym != null) {
                 String[] parts = ym.split("-");
-                binding.tvYearMonth.setText(parts[0] + "년 " + Integer.parseInt(parts[1]) + "월");
+                binding.tvYearMonth.setText(getString(R.string.year_month_display, parts[0], Integer.parseInt(parts[1])));
             }
         });
 
@@ -68,7 +68,9 @@ public class AiSummaryFragment extends Fragment {
                 binding.tvGeminiStatus.setTextColor(
                         requireContext().getColor(R.color.income_color));
             } else {
-                binding.tvGeminiStatus.setText(R.string.ai_local_analysis);
+                binding.tvGeminiStatus.setText(R.string.gemini_status_unsupported);
+                binding.tvGeminiStatus.setTextColor(
+                        requireContext().getColor(R.color.expense_color));
             }
         });
         binding.btnAnalyze.setEnabled(true);

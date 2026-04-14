@@ -40,19 +40,17 @@ public final class YearMonthPickerDialog {
         npMonth.setMaxValue(12);
         npMonth.setValue(month);
         npMonth.setWrapSelectorWheel(true);
-        npMonth.setDisplayedValues(new String[]{
-                "1월", "2월", "3월", "4월", "5월", "6월",
-                "7월", "8월", "9월", "10월", "11월", "12월"
-        });
+        npMonth.setDisplayedValues(
+                context.getResources().getStringArray(R.array.month_names));
 
         new MaterialAlertDialogBuilder(context)
-                .setTitle("월 선택")
+                .setTitle(context.getString(R.string.month_picker_title))
                 .setView(view)
-                .setPositiveButton("확인", (dialog, which) -> {
+                .setPositiveButton(context.getString(R.string.confirm), (dialog, which) -> {
                     String selected = String.format("%04d-%02d", npYear.getValue(), npMonth.getValue());
                     listener.onSelected(selected);
                 })
-                .setNegativeButton("취소", null)
+                .setNegativeButton(context.getString(R.string.cancel), null)
                 .show();
     }
 }

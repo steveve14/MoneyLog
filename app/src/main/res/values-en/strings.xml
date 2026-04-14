@@ -106,6 +106,16 @@
     <string name="settings_data_management">Data Management</string>
     <string name="settings_category_management">Category Management</string>
     <string name="settings_category_management_desc">Edit icons and colors</string>
+    <string name="settings_category_delete_all">Delete All Categories</string>
+    <string name="settings_category_delete_all_desc">Delete all categories</string>
+    <string name="settings_category_reset_default">Reset to Default</string>
+    <string name="settings_category_reset_default_desc">Reset to default categories</string>
+    <string name="category_delete_all_title">Delete All Categories</string>
+    <string name="category_delete_all_message">All categories will be deleted. Continue?</string>
+    <string name="category_delete_all_complete">All categories have been deleted</string>
+    <string name="category_reset_default_title">Reset Categories</string>
+    <string name="category_reset_default_message">All existing categories will be deleted and reset to defaults. Continue?</string>
+    <string name="category_reset_default_complete">Categories have been reset to defaults</string>
     <string name="settings_backup_sync">Backup &amp; Sync</string>
     <string name="settings_gdrive_connected">Google Drive Connected</string>
     <string name="settings_backup_now">Backup Now</string>
@@ -142,4 +152,206 @@
     <string name="save">Save</string>
     <string name="expand_categories">More ▼</string>
     <string name="collapse_categories">Less ▲</string>
+    <string name="prev_month">Previous Month</string>
+    <string name="next_month">Next Month</string>
+    <string name="view_trends">View Trends →</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="no_spending_data">No spending data</string>
+    <string name="no_recent_transactions">No recent transactions</string>
+
+    <!-- History -->
+    <string name="statistics_financial_insight_history">History</string>
+    <string name="history_headline">History</string>
+    <string name="filter_all">All</string>
+    <string name="search_transactions">Search transactions…</string>
+    <string name="no_transactions">No transactions</string>
+    <string name="add_transaction">Add Transaction</string>
+
+    <!-- Transaction Input -->
+    <string name="journal_entry">JOURNAL ENTRY</string>
+    <string name="new_transaction">New Transaction</string>
+    <string name="transaction_date">Transaction Date</string>
+    <string name="description">Description</string>
+    <string name="memo_hint">Add a note…</string>
+    <string name="category">Category</string>
+    <string name="payment_method">Payment Method</string>
+
+    <!-- Budget -->
+    <string name="budget_monthly_oversight">MONTHLY OVERSIGHT</string>
+    <string name="budget_current_balance">CURRENT BALANCE</string>
+    <string name="budget_utilized">Budget Utilization</string>
+    <string name="budget_allocations">Category Allocations</string>
+    <string name="budget_details">Details</string>
+    <string name="no_budget_data">No budget data</string>
+
+    <!-- Recurring V2 -->
+    <string name="recurring_commitment_desc">Automatically processed transactions each month</string>
+    <string name="recurring_fixed_expenses_desc">Monthly fixed expense items</string>
+    <string name="recurring_fixed_income_desc">Monthly fixed income items</string>
+    <string name="recurring_savings_potential">SAVINGS POTENTIAL</string>
+    <string name="recurring_savings_desc">Reduce fixed costs to save more</string>
+    <string name="ai_financial_insight">AI Financial Insight</string>
+    <string name="recommendation">Recommendation</string>
+
+    <!-- Statistics V2 -->
+    <string name="statistics_performance_review">PERFORMANCE REVIEW</string>
+    <string name="statistics_vs_last_month">VS LAST MONTH</string>
+    <string name="statistics_spending">Spending</string>
+    <string name="insight_saved">Analysis Complete</string>
+    <string name="optimization_ready">Optimization Available</string>
+    <string name="apply_strategy">Apply Strategy</string>
+
+    <!-- Settings V2 -->
+    <string name="settings_current_plan">CURRENT PLAN</string>
+    <string name="settings_plan_name">Basic Plan</string>
+    <string name="settings_plan_desc">Manage your finances with basic features</string>
+    <string name="settings_manage_subscription">Manage Subscription</string>
+    <string name="settings_core_systems">CORE SYSTEMS</string>
+    <string name="settings_data_management_desc">Export, import and data cleanup</string>
+    <string name="settings_backup_sync_desc">Google Drive integration</string>
+    <string name="settings_intelligence">INTELLIGENCE</string>
+    <string name="settings_ai_insights_desc">AI-powered financial analysis and recommendations</string>
+    <string name="gemini_status_active">Active</string>
+    <string name="settings_environment">ENVIRONMENT</string>
+    <string name="settings_device_preferences_desc">Notifications, theme and device settings</string>
+
+    <!-- Common (Additional) -->
+    <string name="close">Close</string>
+    <string name="amount_zero">$0</string>
+    <string name="toggle_calendar">Toggle Calendar</string>
+    <string name="category_add">Add Category</string>
+    <string name="category_edit">Edit Category</string>
+    <string name="category_name_hint">Category Name</string>
+    <string name="icon_select">Select Icon</string>
+    <string name="show_more">More</string>
+    <string name="transaction_type">Transaction Type</string>
+    <string name="category_delete">Delete Category</string>
+    <string name="category_unknown">Category %d</string>
+    <string name="input_name_required">Please enter a name</string>
+    <string name="msg_updated">Updated</string>
+    <string name="msg_added">Added</string>
+    <string name="msg_deleted">Deleted</string>
+    <string name="transaction_edit">Edit Transaction</string>
+    <string name="transaction_delete_title">Delete Transaction</string>
+    <string name="transaction_delete_message">Are you sure you want to delete this transaction?</string>
+    <string name="ai_initial_prompt">Tap the analyze button to see AI insights.</string>
+
+    <!-- Google Drive -->
+    <string name="msg_backup_in_progress">Backing up…</string>
+    <string name="msg_backup_complete">Backup Complete</string>
+    <string name="msg_restore_complete">Restore Complete</string>
+    <string name="data_restore_title">Restore Data</string>
+    <string name="data_restore_message">Restore data from Google Drive. Current data will be overwritten.</string>
+    <string name="data_reset_title">Reset Data</string>
+    <string name="data_reset_complete">All data has been reset.</string>
+    <string name="data_reset_failed">Reset failed: %s</string>
+    <string name="settings_restore_desc">Restore data from Google Drive</string>
+    <string name="settings_gdrive_backup_restore">Google Drive Backup &amp; Restore</string>
+    <string name="settings_gdrive_backup_restore_desc">Manage backup and restore via Google Drive</string>
+    <string name="gdrive_backup">Google Drive Backup</string>
+    <string name="gdrive_restore">Google Drive Restore</string>
+    <string name="gdrive_not_implemented">Google Drive integration is not yet implemented.</string>
+    <string name="gdrive_connect">Connect Google Drive</string>
+    <string name="gdrive_disconnect">Disconnect</string>
+    <string name="gdrive_not_signed_in">Please sign in to Google Drive</string>
+    <string name="gdrive_sign_in_failed">Google sign-in failed</string>
+    <string name="gdrive_backup_no_data">No data to back up</string>
+    <string name="gdrive_no_backup_found">No backup found on Google Drive</string>
+    <string name="gdrive_backup_failed">Backup Failed</string>
+    <string name="gdrive_restore_failed">Restore Failed</string>
+    <string name="gdrive_restart_message">Data restore complete. Restarting app.</string>
+
+    <!-- Data Management -->
+    <string name="data_management_title">Data Management</string>
+    <string name="data_export_csv">Export CSV</string>
+    <string name="data_export_csv_desc">Export transaction history as a CSV file</string>
+    <string name="data_import_csv">Import CSV</string>
+    <string name="data_import_csv_desc">Import transaction history from a CSV file</string>
+    <string name="data_cleanup">Data Cleanup</string>
+    <string name="data_cleanup_desc">Clean up old transaction data</string>
+    <string name="msg_export_complete">CSV export complete</string>
+    <string name="msg_export_failed">Export failed</string>
+    <string name="msg_import_complete">CSV import complete: %d items</string>
+    <string name="msg_import_failed">Import failed</string>
+    <string name="data_cleanup_title">Data Cleanup</string>
+    <string name="data_cleanup_message">Delete transaction data older than 6 months. Continue?</string>
+    <string name="msg_cleanup_complete">Data cleanup complete</string>
+    <string name="drag_to_reorder">Drag to reorder</string>
+
+    <!-- Date Format -->
+    <string name="date_format_md">MMM d</string>
+    <string name="date_format_ym">MMMM yyyy</string>
+    <string name="year_month_display">%2$d %1$s</string>
+    <string name="month_picker_title">Select Month</string>
+    <string-array name="month_names">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sep</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
+    </string-array>
+
+    <!-- Compact Amount -->
+    <bool name="compact_western">true</bool>
+    <string name="compact_large">%1$.0fM</string>
+    <string name="compact_medium">%1$.0fK</string>
+
+    <!-- Amount Format -->
+    <string name="amount_with_unit">$%s</string>
+    <string name="amount_approx_eok">~%dB</string>
+    <string name="amount_approx_eok_cheonman">~%1$dB %2$d0M</string>
+    <string name="amount_approx_man">~%d0K</string>
+    <string name="amount_approx_man_cheon">~%1$d0K %2$dK</string>
+
+    <!-- AI Analysis -->
+    <string name="ai_title_analysis">📊 %1$s Financial Analysis\n\n</string>
+    <string name="ai_total_income">Total Income: %1$s (%2$d items)\n</string>
+    <string name="ai_total_expense">Total Expense: %1$s (%2$d items)\n</string>
+    <string name="ai_balance_positive">Balance: +%s ✅\n</string>
+    <string name="ai_balance_negative">Balance: %s ⚠️\n</string>
+    <string name="ai_savings_rate">\n💰 Savings Rate: %d%%</string>
+    <string name="ai_savings_excellent"> \u2014 Excellent! Stable financial management.</string>
+    <string name="ai_savings_good"> \u2014 Good. Try to save a bit more.</string>
+    <string name="ai_savings_warning"> \u2014 You need to reduce spending.</string>
+    <string name="ai_savings_danger"> \u2014 Spending exceeds income. Review your expenses.</string>
+    <string name="ai_category_title">\n📌 Expense by Category\n</string>
+    <string name="ai_category_row">%1$d. %2$s: %3$s (%4$d%%, %5$d items)\n</string>
+    <string name="ai_pattern_title">\n📅 Spending Pattern\n</string>
+    <string name="ai_pattern_avg">Daily Average: %s\n</string>
+    <string name="ai_pattern_max">Highest Spending Day: %1$s (%2$s)\n</string>
+    <string name="ai_pattern_spike">⚠️ Peak day is %dx the average. Review large expenses.\n</string>
+    <string name="ai_tips_title">\n💡 Saving Tips\n</string>
+    <string name="ai_tip_overspend">• Spending exceeds income. Review fixed expenses.\n</string>
+    <string name="ai_tip_small_expenses">• Many small expenses (avg %s). Review spending habits.\n</string>
+    <string name="ai_tip_diverse_categories">• Spending is spread across many categories. Consider setting budgets.\n</string>
+
+    <!-- Default Categories -->
+    <string name="cat_food">Food</string>
+    <string name="cat_transport">Transport</string>
+    <string name="cat_housing">Housing</string>
+    <string name="cat_entertainment">Entertainment</string>
+    <string name="cat_clothing">Clothing</string>
+    <string name="cat_medical">Medical</string>
+    <string name="cat_education">Education</string>
+    <string name="cat_gifts">Gifts</string>
+    <string name="cat_cafe">Cafe</string>
+    <string name="cat_other_expense">Other Expense</string>
+    <string name="cat_salary">Salary</string>
+    <string name="cat_allowance">Allowance</string>
+    <string name="cat_savings_withdrawal">Savings</string>
+    <string name="cat_investment">Investment</string>
+    <string name="cat_other_income">Other Income</string>
+
+    <!-- Misc -->
+    <string name="file_create_failed">File creation failed</string>
+    <string name="file_write_failed">File write failed</string>
+    <string name="file_empty">Empty file</string>
+    <string name="category_fallback">Other</string>
 </resources>

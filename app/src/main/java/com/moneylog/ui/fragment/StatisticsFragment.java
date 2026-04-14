@@ -59,7 +59,7 @@ public class StatisticsFragment extends Fragment {
         });
 
         viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym ->
-                binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym)));
+                binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym, requireContext())));
 
         viewModel.monthlySummary.observe(getViewLifecycleOwner(), summary -> {
             if (summary == null) {
@@ -67,8 +67,8 @@ public class StatisticsFragment extends Fragment {
                 binding.tvTotalExpense.setText(getString(R.string.amount_zero));
                 return;
             }
-            binding.tvTotalIncome.setText(FormatUtils.formatAmountWithUnit(summary.totalIncome));
-            binding.tvTotalExpense.setText(FormatUtils.formatAmountWithUnit(summary.totalExpense));
+            binding.tvTotalIncome.setText(FormatUtils.formatAmountWithUnit(summary.totalIncome, requireContext()));
+            binding.tvTotalExpense.setText(FormatUtils.formatAmountWithUnit(summary.totalExpense, requireContext()));
         });
 
         viewModel.categories.observe(getViewLifecycleOwner(), cats -> {
@@ -118,7 +118,7 @@ public class StatisticsFragment extends Fragment {
                     ? categoryNameMap.get(cs.categoryId)
                     : getString(R.string.category_unknown, cs.categoryId);
             tvName.setText(categoryName);
-            tvAmount.setText(FormatUtils.formatAmountWithUnit(cs.total));
+            tvAmount.setText(FormatUtils.formatAmountWithUnit(cs.total, requireContext()));
             double ratio = total > 0 ? (double) cs.total / total : 0.0;
             tvPercent.setText(FormatUtils.formatPercent(ratio));
             progress.setProgress((int) (ratio * 100));

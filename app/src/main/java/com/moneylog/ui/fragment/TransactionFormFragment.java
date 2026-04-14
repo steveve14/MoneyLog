@@ -77,7 +77,7 @@ public class TransactionFormFragment extends Fragment {
         }
 
         binding.tvTitle.setText(isEdit ? getString(R.string.transaction_edit) : getString(R.string.add_transaction));
-        binding.tvDate.setText(DateUtils.toDisplayDate(selectedDate));
+        binding.tvDate.setText(DateUtils.toDisplayDate(selectedDate, requireContext()));
 
         // 닫기 버튼
         binding.btnClose.setOnClickListener(v ->
@@ -157,7 +157,7 @@ public class TransactionFormFragment extends Fragment {
                 binding.etAmount.setText(FormatUtils.formatAmountInput(tx.amount));
                 selectedCategoryId = tx.categoryId;
                 selectedDate = tx.date;
-                binding.tvDate.setText(DateUtils.toDisplayDate(selectedDate));
+                binding.tvDate.setText(DateUtils.toDisplayDate(selectedDate, requireContext()));
                 binding.etMemo.setText(tx.memo);
                 selectedPaymentMethod = tx.paymentMethod;
                 updatePaymentMethodChips(tx.paymentMethod);
@@ -249,7 +249,7 @@ public class TransactionFormFragment extends Fragment {
             (picker, year, month, day) -> {
                 LocalDate picked = LocalDate.of(year, month + 1, day);
                 selectedDate = DateUtils.formatDate(picked);
-                binding.tvDate.setText(DateUtils.toDisplayDate(selectedDate));
+                binding.tvDate.setText(DateUtils.toDisplayDate(selectedDate, requireContext()));
             },
             d.getYear(), d.getMonthValue() - 1, d.getDayOfMonth()
         ).show();

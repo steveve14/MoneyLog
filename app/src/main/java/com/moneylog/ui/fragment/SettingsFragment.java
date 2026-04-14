@@ -85,6 +85,54 @@ public class SettingsFragment extends Fragment {
         binding.rowCategory.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.categoryFragment));
 
+        // 카테고리 모두 삭제
+        binding.rowCategoryDeleteAll.setOnClickListener(v ->
+                new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                        .setTitle(R.string.category_delete_all_title)
+                        .setMessage(R.string.category_delete_all_message)
+                        .setPositiveButton(R.string.confirm, (dialog, which) ->
+                                dataManagementHelper.deleteAllCategories(new DataManagementHelper.ResultCallback() {
+                                    @Override
+                                    public void onSuccess(String message) {
+                                        requireActivity().runOnUiThread(() ->
+                                                Toast.makeText(requireContext(),
+                                                        R.string.category_delete_all_complete,
+                                                        Toast.LENGTH_SHORT).show());
+                                    }
+
+                                    @Override
+                                    public void onFailure(String message) {
+                                        requireActivity().runOnUiThread(() ->
+                                                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show());
+                                    }
+                                }))
+                        .setNegativeButton(R.string.cancel, null)
+                        .show());
+
+        // 카테고리 기본으로
+        binding.rowCategoryResetDefault.setOnClickListener(v ->
+                new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                        .setTitle(R.string.category_reset_default_title)
+                        .setMessage(R.string.category_reset_default_message)
+                        .setPositiveButton(R.string.confirm, (dialog, which) ->
+                                dataManagementHelper.resetCategoriesToDefault(new DataManagementHelper.ResultCallback() {
+                                    @Override
+                                    public void onSuccess(String message) {
+                                        requireActivity().runOnUiThread(() ->
+                                                Toast.makeText(requireContext(),
+                                                        R.string.category_reset_default_complete,
+                                                        Toast.LENGTH_SHORT).show());
+                                    }
+
+                                    @Override
+                                    public void onFailure(String message) {
+                                        requireActivity().runOnUiThread(() ->
+                                                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show());
+                                    }
+                                }))
+                        .setNegativeButton(R.string.cancel, null)
+                        .show());
+
         // 금액 표시 모드
         binding.switchAmountText.setChecked(LocaleHelper.isAmountTextMode(requireContext()));
         binding.switchAmountText.setOnCheckedChangeListener((btn, checked) -> {
@@ -101,7 +149,23 @@ public class SettingsFragment extends Fragment {
                         .setTitle(getString(R.string.data_reset_title))
                         .setMessage(getString(R.string.settings_reset_warning))
                         .setPositiveButton(getString(R.string.settings_reset_all_data), (dialog, which) ->
-                                Toast.makeText(requireContext(), R.string.data_reset_not_implemented, Toast.LENGTH_SHORT).show())
+                                dataManagementHelper.resetAllData(new DataManagementHelper.ResultCallback() {
+                                    @Override
+                                    public void onSuccess(String message) {
+                                        requireActivity().runOnUiThread(() ->
+                                                Toast.makeText(requireContext(),
+                                                        R.string.data_reset_complete,
+                                                        Toast.LENGTH_SHORT).show());
+                                    }
+
+                                    @Override
+                                    public void onFailure(String message) {
+                                        requireActivity().runOnUiThread(() ->
+                                                Toast.makeText(requireContext(),
+                                                        getString(R.string.data_reset_failed, message),
+                                                        Toast.LENGTH_LONG).show());
+                                    }
+                                }))
                         .setNegativeButton(getString(R.string.cancel), null)
                         .show());
     }

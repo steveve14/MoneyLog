@@ -37,4 +37,16 @@ public interface CategoryDao {
 
     @Query("UPDATE categories SET sort_order = :sortOrder WHERE id = :id")
     void updateSortOrder(long id, int sortOrder);
+
+    /** 기본 카테고리 동기 조회 (언어 변경 시 이름 업데이트용) */
+    @Query("SELECT * FROM categories WHERE is_default = 1 AND is_deleted = 0")
+    List<CategoryEntity> getDefaultCategoriesSync();
+
+    /** 기본 카테고리 이름 업데이트 */
+    @Query("UPDATE categories SET name = :name WHERE id = :id AND is_default = 1")
+    void updateDefaultCategoryName(long id, String name);
+
+    /** 전체 카테고리 삭제 (데이터 초기화용) */
+    @Query("DELETE FROM categories")
+    void deleteAll();
 }

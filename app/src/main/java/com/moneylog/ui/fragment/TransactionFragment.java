@@ -100,7 +100,7 @@ public class TransactionFragment extends Fragment
 
         // -- Observers ---
         viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym ->
-                binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym)));
+                binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym, requireContext())));
 
         viewModel.monthlySummary.observe(getViewLifecycleOwner(), summary -> {
             if (summary == null) {
@@ -109,10 +109,10 @@ public class TransactionFragment extends Fragment
                 binding.tvBalance.setText(getString(R.string.amount_zero));
                 return;
             }
-            binding.tvIncome.setText(FormatUtils.formatAmountWithUnit(summary.totalIncome));
-            binding.tvExpense.setText(FormatUtils.formatAmountWithUnit(summary.totalExpense));
+            binding.tvIncome.setText(FormatUtils.formatAmountWithUnit(summary.totalIncome, requireContext()));
+            binding.tvExpense.setText(FormatUtils.formatAmountWithUnit(summary.totalExpense, requireContext()));
             long balance = summary.totalIncome - summary.totalExpense;
-            binding.tvBalance.setText(FormatUtils.formatAmountWithUnit(balance));
+            binding.tvBalance.setText(FormatUtils.formatAmountWithUnit(balance, requireContext()));
         });
 
         viewModel.dailySummary.observe(getViewLifecycleOwner(), dailies -> {
@@ -208,7 +208,7 @@ public class TransactionFragment extends Fragment
                 DailySummary ds = dayMap.get(day);
                 if (ds != null && ds.totalExpense > 0) {
                     TextView tvExp = new TextView(requireContext());
-                    tvExp.setText("-" + FormatUtils.formatCompact(ds.totalExpense));
+                    tvExp.setText("-" + FormatUtils.formatCompact(ds.totalExpense, requireContext()));
                     tvExp.setGravity(Gravity.CENTER);
                     tvExp.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
                     tvExp.setTextColor(requireContext().getColor(R.color.expense_color));
@@ -216,7 +216,7 @@ public class TransactionFragment extends Fragment
                 }
                 if (ds != null && ds.totalIncome > 0) {
                     TextView tvInc = new TextView(requireContext());
-                    tvInc.setText("+" + FormatUtils.formatCompact(ds.totalIncome));
+                    tvInc.setText("+" + FormatUtils.formatCompact(ds.totalIncome, requireContext()));
                     tvInc.setGravity(Gravity.CENTER);
                     tvInc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
                     tvInc.setTextColor(requireContext().getColor(R.color.income_color));
@@ -258,7 +258,7 @@ public class TransactionFragment extends Fragment
                 filtered.add(tx);
             }
         }
-        adapter.submitTransactions(filtered, categoryMap);
+        adapter.submitTransactions(filtered, categoryMap, requireContext());
 
         boolean empty = filtered.isEmpty();
         binding.recyclerTransactions.setVisibility(empty ? View.GONE : View.VISIBLE);

@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.moneylog.R;
@@ -32,6 +34,7 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnCate
     private FragmentCategoryBinding binding;
     private CategoryViewModel viewModel;
     private CategoryAdapter adapter;
+    private ItemTouchHelper itemTouchHelper;
     private String selectedType = "EXPENSE";
 
     @Nullable
@@ -57,6 +60,34 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnCate
         adapter = new CategoryAdapter(this);
         binding.rvCategories.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvCategories.setAdapter(adapter);
+
+        // 드래그 앤 드롭
+        ItemTouchHelper.SimpleCallback touchCallback = new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView rv,
+                                  @NonNull RecyclerView.ViewHolder from,
+                                  @NonNull RecyclerView.ViewHolder to) {
+                return adapter.moveItem(from.getAdapterPosition(), to.getAdapterPosition());
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder holder, int direction) { }
+
+            @Override
+            public void clearView(@NonNull RecyclerView rv, @NonNull RecyclerView.ViewHolder h) {
+                super.clearView(rv, h);
+                viewModel.updateSortOrders(adapter.getReorderedList());
+            }
+
+            @Override
+            public boolean isLongPressDragEnabled() {
+                return false;
+            }
+        };
+        itemTouchHelper = new ItemTouchHelper(touchCallback);
+        itemTouchHelper.attachToRecyclerView(binding.rvCategories);
+        adapter.setDragStartListener(holder -> itemTouchHelper.startDrag(holder));
 
         // 세그먼트 토글 설정
         updateSegmentToggle();

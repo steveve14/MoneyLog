@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,15 +12,37 @@ import androidx.navigation.Navigation;
 
 import com.moneylog.R;
 import com.moneylog.databinding.FragmentOnboardingBinding;
+import com.moneylog.util.DataManagementHelper;
 import com.moneylog.util.LocaleHelper;
+
+import java.util.Locale;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class OnboardingFragment extends Fragment {
 
+    @Inject
+    DataManagementHelper dataManagementHelper;
+
     private FragmentOnboardingBinding binding;
-    private String selectedTag = "ko";
+    private String selectedTag = "en";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        String systemLang = Locale.getDefault().getLanguage();
+        if ("ko".equals(systemLang) || "en".equals(systemLang) || "ja".equals(systemLang)) {
+            selectedTag = systemLang;
+        } else {
+            selectedTag = "en";
+            if (LocaleHelper.getCurrentLocaleTag().isEmpty()) {
+                LocaleHelper.setLocale("en");
+            }
+        }
+    }
 
     @Nullable
     @Override
@@ -57,6 +78,10 @@ public class OnboardingFragment extends Fragment {
             LocaleHelper.saveLanguageTag(requireContext(), selectedTag);
             LocaleHelper.setLocale(selectedTag);
             LocaleHelper.setOnboardingDone(requireContext());
+            dataManagementHelper.resetCategoriesToDefault(new DataManagementHelper.ResultCallback() {
+                @Override public void onSuccess(String message) { }
+                @Override public void onFailure(String message) { }
+            });
             Navigation.findNavController(v).navigate(R.id.action_onboarding_to_dashboard);
         });
     }

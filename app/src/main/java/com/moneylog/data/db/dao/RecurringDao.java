@@ -41,4 +41,8 @@ public interface RecurringDao {
     /** WorkManager용: 활성화된 반복 거래 전체 조회 (동기) */
     @Query("SELECT * FROM recurring_transactions WHERE is_active = 1")
     List<RecurringEntity> getAllActiveSync();
+
+    /** 전체 반복 거래 삭제 (데이터 초기화용) */
+    @Query("DELETE FROM recurring_transactions")
+    void deleteAll();
 }

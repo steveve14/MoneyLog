@@ -109,6 +109,16 @@
     <string name="settings_data_management">데이터 관리</string>
     <string name="settings_category_management">카테고리 관리</string>
     <string name="settings_category_management_desc">아이콘과 색상을 편집합니다</string>
+    <string name="settings_category_delete_all">카테고리 모두 삭제</string>
+    <string name="settings_category_delete_all_desc">모든 카테고리를 삭제합니다</string>
+    <string name="settings_category_reset_default">카테고리 기본으로</string>
+    <string name="settings_category_reset_default_desc">기본 카테고리로 초기화합니다</string>
+    <string name="category_delete_all_title">카테고리 모두 삭제</string>
+    <string name="category_delete_all_message">모든 카테고리가 삭제됩니다. 계속하시겠습니까?</string>
+    <string name="category_delete_all_complete">모든 카테고리가 삭제되었습니다</string>
+    <string name="category_reset_default_title">카테고리 초기화</string>
+    <string name="category_reset_default_message">기존 카테고리를 모두 삭제하고 기본 카테고리로 초기화합니다. 계속하시겠습니까?</string>
+    <string name="category_reset_default_complete">기본 카테고리로 초기화되었습니다</string>
     <string name="settings_backup_sync">백업 &amp; 동기화</string>
     <string name="settings_gdrive_connected">Google Drive 연결</string>
     <string name="settings_backup_now">지금 백업</string>
@@ -233,7 +243,8 @@
     <string name="data_restore_title">데이터 복원</string>
     <string name="data_restore_message">Google Drive에서 데이터를 복원합니다. 현재 데이터가 덮어쓰여집니다.</string>
     <string name="data_reset_title">데이터 초기화</string>
-    <string name="data_reset_not_implemented">초기화 기능은 아직 구현되지 않았습니다.</string>
+    <string name="data_reset_complete">모든 데이터가 초기화되었습니다.</string>
+    <string name="data_reset_failed">초기화 실패: %s</string>
     <string name="settings_restore_desc">Google Drive에서 데이터 복원</string>
     <string name="settings_gdrive_backup_restore">Google Drive 백업 &amp; 복원</string>
     <string name="settings_gdrive_backup_restore_desc">백업 및 복원을 Google Drive로 관리</string>
@@ -263,4 +274,82 @@
     <string name="data_cleanup_title">데이터 정리</string>
     <string name="data_cleanup_message">6개월 이전의 거래 데이터를 삭제합니다. 계속하시겠습니까?</string>
     <string name="msg_cleanup_complete">데이터 정리 완료</string>
+    <string name="drag_to_reorder">드래그하여 순서 변경</string>
+
+    <!-- 날짜 형식 -->
+    <string name="date_format_md">M월 d일</string>
+    <string name="date_format_ym">yyyy년 M월</string>
+    <string name="year_month_display">%1$s년 %2$d월</string>
+    <string name="month_picker_title">월 선택</string>
+    <string-array name="month_names">
+        <item>1월</item>
+        <item>2월</item>
+        <item>3월</item>
+        <item>4월</item>
+        <item>5월</item>
+        <item>6월</item>
+        <item>7월</item>
+        <item>8월</item>
+        <item>9월</item>
+        <item>10월</item>
+        <item>11월</item>
+        <item>12월</item>
+    </string-array>
+
+    <!-- 간략 금액 표시 -->
+    <bool name="compact_western">false</bool>
+    <string name="compact_large">%1$.1f억</string>
+    <string name="compact_medium">%1$.0f만</string>
+
+    <!-- 금액 형식 -->
+    <string name="amount_with_unit">%s원</string>
+    <string name="amount_approx_eok">약 %d억원</string>
+    <string name="amount_approx_eok_cheonman">약 %1$d억 %2$d천만원</string>
+    <string name="amount_approx_man">약 %d만원</string>
+    <string name="amount_approx_man_cheon">약 %1$d만 %2$d천원</string>
+
+    <!-- AI 분석 결과 -->
+    <string name="ai_title_analysis">📊 %1$s 재정 분석\n\n</string>
+    <string name="ai_total_income">총 수입: %1$s (%2$d건)\n</string>
+    <string name="ai_total_expense">총 지출: %1$s (%2$d건)\n</string>
+    <string name="ai_balance_positive">잔액: +%s ✅\n</string>
+    <string name="ai_balance_negative">잔액: %s ⚠️\n</string>
+    <string name="ai_savings_rate">\n💰 저축률: %d%%</string>
+    <string name="ai_savings_excellent"> — 훌륭합니다! 안정적인 재정 관리입니다.</string>
+    <string name="ai_savings_good"> — 양호합니다. 조금 더 절약해보세요.</string>
+    <string name="ai_savings_warning"> — 지출을 줄일 필요가 있습니다.</string>
+    <string name="ai_savings_danger"> — 수입보다 지출이 많습니다. 지출 점검이 필요합니다.</string>
+    <string name="ai_category_title">\n📌 카테고리별 지출 분석\n</string>
+    <string name="ai_category_row">%1$d. %2$s: %3$s (%4$d%%, %5$d건)\n</string>
+    <string name="ai_pattern_title">\n📅 소비 패턴\n</string>
+    <string name="ai_pattern_avg">일 평균 지출: %s\n</string>
+    <string name="ai_pattern_max">최대 지출일: %1$s (%2$s)\n</string>
+    <string name="ai_pattern_spike">⚠️ 최대 지출일이 평균의 %d배입니다. 큰 지출을 점검해보세요.\n</string>
+    <string name="ai_tips_title">\n💡 절약 팁\n</string>
+    <string name="ai_tip_overspend">• 수입 대비 지출이 초과되었습니다. 고정 지출 항목을 점검해보세요.\n</string>
+    <string name="ai_tip_small_expenses">• 소액 지출이 많습니다 (평균 %s). 소비 습관을 점검해보세요.\n</string>
+    <string name="ai_tip_diverse_categories">• 지출 카테고리가 다양합니다. 주요 카테고리에 예산을 설정해보세요.\n</string>
+
+    <!-- 기본 카테고리 -->
+    <string name="cat_food">식비</string>
+    <string name="cat_transport">교통</string>
+    <string name="cat_housing">주거</string>
+    <string name="cat_entertainment">엔터테인먼트</string>
+    <string name="cat_clothing">의류</string>
+    <string name="cat_medical">의료·건강</string>
+    <string name="cat_education">교육</string>
+    <string name="cat_gifts">선물·경조사</string>
+    <string name="cat_cafe">카페</string>
+    <string name="cat_other_expense">기타 지출</string>
+    <string name="cat_salary">급여</string>
+    <string name="cat_allowance">용돈</string>
+    <string name="cat_savings_withdrawal">저축 인출</string>
+    <string name="cat_investment">투자 수익</string>
+    <string name="cat_other_income">기타 수입</string>
+
+    <!-- 기타 누락 -->
+    <string name="file_create_failed">파일 생성 실패</string>
+    <string name="file_write_failed">파일 쓰기 실패</string>
+    <string name="file_empty">빈 파일입니다</string>
+    <string name="category_fallback">기타</string>
 </resources>

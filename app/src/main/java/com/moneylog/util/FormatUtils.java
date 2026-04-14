@@ -1,5 +1,9 @@
 package com.moneylog.util;
 
+import android.content.Context;
+
+import com.moneylog.R;
+
 import java.text.DecimalFormat;
 
 public final class FormatUtils {
@@ -22,38 +26,49 @@ public final class FormatUtils {
         return AMOUNT_FORMAT.format(amount);
     }
 
-    /** Long 금액 → "1,234,567원" (텍스트 모드: "약 1억원") */
+    /** Long 금액 → locale-aware unit (Context 버전) */
+    public static String formatAmountWithUnit(long amount, Context context) {
+        if (textMode) {
+            return formatAmountText(amount, context);
+        }
+        return context.getString(R.string.amount_with_unit, AMOUNT_FORMAT.format(amount));
+    }
+
+    /** Fallback (Context 없음) */
     public static String formatAmountWithUnit(long amount) {
         if (textMode) {
             return formatAmountText(amount);
         }
-        return AMOUNT_FORMAT.format(amount) + "원";
+        return AMOUNT_FORMAT.format(amount);
     }
 
-    /** 금액을 한국어 텍스트로 변환 (약 1억원, 약 500만원 등) */
-    public static String formatAmountText(long amount) {
+    /** 금액을 텍스트로 변환 — locale-aware (Context 버전) */
+    public static String formatAmountText(long amount, Context context) {
         if (amount >= 1_0000_0000L) {
             long eok = amount / 1_0000_0000L;
             long remainder = amount % 1_0000_0000L;
             long cheonMan = remainder / 1000_0000L;
-            if (remainder == 0) {
-                return "약 " + eok + "억원";
-            } else if (cheonMan > 0) {
-                return "약 " + eok + "억 " + cheonMan + "천만원";
+            if (remainder == 0 || cheonMan == 0) {
+                return context.getString(R.string.amount_approx_eok, (int) eok);
+            } else {
+                return context.getString(R.string.amount_approx_eok_cheonman, (int) eok, (int) cheonMan);
             }
-            return "약 " + eok + "억원";
         } else if (amount >= 1_0000L) {
             long man = amount / 1_0000L;
             long remainder = amount % 1_0000L;
             long cheon = remainder / 1000L;
-            if (remainder == 0) {
-                return "약 " + man + "만원";
-            } else if (cheon > 0) {
-                return "약 " + man + "만 " + cheon + "천원";
+            if (remainder == 0 || cheon == 0) {
+                return context.getString(R.string.amount_approx_man, (int) man);
+            } else {
+                return context.getString(R.string.amount_approx_man_cheon, (int) man, (int) cheon);
             }
-            return "약 " + man + "만원";
         }
-        return AMOUNT_FORMAT.format(amount) + "원";
+        return context.getString(R.string.amount_with_unit, AMOUNT_FORMAT.format(amount));
+    }
+
+    /** Fallback (Context 없음) */
+    public static String formatAmountText(long amount) {
+        return AMOUNT_FORMAT.format(amount);
     }
 
     /** Double 비율 → "75.3%" */
@@ -75,14 +90,30 @@ public final class FormatUtils {
         return amount == 0L ? "" : AMOUNT_FORMAT.format(amount);
     }
 
-    /** 달력 셀용 간략 금액 표시 (만 단위 이상이면 '1.2만' 형태) */
+    /** 달력 셀용 간략 금액 표시 — locale-aware (Context 버전) */
+    public static String formatCompact(long amount, Context context) {
+        boolean western = context.getResources().getBoolean(R.bool.compact_western);
+        if (western) {
+            if (amount >= 1_000_000L)
+                return context.getString(R.string.compact_large, amount / 1_000_000.0);
+            if (amount >= 1_000L)
+                return context.getString(R.string.compact_medium, amount / 1_000.0);
+        } else {
+            if (amount >= 100_000_000L)
+                return context.getString(R.string.compact_large, amount / 100_000_000.0);
+            if (amount >= 10_000L)
+                return context.getString(R.string.compact_medium, amount / 10_000.0);
+        }
+        return AMOUNT_FORMAT.format(amount);
+    }
+
+    /** Fallback (Context 없음) */
     public static String formatCompact(long amount) {
         if (amount >= 100_000_000L) {
             return String.format("%.1f억", amount / 100_000_000.0);
         } else if (amount >= 10_000L) {
             return String.format("%.0f만", amount / 10_000.0);
-        } else {
-            return AMOUNT_FORMAT.format(amount);
         }
+        return AMOUNT_FORMAT.format(amount);
     }
 }

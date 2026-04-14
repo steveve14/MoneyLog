@@ -67,7 +67,7 @@ public class DashboardFragment extends Fragment {
                         .navigate(R.id.transactionFragment));
 
         viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym ->
-                binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym)));
+                binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym, requireContext())));
 
         viewModel.monthlySummary.observe(getViewLifecycleOwner(), summary -> {
             if (summary == null) {
@@ -77,9 +77,9 @@ public class DashboardFragment extends Fragment {
                 return;
             }
             long balance = summary.totalIncome - summary.totalExpense;
-            binding.tvBalance.setText(FormatUtils.formatAmountWithUnit(balance));
-            binding.tvIncome.setText(FormatUtils.formatAmountWithUnit(summary.totalIncome));
-            binding.tvExpense.setText(FormatUtils.formatAmountWithUnit(summary.totalExpense));
+            binding.tvBalance.setText(FormatUtils.formatAmountWithUnit(balance, requireContext()));
+            binding.tvIncome.setText(FormatUtils.formatAmountWithUnit(summary.totalIncome, requireContext()));
+            binding.tvExpense.setText(FormatUtils.formatAmountWithUnit(summary.totalExpense, requireContext()));
         });
 
         viewModel.categoryExpenses.observe(getViewLifecycleOwner(), this::renderCategoryBars);
@@ -123,7 +123,7 @@ public class DashboardFragment extends Fragment {
             boolean isIncome = "INCOME".equals(cs.type);
             String prefix = isIncome ? "+" : "-";
             tvName.setText(name);
-            tvAmount.setText(prefix + FormatUtils.formatAmountWithUnit(cs.total));
+            tvAmount.setText(prefix + FormatUtils.formatAmountWithUnit(cs.total, requireContext()));
             if (isIncome) {
                 tvAmount.setTextColor(requireContext().getColor(R.color.income_color));
             }
@@ -153,7 +153,7 @@ public class DashboardFragment extends Fragment {
             TextView tvAmount = row.findViewById(R.id.tvTxAmount);
             TextView tvCategory = row.findViewById(R.id.tvTxCategory);
 
-            tvDate.setText(DateUtils.toDisplayDate(tx.date));
+            tvDate.setText(DateUtils.toDisplayDate(tx.date, requireContext()));
 
             String catName = categoryNameMap.get(tx.categoryId);
             if (catName != null) {
@@ -168,7 +168,7 @@ public class DashboardFragment extends Fragment {
 
             boolean isIncome = "INCOME".equals(tx.type);
             String prefix = isIncome ? "+" : "-";
-            tvAmount.setText(prefix + FormatUtils.formatAmountWithUnit(tx.amount));
+            tvAmount.setText(prefix + FormatUtils.formatAmountWithUnit(tx.amount, requireContext()));
             tvAmount.setTextColor(requireContext().getColor(
                     isIncome ? R.color.income_color : R.color.expense_color));
 

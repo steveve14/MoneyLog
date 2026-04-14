@@ -6,7 +6,12 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import com.moneylog.R;
+import com.moneylog.data.db.AppDatabase;
+import com.moneylog.data.db.dao.CategoryDao;
+import com.moneylog.data.db.dao.RecurringDao;
 import com.moneylog.data.db.dao.TransactionDao;
+import com.moneylog.data.db.entity.CategoryEntity;
 import com.moneylog.data.db.entity.TransactionEntity;
 
 import java.io.BufferedReader;
@@ -16,7 +21,9 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,12 +37,22 @@ public class DataManagementHelper {
 
     private final Context context;
     private final TransactionDao transactionDao;
+    private final CategoryDao categoryDao;
+    private final RecurringDao recurringDao;
+    private final AppDatabase appDatabase;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Inject
-    public DataManagementHelper(@ApplicationContext Context context, TransactionDao transactionDao) {
+    public DataManagementHelper(@ApplicationContext Context context,
+                                TransactionDao transactionDao,
+                                CategoryDao categoryDao,
+                                RecurringDao recurringDao,
+                                AppDatabase appDatabase) {
         this.context = context;
         this.transactionDao = transactionDao;
+        this.categoryDao = categoryDao;
+        this.recurringDao = recurringDao;
+        this.appDatabase = appDatabase;
     }
 
     public interface ResultCallback {
@@ -58,13 +75,13 @@ public class DataManagementHelper {
                 Uri uri = context.getContentResolver()
                         .insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
                 if (uri == null) {
-                    callback.onFailure("파일 생성 실패");
+                    callback.onFailure(context.getString(R.string.file_create_failed));
                     return;
                 }
 
                 try (OutputStream os = context.getContentResolver().openOutputStream(uri)) {
                     if (os == null) {
-                        callback.onFailure("파일 쓰기 실패");
+                        callback.onFailure(context.getString(R.string.file_write_failed));
                         return;
                     }
                     // BOM for Excel compatibility
@@ -93,7 +110,7 @@ public class DataManagementHelper {
                         new InputStreamReader(context.getContentResolver().openInputStream(fileUri), "UTF-8"))) {
                     String header = reader.readLine(); // skip header
                     if (header == null) {
-                        callback.onFailure("빈 파일입니다");
+                        callback.onFailure(context.getString(R.string.file_empty));
                         return;
                     }
                     String line;
@@ -119,6 +136,77 @@ public class DataManagementHelper {
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             int count = transactionDao.softDeleteBefore(beforeDate, System.currentTimeMillis());
             callback.onSuccess(String.valueOf(count));
+        });
+    }
+
+    public void resetAllData(ResultCallback callback) {
+        executor.execute(() -> {
+            try {
+                transactionDao.deleteAll();
+                recurringDao.deleteAll();
+                categoryDao.deleteAll();
+                AppDatabase.reseedDefaultCategories(
+                        appDatabase.getOpenHelper().getWritableDatabase(), context);
+                callback.onSuccess("");
+            } catch (Exception e) {
+                callback.onFailure(e.getMessage());
+            }
+        });
+    }
+
+    public void deleteAllCategories(ResultCallback callback) {
+        executor.execute(() -> {
+            try {
+                categoryDao.deleteAll();
+                callback.onSuccess("");
+            } catch (Exception e) {
+                callback.onFailure(e.getMessage());
+            }
+        });
+    }
+
+    public void resetCategoriesToDefault(ResultCallback callback) {
+        executor.execute(() -> {
+            try {
+                categoryDao.deleteAll();
+                AppDatabase.reseedDefaultCategories(
+                        appDatabase.getOpenHelper().getWritableDatabase(), context);
+                callback.onSuccess("");
+            } catch (Exception e) {
+                callback.onFailure(e.getMessage());
+            }
+        });
+    }
+
+    /** 언어 변경 시 기본 카테고리 이름을 현재 로케일에 맞게 업데이트 */
+    public void updateDefaultCategoryNames() {
+        executor.execute(() -> {
+            Map<String, Integer> iconToStringRes = new HashMap<>();
+            iconToStringRes.put("restaurant", R.string.cat_food);
+            iconToStringRes.put("directions_bus", R.string.cat_transport);
+            iconToStringRes.put("home", R.string.cat_housing);
+            iconToStringRes.put("sports_esports", R.string.cat_entertainment);
+            iconToStringRes.put("checkroom", R.string.cat_clothing);
+            iconToStringRes.put("local_hospital", R.string.cat_medical);
+            iconToStringRes.put("menu_book", R.string.cat_education);
+            iconToStringRes.put("redeem", R.string.cat_gifts);
+            iconToStringRes.put("local_cafe", R.string.cat_cafe);
+            iconToStringRes.put("payments", R.string.cat_salary);
+            iconToStringRes.put("account_balance_wallet", R.string.cat_allowance);
+            iconToStringRes.put("savings", R.string.cat_savings_withdrawal);
+            iconToStringRes.put("trending_up", R.string.cat_investment);
+
+            List<CategoryEntity> defaults = categoryDao.getDefaultCategoriesSync();
+            for (CategoryEntity cat : defaults) {
+                Integer resId = iconToStringRes.get(cat.iconName);
+                if (resId != null) {
+                    categoryDao.updateDefaultCategoryName(cat.id, context.getString(resId));
+                } else if ("inventory_2".equals(cat.iconName)) {
+                    int fallbackRes = "EXPENSE".equals(cat.type)
+                            ? R.string.cat_other_expense : R.string.cat_other_income;
+                    categoryDao.updateDefaultCategoryName(cat.id, context.getString(fallbackRes));
+                }
+            }
         });
     }
 

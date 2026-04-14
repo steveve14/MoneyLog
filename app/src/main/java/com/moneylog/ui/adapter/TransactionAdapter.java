@@ -1,5 +1,6 @@
 package com.moneylog.ui.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<AdapterItem> items = new ArrayList<>();
     private Map<Long, CategoryEntity> categoryMap;
     private OnTransactionClickListener listener;
+    private Context context;
 
     public TransactionAdapter(OnTransactionClickListener listener) {
         this.listener = listener;
@@ -72,13 +74,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     /** Build the flat list with date headers from a sorted transaction list. */
     public void submitTransactions(List<TransactionEntity> txList,
-                                   Map<Long, CategoryEntity> catMap) {
+                                   Map<Long, CategoryEntity> catMap,
+                                   Context context) {
         this.categoryMap = catMap;
+        this.context = context;
         List<AdapterItem> newItems = new ArrayList<>();
         String lastDate = null;
         for (TransactionEntity tx : txList) {
             if (!tx.date.equals(lastDate)) {
-                newItems.add(new HeaderItem(DateUtils.toDisplayDate(tx.date)));
+                newItems.add(new HeaderItem(DateUtils.toDisplayDate(tx.date, context)));
                 lastDate = tx.date;
             }
             newItems.add(new TxItem(tx));
@@ -163,7 +167,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         void bind(TransactionEntity tx, CategoryEntity cat) {
             this.boundTx = tx;
-            tvCategory.setText(cat != null ? cat.name : "기타");
+            tvCategory.setText(cat != null ? cat.name :
+                    itemView.getContext().getString(R.string.category_fallback));
             int iconRes = IconHelper.getDrawableResId(cat != null ? cat.iconName : "category");
             ivIcon.setImageResource(iconRes);
             if (tx.memo != null && !tx.memo.isEmpty()) {
@@ -174,7 +179,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             boolean isIncome = "INCOME".equals(tx.type);
             String prefix = isIncome ? "+" : "-";
-            tvAmount.setText(prefix + FormatUtils.formatAmountWithUnit(tx.amount));
+            tvAmount.setText(prefix + FormatUtils.formatAmountWithUnit(tx.amount, itemView.getContext()));
             tvAmount.setTextColor(itemView.getContext().getColor(
                 isIncome ? R.color.income_color : R.color.expense_color
             ));

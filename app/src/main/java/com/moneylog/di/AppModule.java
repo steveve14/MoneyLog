@@ -25,7 +25,7 @@ public class AppModule {
     @Singleton
     public AppDatabase provideAppDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DATABASE_NAME)
-            .addCallback(AppDatabase.SEED_CALLBACK)
+            .addCallback(AppDatabase.createSeedCallback(context))
             .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3)
             .build();
     }

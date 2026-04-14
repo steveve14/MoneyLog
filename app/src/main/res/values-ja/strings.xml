@@ -106,6 +106,16 @@
     <string name="settings_data_management">データ管理</string>
     <string name="settings_category_management">カテゴリ管理</string>
     <string name="settings_category_management_desc">アイコンと色を編集します</string>
+    <string name="settings_category_delete_all">カテゴリをすべて削除</string>
+    <string name="settings_category_delete_all_desc">すべてのカテゴリを削除します</string>
+    <string name="settings_category_reset_default">デフォルトに戻す</string>
+    <string name="settings_category_reset_default_desc">デフォルトカテゴリに初期化します</string>
+    <string name="category_delete_all_title">カテゴリをすべて削除</string>
+    <string name="category_delete_all_message">すべてのカテゴリが削除されます。続行しますか？</string>
+    <string name="category_delete_all_complete">すべてのカテゴリが削除されました</string>
+    <string name="category_reset_default_title">カテゴリ初期化</string>
+    <string name="category_reset_default_message">既存のカテゴリをすべて削除し、デフォルトに初期化します。続行しますか？</string>
+    <string name="category_reset_default_complete">デフォルトカテゴリに初期化されました</string>
     <string name="settings_backup_sync">バックアップ &amp; 同期</string>
     <string name="settings_gdrive_connected">Google Drive接続</string>
     <string name="settings_backup_now">今すぐバックアップ</string>
@@ -142,4 +152,206 @@
     <string name="save">保存</string>
     <string name="expand_categories">もっと見る ▼</string>
     <string name="collapse_categories">閉じる ▲</string>
+    <string name="prev_month">前月</string>
+    <string name="next_month">翌月</string>
+    <string name="view_trends">トレンドを見る →</string>
+    <string name="dismiss">閉じる</string>
+    <string name="no_spending_data">支出データがありません</string>
+    <string name="no_recent_transactions">最近の取引がありません</string>
+
+    <!-- 履歴 -->
+    <string name="statistics_financial_insight_history">履歴</string>
+    <string name="history_headline">履歴</string>
+    <string name="filter_all">すべて</string>
+    <string name="search_transactions">取引を検索…</string>
+    <string name="no_transactions">取引がありません</string>
+    <string name="add_transaction">取引を追加</string>
+
+    <!-- 取引入力 -->
+    <string name="journal_entry">JOURNAL ENTRY</string>
+    <string name="new_transaction">新しい取引</string>
+    <string name="transaction_date">取引日</string>
+    <string name="description">説明</string>
+    <string name="memo_hint">メモを入力…</string>
+    <string name="category">カテゴリ</string>
+    <string name="payment_method">支払方法</string>
+
+    <!-- 予算 -->
+    <string name="budget_monthly_oversight">月間管理</string>
+    <string name="budget_current_balance">現在の残高</string>
+    <string name="budget_utilized">予算使用率</string>
+    <string name="budget_allocations">カテゴリ別配分</string>
+    <string name="budget_details">詳細</string>
+    <string name="no_budget_data">予算データがありません</string>
+
+    <!-- 固定取引 V2 -->
+    <string name="recurring_commitment_desc">毎月自動処理される取引です</string>
+    <string name="recurring_fixed_expenses_desc">毎月の固定支出項目</string>
+    <string name="recurring_fixed_income_desc">毎月の固定収入項目</string>
+    <string name="recurring_savings_potential">節約の可能性</string>
+    <string name="recurring_savings_desc">固定費を削減して節約しましょう</string>
+    <string name="ai_financial_insight">AI財務インサイト</string>
+    <string name="recommendation">おすすめ</string>
+
+    <!-- 統計 V2 -->
+    <string name="statistics_performance_review">パフォーマンスレビュー</string>
+    <string name="statistics_vs_last_month">前月比</string>
+    <string name="statistics_spending">支出</string>
+    <string name="insight_saved">分析完了</string>
+    <string name="optimization_ready">最適化可能</string>
+    <string name="apply_strategy">戦略を適用</string>
+
+    <!-- 設定 V2 -->
+    <string name="settings_current_plan">現在のプラン</string>
+    <string name="settings_plan_name">ベーシックプラン</string>
+    <string name="settings_plan_desc">基本機能で財務を管理しましょう</string>
+    <string name="settings_manage_subscription">サブスクリプション管理</string>
+    <string name="settings_core_systems">コアシステム</string>
+    <string name="settings_data_management_desc">エクスポート、インポートおよびデータ整理</string>
+    <string name="settings_backup_sync_desc">Google Drive連携</string>
+    <string name="settings_intelligence">インテリジェンス</string>
+    <string name="settings_ai_insights_desc">AIベースの財務分析と提案</string>
+    <string name="gemini_status_active">有効</string>
+    <string name="settings_environment">環境</string>
+    <string name="settings_device_preferences_desc">通知、テーマなどのデバイス設定</string>
+
+    <!-- 共通（追加） -->
+    <string name="close">閉じる</string>
+    <string name="amount_zero">0円</string>
+    <string name="toggle_calendar">カレンダーを開く/閉じる</string>
+    <string name="category_add">カテゴリを追加</string>
+    <string name="category_edit">カテゴリを編集</string>
+    <string name="category_name_hint">カテゴリ名</string>
+    <string name="icon_select">アイコンを選択</string>
+    <string name="show_more">もっと見る</string>
+    <string name="transaction_type">取引タイプ</string>
+    <string name="category_delete">カテゴリを削除</string>
+    <string name="category_unknown">カテゴリ %d</string>
+    <string name="input_name_required">名前を入力してください</string>
+    <string name="msg_updated">更新しました</string>
+    <string name="msg_added">追加しました</string>
+    <string name="msg_deleted">削除しました</string>
+    <string name="transaction_edit">取引を編集</string>
+    <string name="transaction_delete_title">取引を削除</string>
+    <string name="transaction_delete_message">この取引を削除しますか？</string>
+    <string name="ai_initial_prompt">分析ボタンをタップしてAIインサイトを確認しましょう。</string>
+
+    <!-- Google Drive -->
+    <string name="msg_backup_in_progress">バックアップ中…</string>
+    <string name="msg_backup_complete">バックアップ完了</string>
+    <string name="msg_restore_complete">復元完了</string>
+    <string name="data_restore_title">データ復元</string>
+    <string name="data_restore_message">Google Driveからデータを復元します。現在のデータは上書きされます。</string>
+    <string name="data_reset_title">データリセット</string>
+    <string name="data_reset_complete">すべてのデータがリセットされました。</string>
+    <string name="data_reset_failed">リセット失敗: %s</string>
+    <string name="settings_restore_desc">Google Driveからデータを復元</string>
+    <string name="settings_gdrive_backup_restore">Google Driveバックアップ &amp; 復元</string>
+    <string name="settings_gdrive_backup_restore_desc">Google Driveでバックアップと復元を管理</string>
+    <string name="gdrive_backup">Google Driveバックアップ</string>
+    <string name="gdrive_restore">Google Drive復元</string>
+    <string name="gdrive_not_implemented">Google Drive連携はまだ実装されていません。</string>
+    <string name="gdrive_connect">Google Drive連携</string>
+    <string name="gdrive_disconnect">連携解除</string>
+    <string name="gdrive_not_signed_in">Google Driveにログインしてください</string>
+    <string name="gdrive_sign_in_failed">Googleログインに失敗しました</string>
+    <string name="gdrive_backup_no_data">バックアップするデータがありません</string>
+    <string name="gdrive_no_backup_found">Google Driveにバックアップデータがありません</string>
+    <string name="gdrive_backup_failed">バックアップ失敗</string>
+    <string name="gdrive_restore_failed">復元失敗</string>
+    <string name="gdrive_restart_message">データ復元が完了しました。アプリを再起動します。</string>
+
+    <!-- データ管理 -->
+    <string name="data_management_title">データ管理</string>
+    <string name="data_export_csv">CSVエクスポート</string>
+    <string name="data_export_csv_desc">取引履歴をCSVファイルでエクスポートします</string>
+    <string name="data_import_csv">CSVインポート</string>
+    <string name="data_import_csv_desc">CSVファイルから取引履歴をインポートします</string>
+    <string name="data_cleanup">データ整理</string>
+    <string name="data_cleanup_desc">古い取引データを整理します</string>
+    <string name="msg_export_complete">CSVエクスポート完了</string>
+    <string name="msg_export_failed">エクスポート失敗</string>
+    <string name="msg_import_complete">CSVインポート完了: %d件</string>
+    <string name="msg_import_failed">インポート失敗</string>
+    <string name="data_cleanup_title">データ整理</string>
+    <string name="data_cleanup_message">6ヶ月以前の取引データを削除します。続行しますか？</string>
+    <string name="msg_cleanup_complete">データ整理完了</string>
+    <string name="drag_to_reorder">ドラッグして並べ替え</string>
+
+    <!-- 日付フォーマット -->
+    <string name="date_format_md">M月d日</string>
+    <string name="date_format_ym">yyyy年M月</string>
+    <string name="year_month_display">%1$s年 %2$d月</string>
+    <string name="month_picker_title">月を選択</string>
+    <string-array name="month_names">
+        <item>1月</item>
+        <item>2月</item>
+        <item>3月</item>
+        <item>4月</item>
+        <item>5月</item>
+        <item>6月</item>
+        <item>7月</item>
+        <item>8月</item>
+        <item>9月</item>
+        <item>10月</item>
+        <item>11月</item>
+        <item>12月</item>
+    </string-array>
+
+    <!-- コンパクト金額 -->
+    <bool name="compact_western">false</bool>
+    <string name="compact_large">%1$.1f億</string>
+    <string name="compact_medium">%1$.0f万</string>
+
+    <!-- 金額フォーマット -->
+    <string name="amount_with_unit">%s円</string>
+    <string name="amount_approx_eok">約%d億円</string>
+    <string name="amount_approx_eok_cheonman">約%1$d億%2$d千万円</string>
+    <string name="amount_approx_man">約%d万円</string>
+    <string name="amount_approx_man_cheon">約%1$d万%2$d千円</string>
+
+    <!-- AI分析 -->
+    <string name="ai_title_analysis">📊 %1$s 財務分析\n\n</string>
+    <string name="ai_total_income">総収入: %1$s (%2$d件)\n</string>
+    <string name="ai_total_expense">総支出: %1$s (%2$d件)\n</string>
+    <string name="ai_balance_positive">残高: +%s ✅\n</string>
+    <string name="ai_balance_negative">残高: %s ⚠️\n</string>
+    <string name="ai_savings_rate">\n💰 貯蓄率: %d%%</string>
+    <string name="ai_savings_excellent"> — 素晴らしい！安定した財務管理です。</string>
+    <string name="ai_savings_good"> — 良好です。もう少し節約しましょう。</string>
+    <string name="ai_savings_warning"> — 支出を減らす必要があります。</string>
+    <string name="ai_savings_danger"> — 収入より支出が多いです。支出を見直しましょう。</string>
+    <string name="ai_category_title">\n📌 カテゴリ別支出分析\n</string>
+    <string name="ai_category_row">%1$d. %2$s: %3$s (%4$d%%, %5$d件)\n</string>
+    <string name="ai_pattern_title">\n📅 消費パターン\n</string>
+    <string name="ai_pattern_avg">日平均支出: %s\n</string>
+    <string name="ai_pattern_max">最大支出日: %1$s (%2$s)\n</string>
+    <string name="ai_pattern_spike">⚠️ 最大支出日が平均の%d倍です。大きな支出を確認しましょう。\n</string>
+    <string name="ai_tips_title">\n💡 節約ティップ\n</string>
+    <string name="ai_tip_overspend">• 収入より支出が超過しています。固定費を見直しましょう。\n</string>
+    <string name="ai_tip_small_expenses">• 小額支出が多いです (平均 %s)。消費習慣を見直しましょう。\n</string>
+    <string name="ai_tip_diverse_categories">• 支出カテゴリが多様です。主要カテゴリに予算を設定しましょう。\n</string>
+
+    <!-- デフォルトカテゴリ -->
+    <string name="cat_food">食費</string>
+    <string name="cat_transport">交通</string>
+    <string name="cat_housing">住居</string>
+    <string name="cat_entertainment">娯楽</string>
+    <string name="cat_clothing">被服</string>
+    <string name="cat_medical">医療・健康</string>
+    <string name="cat_education">教育</string>
+    <string name="cat_gifts">贈り物</string>
+    <string name="cat_cafe">カフェ</string>
+    <string name="cat_other_expense">その他支出</string>
+    <string name="cat_salary">給与</string>
+    <string name="cat_allowance">お小遣い</string>
+    <string name="cat_savings_withdrawal">貯蓄引き出し</string>
+    <string name="cat_investment">投資収益</string>
+    <string name="cat_other_income">その他収入</string>
+
+    <!-- その他 -->
+    <string name="file_create_failed">ファイル作成失敗</string>
+    <string name="file_write_failed">ファイル書き込み失敗</string>
+    <string name="file_empty">空のファイルです</string>
+    <string name="category_fallback">その他</string>
 </resources>
