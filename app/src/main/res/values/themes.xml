@@ -68,6 +68,17 @@
         <item name="android:textColor">@color/md_theme_primary</item>
     </style>
 
+    <!-- ─── MaterialAlertDialog: Serene Ledger ─── -->
+    <style name="ThemeOverlay.MoneyLog.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.MoneyLog.Dialog</item>
+        <item name="colorSurface">@color/md_theme_surface_container_lowest</item>
+    </style>
+
+    <style name="ShapeAppearance.MoneyLog.Dialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">28dp</item>
+    </style>
+
     <!-- ─── Plinth 입력 필드 (테두리 없음, surface-container-highest 배경) ─── -->
     <style name="Widget.MoneyLog.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
         <item name="boxBackgroundColor">@color/md_theme_surface_container_highest</item>

@@ -11,11 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.tabs.TabLayout;
+import com.moneylog.R;
 import com.moneylog.data.db.entity.CategoryEntity;
 import com.moneylog.databinding.BottomSheetCategoryBinding;
 import com.moneylog.databinding.FragmentCategoryBinding;
@@ -48,27 +49,44 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnCate
 
         viewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
+        // 닫기 버튼
+        binding.btnClose.setOnClickListener(v ->
+                Navigation.findNavController(v).popBackStack());
+
         // RecyclerView
         adapter = new CategoryAdapter(this);
         binding.rvCategories.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvCategories.setAdapter(adapter);
 
-        // 탭 설정
-        binding.tabType.addTab(binding.tabType.newTab().setText("지출"));
-        binding.tabType.addTab(binding.tabType.newTab().setText("수입"));
-        binding.tabType.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override public void onTabSelected(TabLayout.Tab tab) {
-                selectedType = tab.getPosition() == 0 ? "EXPENSE" : "INCOME";
-                observeCategories();
-            }
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
+        // 세그먼트 토글 설정
+        updateSegmentToggle();
+        binding.btnExpense.setOnClickListener(v -> {
+            selectedType = "EXPENSE";
+            updateSegmentToggle();
+            observeCategories();
+        });
+        binding.btnIncome.setOnClickListener(v -> {
+            selectedType = "INCOME";
+            updateSegmentToggle();
+            observeCategories();
         });
 
         observeCategories();
 
         // FAB
         binding.fabAddCategory.setOnClickListener(v -> showCategorySheet(null));
+
+        // 스크롤 시 FAB 축소/확장
+        binding.rvCategories.addOnScrollListener(new androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull androidx.recyclerview.widget.RecyclerView rv, int dx, int dy) {
+                if (dy > 0) {
+                    binding.fabAddCategory.shrink();
+                } else if (dy < 0) {
+                    binding.fabAddCategory.extend();
+                }
+            }
+        });
     }
 
     private void observeCategories() {
@@ -95,8 +113,18 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnCate
         sheet.rvIconPicker.setAdapter(iconAdapter);
         iconAdapter.setSelectedIcon(selectedIcon[0]);
 
+        // 더보기 버튼: 아이콘이 3줄 이하면 숨김
+        if (iconAdapter.isAllVisible()) {
+            sheet.btnShowMoreIcons.setVisibility(View.GONE);
+        } else {
+            sheet.btnShowMoreIcons.setOnClickListener(v -> {
+                iconAdapter.expand();
+                sheet.btnShowMoreIcons.setVisibility(View.GONE);
+            });
+        }
+
         if (isEdit) {
-            sheet.tvSheetTitle.setText("카테고리 수정");
+            sheet.tvSheetTitle.setText(getString(R.string.category_edit));
             sheet.etName.setText(existing.name);
             // 유형 버튼 초기 선택
             if ("EXPENSE".equals(existing.type)) {
@@ -125,7 +153,7 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnCate
                 sheet.etName.getText().toString().trim() : "";
 
             if (TextUtils.isEmpty(name)) {
-                sheet.tilName.setError("이름을 입력하세요");
+                sheet.tilName.setError(getString(R.string.input_name_required));
                 return;
             }
             sheet.tilName.setError(null);
@@ -137,10 +165,10 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnCate
 
             if (isEdit) {
                 viewModel.update(cat);
-                Toast.makeText(requireContext(), "수정되었습니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.msg_updated, Toast.LENGTH_SHORT).show();
             } else {
                 viewModel.save(cat);
-                Toast.makeText(requireContext(), "추가되었습니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.msg_added, Toast.LENGTH_SHORT).show();
             }
             dialog.dismiss();
         });
@@ -149,12 +177,34 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnCate
         sheet.btnDelete.setOnClickListener(v -> {
             if (existing != null) {
                 viewModel.delete(existing.id);
-                Toast.makeText(requireContext(), "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.msg_deleted, Toast.LENGTH_SHORT).show();
             }
             dialog.dismiss();
         });
 
         dialog.show();
+    }
+
+    private void updateSegmentToggle() {
+        boolean isExpense = "EXPENSE".equals(selectedType);
+        binding.btnExpense.setSelected(isExpense);
+        binding.btnIncome.setSelected(!isExpense);
+
+        binding.btnExpense.setBackgroundResource(isExpense ? R.drawable.bg_segment_selected : 0);
+        binding.btnIncome.setBackgroundResource(!isExpense ? R.drawable.bg_segment_selected : 0);
+
+        binding.btnExpense.setTextAppearance(isExpense
+                ? com.google.android.material.R.style.TextAppearance_Material3_LabelLarge
+                : com.google.android.material.R.style.TextAppearance_Material3_LabelMedium);
+        binding.btnIncome.setTextAppearance(!isExpense
+                ? com.google.android.material.R.style.TextAppearance_Material3_LabelLarge
+                : com.google.android.material.R.style.TextAppearance_Material3_LabelMedium);
+
+        int expenseColor = requireContext().getColor(R.color.expense_color);
+        int incomeColor = requireContext().getColor(R.color.income_color);
+        int defaultColor = requireContext().getColor(com.google.android.material.R.color.material_on_surface_emphasis_medium);
+        binding.btnExpense.setTextColor(isExpense ? expenseColor : defaultColor);
+        binding.btnIncome.setTextColor(!isExpense ? incomeColor : defaultColor);
     }
 
     private void updateTypeButtons(BottomSheetCategoryBinding sheet, String type) {

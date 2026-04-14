@@ -63,8 +63,8 @@ public class StatisticsFragment extends Fragment {
 
         viewModel.monthlySummary.observe(getViewLifecycleOwner(), summary -> {
             if (summary == null) {
-                binding.tvTotalIncome.setText("0원");
-                binding.tvTotalExpense.setText("0원");
+                binding.tvTotalIncome.setText(getString(R.string.amount_zero));
+                binding.tvTotalExpense.setText(getString(R.string.amount_zero));
                 return;
             }
             binding.tvTotalIncome.setText(FormatUtils.formatAmountWithUnit(summary.totalIncome));
@@ -116,7 +116,7 @@ public class StatisticsFragment extends Fragment {
 
             String categoryName = categoryNameMap.containsKey(cs.categoryId)
                     ? categoryNameMap.get(cs.categoryId)
-                    : "카테고리 " + cs.categoryId;
+                    : getString(R.string.category_unknown, cs.categoryId);
             tvName.setText(categoryName);
             tvAmount.setText(FormatUtils.formatAmountWithUnit(cs.total));
             double ratio = total > 0 ? (double) cs.total / total : 0.0;

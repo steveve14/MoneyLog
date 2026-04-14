@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,6 +49,7 @@ public class TransactionFormFragment extends Fragment {
     private boolean isEdit = false;
     private TransactionEntity editingTx = null;
     private boolean categoriesExpanded = false;
+    private int collapsedHeight = 0;
 
     @Nullable
     @Override
@@ -76,8 +76,12 @@ public class TransactionFormFragment extends Fragment {
             }
         }
 
-        binding.tvTitle.setText(isEdit ? "거래 수정" : "거래 추가");
+        binding.tvTitle.setText(isEdit ? getString(R.string.transaction_edit) : getString(R.string.add_transaction));
         binding.tvDate.setText(DateUtils.toDisplayDate(selectedDate));
+
+        // 닫기 버튼
+        binding.btnClose.setOnClickListener(v ->
+                Navigation.findNavController(v).popBackStack());
 
         // 타입 탭
         binding.btnExpense.setOnClickListener(v -> setType("EXPENSE"));
@@ -126,21 +130,19 @@ public class TransactionFormFragment extends Fragment {
             binding.btnDelete.setVisibility(View.VISIBLE);
             binding.btnDelete.setOnClickListener(v ->
                 new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("거래 삭제")
-                    .setMessage("이 거래를 삭제하시겠습니까?")
-                    .setPositiveButton("삭제", (d, w) -> {
+                    .setTitle(getString(R.string.transaction_delete_title))
+                    .setMessage(getString(R.string.transaction_delete_message))
+                    .setPositiveButton(getString(R.string.delete), (d, w) -> {
                         if (editingTx != null) {
                             viewModel.deleteTransaction(editingTx.id);
                         }
                         Navigation.findNavController(requireView()).popBackStack();
                     })
-                    .setNegativeButton("취소", null)
+                    .setNegativeButton(getString(R.string.cancel), null)
                     .show());
         }
 
-        // 닫기
-        binding.btnClose.setOnClickListener(v ->
-            Navigation.findNavController(v).popBackStack());
+
 
         // 카테고리 옵저버
         viewModel.categories.observe(getViewLifecycleOwner(), cats -> {
@@ -169,6 +171,18 @@ public class TransactionFormFragment extends Fragment {
         binding.btnExpense.setSelected(isExpense);
         binding.btnIncome.setSelected(!isExpense);
 
+        // 배경 토글
+        binding.btnExpense.setBackgroundResource(isExpense ? R.drawable.bg_segment_selected : 0);
+        binding.btnIncome.setBackgroundResource(!isExpense ? R.drawable.bg_segment_selected : 0);
+
+        // 텍스트 스타일 토글
+        binding.btnExpense.setTextAppearance(isExpense
+                ? com.google.android.material.R.style.TextAppearance_Material3_LabelLarge
+                : com.google.android.material.R.style.TextAppearance_Material3_LabelMedium);
+        binding.btnIncome.setTextAppearance(!isExpense
+                ? com.google.android.material.R.style.TextAppearance_Material3_LabelLarge
+                : com.google.android.material.R.style.TextAppearance_Material3_LabelMedium);
+
         int expenseColor = requireContext().getColor(R.color.expense_color);
         int incomeColor = requireContext().getColor(R.color.income_color);
         int defaultColor = requireContext().getColor(com.google.android.material.R.color.material_on_surface_emphasis_medium);
@@ -181,6 +195,7 @@ public class TransactionFormFragment extends Fragment {
 
     private void buildCategoryChips(List<CategoryEntity> allCategories) {
         binding.chipGroupCategory.removeAllViews();
+        binding.chipGroupCategory.setVisibility(View.VISIBLE);
         categoriesExpanded = false;
         for (CategoryEntity cat : allCategories) {
             if (!cat.type.equals(selectedType)) continue;
@@ -192,19 +207,22 @@ public class TransactionFormFragment extends Fragment {
             binding.chipGroupCategory.addView(chip);
         }
 
-        int collapsedHeight = (int) (48 * getResources().getDisplayMetrics().density);
-        binding.chipGroupCategory.getLayoutParams().height = collapsedHeight;
-        binding.chipGroupCategory.requestLayout();
-
+        // 카테고리가 많으면 접기/펼치기
         binding.chipGroupCategory.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
                         binding.chipGroupCategory.getViewTreeObserver()
                                 .removeOnGlobalLayoutListener(this);
-                        int fullHeight = binding.chipGroupCategory.getMeasuredHeight();
-                        if (fullHeight > collapsedHeight) {
+                        int fullHeight = binding.chipGroupCategory.getHeight();
+                        int oneRowHeight = (int) (48 * getResources().getDisplayMetrics().density);
+                        if (fullHeight > oneRowHeight) {
+                            collapsedHeight = oneRowHeight;
+                            ViewGroup.LayoutParams lp = binding.chipGroupCategory.getLayoutParams();
+                            lp.height = collapsedHeight;
+                            binding.chipGroupCategory.setLayoutParams(lp);
                             binding.tvExpandCategories.setVisibility(View.VISIBLE);
+                            binding.tvExpandCategories.setText(R.string.expand_categories);
                         } else {
                             binding.tvExpandCategories.setVisibility(View.GONE);
                         }
@@ -216,10 +234,10 @@ public class TransactionFormFragment extends Fragment {
             ViewGroup.LayoutParams lp = binding.chipGroupCategory.getLayoutParams();
             if (categoriesExpanded) {
                 lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                binding.tvExpandCategories.setText(getString(R.string.collapse_categories));
+                binding.tvExpandCategories.setText(R.string.collapse_categories);
             } else {
                 lp.height = collapsedHeight;
-                binding.tvExpandCategories.setText(getString(R.string.expand_categories));
+                binding.tvExpandCategories.setText(R.string.expand_categories);
             }
             binding.chipGroupCategory.setLayoutParams(lp);
         });

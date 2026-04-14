@@ -37,6 +37,9 @@
     <string name="ai_reanalyze">Reanalyze</string>
     <string name="gemini_status_supported">SUPPORTED</string>
     <string name="gemini_status_unsupported">UNSUPPORTED</string>
+    <string name="ai_local_analysis">Local Analysis</string>
+    <string name="ai_no_data">No transaction data for this month.</string>
+    <string name="ai_analysis_failed">An error occurred during analysis.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_financial_overview">FINANCIAL OVERVIEW</string>

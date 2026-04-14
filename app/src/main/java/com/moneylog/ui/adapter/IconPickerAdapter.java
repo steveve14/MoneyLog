@@ -19,6 +19,10 @@ import java.util.Map;
 
 public class IconPickerAdapter extends RecyclerView.Adapter<IconPickerAdapter.ViewHolder> {
 
+    private static final int COLUMNS = 5;
+    private static final int COLLAPSED_ROWS = 3;
+    private static final int COLLAPSED_COUNT = COLUMNS * COLLAPSED_ROWS; // 15
+
     public interface OnIconSelectedListener {
         void onIconSelected(String iconName);
     }
@@ -26,16 +30,30 @@ public class IconPickerAdapter extends RecyclerView.Adapter<IconPickerAdapter.Vi
     private final List<Map.Entry<String, Integer>> icons;
     private final OnIconSelectedListener listener;
     private String selectedIconName;
+    private boolean isExpanded = false;
 
     public IconPickerAdapter(OnIconSelectedListener listener) {
         this.icons = new ArrayList<>(IconHelper.getAllIcons().entrySet());
         this.listener = listener;
     }
 
+    public void expand() {
+        if (!isExpanded) {
+            int prevCount = getItemCount();
+            isExpanded = true;
+            notifyItemRangeInserted(prevCount, icons.size() - prevCount);
+        }
+    }
+
+    public boolean isAllVisible() {
+        return icons.size() <= COLLAPSED_COUNT;
+    }
+
     public void setSelectedIcon(String iconName) {
         String old = this.selectedIconName;
         this.selectedIconName = iconName;
-        for (int i = 0; i < icons.size(); i++) {
+        int count = getItemCount();
+        for (int i = 0; i < count; i++) {
             String name = icons.get(i).getKey();
             if (name.equals(old) || name.equals(iconName)) {
                 notifyItemChanged(i);
@@ -59,7 +77,7 @@ public class IconPickerAdapter extends RecyclerView.Adapter<IconPickerAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return icons.size();
+        return isExpanded ? icons.size() : Math.min(COLLAPSED_COUNT, icons.size());
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

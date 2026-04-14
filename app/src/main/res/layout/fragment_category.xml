@@ -16,38 +16,83 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp">
+            app:layout_scrollFlags="scroll|enterAlways|snap">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CATEGORIES"
-                android:textAppearance="?attr/textAppearanceLabelSmall"
-                android:textColor="@color/md_theme_primary"
-                android:letterSpacing="0.12" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="카테고리 관리"
-                android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                android:textColor="?attr/colorOnBackground"
-                android:layout_marginTop="2dp" />
-
-            <!-- 지출/수입 필터 탭 -->
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_type"
+            <!-- ── Header ─────────────────────────────────────── -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:tabGravity="fill"
-                app:tabMode="fixed"
-                app:tabIndicatorColor="@color/md_theme_primary"
-                app:tabSelectedTextColor="@color/md_theme_primary"
-                app:tabTextColor="@color/md_theme_on_surface_variant"
-                app:tabBackground="@android:color/transparent" />
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+                <!-- Close Button -->
+                <ImageButton
+                    android:id="@+id/btnClose"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_chevron_left_24"
+                    android:contentDescription="@string/close"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+
+                <!-- Title -->
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nav_category"
+                    android:textSize="36sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="-0.02"
+                    android:layout_marginTop="4dp"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+
+            <!-- ── Type Toggle (Segmented Control) ──────────────── -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="24dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_segment_container"
+                    android:padding="6dp"
+                    android:maxWidth="320dp"
+                    android:layout_gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/btn_expense"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/transaction_expense"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorPrimary"
+                        android:background="@drawable/bg_segment_selected"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/btn_income"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/transaction_income"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+            </FrameLayout>
+
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -66,7 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
-        android:text="카테고리 추가"
+        android:text="@string/category_add"
         app:icon="@drawable/ic_add_24"
         app:iconTint="@color/md_theme_on_primary"
         android:textColor="@color/md_theme_on_primary"

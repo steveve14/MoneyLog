@@ -71,9 +71,9 @@ public class DashboardFragment extends Fragment {
 
         viewModel.monthlySummary.observe(getViewLifecycleOwner(), summary -> {
             if (summary == null) {
-                binding.tvBalance.setText("0원");
-                binding.tvIncome.setText("0원");
-                binding.tvExpense.setText("0원");
+                binding.tvBalance.setText(getString(R.string.amount_zero));
+                binding.tvIncome.setText(getString(R.string.amount_zero));
+                binding.tvExpense.setText(getString(R.string.amount_zero));
                 return;
             }
             long balance = summary.totalIncome - summary.totalExpense;
@@ -119,7 +119,7 @@ public class DashboardFragment extends Fragment {
             TextView tvAmount = row.findViewById(R.id.tvCategoryAmount);
             View colorDot = row.findViewById(R.id.viewColorDot);
 
-            String name = cs.categoryName != null ? cs.categoryName : ("카테고리 " + cs.categoryId);
+            String name = cs.categoryName != null ? cs.categoryName : (getString(R.string.category_unknown, cs.categoryId));
             boolean isIncome = "INCOME".equals(cs.type);
             String prefix = isIncome ? "+" : "-";
             tvName.setText(name);

@@ -41,4 +41,8 @@ public class CategoryViewModel extends ViewModel {
     public void delete(long id) {
         repo.delete(id);
     }
+
+    public void updateSortOrders(List<CategoryEntity> categories) {
+        repo.updateSortOrders(categories);
+    }
 }

@@ -129,7 +129,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private final TextView tvDate;
         HeaderViewHolder(View v) {
             super(v);
-            tvDate = v.findViewById(R.id.tv_date_header);
+            tvDate = v.findViewById(R.id.tvMonthLabel);
         }
         void bind(HeaderItem item) {
             tvDate.setText(item.dateDisplay);
@@ -147,10 +147,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TxViewHolder(View v, OnTransactionClickListener listener) {
             super(v);
             this.listener = listener;
-            ivIcon     = v.findViewById(R.id.iv_category_icon);
-            tvCategory = v.findViewById(R.id.tv_category);
-            tvMemo     = v.findViewById(R.id.tv_memo);
-            tvAmount   = v.findViewById(R.id.tv_amount);
+            ivIcon     = v.findViewById(R.id.ivCategoryIcon);
+            tvCategory = v.findViewById(R.id.tvTransactionName);
+            tvMemo     = v.findViewById(R.id.tvTransactionSubtitle);
+            tvAmount   = v.findViewById(R.id.tvTransactionAmount);
 
             v.setOnClickListener(view -> {
                 if (boundTx != null) listener.onEdit(boundTx);

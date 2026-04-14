@@ -74,4 +74,15 @@ public final class FormatUtils {
     public static String formatAmountInput(long amount) {
         return amount == 0L ? "" : AMOUNT_FORMAT.format(amount);
     }
+
+    /** 달력 셀용 간략 금액 표시 (만 단위 이상이면 '1.2만' 형태) */
+    public static String formatCompact(long amount) {
+        if (amount >= 100_000_000L) {
+            return String.format("%.1f억", amount / 100_000_000.0);
+        } else if (amount >= 10_000L) {
+            return String.format("%.0f만", amount / 10_000.0);
+        } else {
+            return AMOUNT_FORMAT.format(amount);
+        }
+    }
 }

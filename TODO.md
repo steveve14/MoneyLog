@@ -1,6 +1,6 @@
 # MoneyLog - 개발 TODO 리스트
 
-> **최종 업데이트**: 2026-04-13
+> **최종 업데이트**: 2026-04-14
 > **디자인 시스템**: "The Sovereign Ledger" (High-End Editorial)
 
 ---
@@ -14,7 +14,7 @@
 - [x] 기술 스택 선정
 - [x] 데이터 레이어 설계 (DAO, Repository)
 - [x] 개발환경 설정 가이드 작성
-- [x] UI 디자인 시스템 확정 — "The Sovereign Ledger" (stitch/indigo_ledger/DESIGN.md)
+- [x] UI 디자인 시스템 확정 — "The Sovereign Ledger" (stitch/serene_ledger/DESIGN.md)
 - [x] 화면별 디자인 목업 완성 (stitch/ — 8개 화면 HTML/이미지)
 - [x] Android Studio 프로젝트 초기 생성 (`com.moneylog`) — `settings.gradle.kts`, `build.gradle.kts`
 - [x] `gradle/libs.versions.toml` 버전 카탈로그 구성
@@ -63,7 +63,7 @@
 
 ### 2-6. 디자인 시스템 & 테마 구현
 
-> **참조**: stitch/indigo_ledger/DESIGN.md — "The Sovereign Ledger"
+> **참조**: stitch/serene_ledger/DESIGN.md
 
 #### 색상 팔레트 (Material 3 Surface Hierarchy)
 
@@ -137,6 +137,7 @@
 - [x] `CategoryAdapter.java` — RecyclerView 어댑터
 - [x] 커스텀 카테고리 추가 — BottomSheetDialog (`bottom_sheet_category.xml`)
 - [x] 카테고리 수정·삭제 (아이콘, 이름)
+- [x] 지출/수입 세그먼트 토글 배경색 분리 (`surface_container`로 구분)
 - [ ] 카테고리 드래그 앤 드롭 정렬 — P2
 
 ---
@@ -145,14 +146,13 @@
 
 ### 3-1. 반복 거래 UI (F03)
 
-> **디자인 참조**: stitch/fixed_transactions/
+> **디자인 참조**: stitch/fixed_transactions_serene/
 
 - [x] `RecurringViewModel.java` — 반복 거래 ViewModel
 - [x] `RecurringFormFragment.java` — 반복 거래 등록/수정 폼 (금액, 카테고리, 매월 N일, 메모, 결제수단)
 - [x] `fragment_recurring_form.xml` — 반복 거래 폼 레이아웃
 - [x] 반복 거래 수정 — 편집 모드 (loadById)
 - [x] 반복 거래 비활성화/활성화 토글
-- [ ] `RecurringFragment.java` — 고정 수입·지출 관리 목록 화면 (미구현)
 
 ### 3-2. WorkManager 자동 실행
 
@@ -170,7 +170,7 @@
 
 ### 4-1. 대시보드 (메인 화면)
 
-> **디자인 참조**: stitch/dashboard/
+> **디자인 참조**: stitch/dashboard_serene/
 
 - [x] `DashboardViewModel.java` — 월별 수입/지출/잔액 + 최근 거래
 - [x] `DashboardFragment.java` + `fragment_dashboard.xml` — 대시보드 레이아웃
@@ -188,7 +188,7 @@
 
 ### 4-2. 통계·분석 (F06)
 
-> **디자인 참조**: stitch/statistics/
+> **디자인 참조**: stitch/statistics_serene/
 
 - [ ] `StatisticsViewModel.kt` — 통계 ViewModel
 - [ ] `StatisticsScreen.kt` — 통계 화면
@@ -205,7 +205,7 @@
 
 ### 4-3. 예산 관리 (F05)
 
-> **디자인 참조**: stitch/budget_management/
+> **디자인 참조**: stitch/budget_management_serene/
 
 - [ ] `BudgetViewModel.kt` — 예산 ViewModel
 - [ ] `BudgetScreen.kt` — 예산 관리 화면
@@ -228,33 +228,38 @@
 
 ### 5-1. Google 인증
 
-- [ ] Google Cloud Console 프로젝트 생성 + OAuth 2.0 설정
-- [ ] Google Sign-In (Credential Manager) 연동 — `drive.appdata` scope
+- [x] Google Sign-In 연동 — `drive.appdata` scope (Play Services Auth)
+- [ ] Google Cloud Console OAuth 2.0 클라이언트 ID 등록
 - [ ] SHA-1 지문 등록 (debug + release)
 
 ### 5-2. Google Drive 백업·복원 (F07)
 
-- [ ] `BackupRepository.kt` — DB 파일 백업/복원 로직
-  - [ ] WAL checkpoint → DB 파일 복사
-  - [ ] Google Drive `appDataFolder`에 업로드
-  - [ ] 백업 파일명: `moneylog_yyyy-MM-dd_HHmmss.db`
-- [ ] 수동 백업 버튼 ("Backup Now" 그라디언트 버튼) — P1
-- [ ] 백업 목록 조회 (날짜·크기 확인) — P1
-- [ ] 복원 버튼 ("Restore" 아웃라인 버튼) — P1
+- [x] `BackupRepository.java` — DB 파일 백업/복원 로직
+  - [x] WAL checkpoint → DB 파일 복사
+  - [x] Google Drive `appDataFolder`에 업로드/업데이트
+  - [x] 복원 시 DB 교체 + 앱 재시작
+- [x] Google Drive 연동 상태 표시 (미연동: "Google Drive 연동", 연동: 이메일 표시)
+- [x] 수동 백업 버튼 — P1
+- [x] 복원 버튼 + 확인 다이얼로그 — P1
+- [x] 연동 해제 기능
+- [ ] 백업 목록 조회 (날짜·크기 확인) — P2
 - [ ] 자동 백업 (WorkManager 주기적 실행: 매일/매주) — P2
 - [ ] 백업 파일 AES 암호화 — P2
 
 ### 5-3. 설정 화면
 
 - [x] `SettingsFragment.java` + `fragment_settings.xml` — 설정 화면
-- [x] `BackupRepository.java` — stub 구현
+- [x] `BackupRepository.java` — Google Drive 백업/복원 구현
 - [x] 언어 선택 (한국어/English/日本語)
 - [x] 금액 텍스트 표시 모드 토글
 - [x] 카테고리 관리 네비게이션
+- [x] 데이터 관리 (CSV 내보내기/가져오기/정리)
+- [x] MaterialAlertDialogBuilder (Serene Ledger 28dp 라운드) 적용
+- [x] 온보딩 화면에서 하단 네비게이션 숨김
 
 ### 5-4. 설정 화면 (F10)
 
-> **디자인 참조**: stitch/settings/
+> **디자인 참조**: stitch/settings_serene/
 
 - [ ] `SettingsViewModel.kt` — 설정 ViewModel
 - [ ] `SettingsScreen.kt` — 설정 화면 레이아웃
@@ -288,26 +293,24 @@
 
 ---
 
-## Phase 6: AI 요약 — Gemini Nano 온디바이스 소비 분석 (1주) ⚙️ Scaffold 완료
+## Phase 6: AI 요약 — 온디바이스 소비 분석 (1주) ✅ 완료
 
-### 6-1. Gemini Nano 연동 (F08)
+### 6-1. AI 분석 엔진
 
-- [x] `AiSummaryRepository.java` — scaffold + isAvailable() 체크
-- [x] `AiSummaryViewModel.java` — 월 선택 + 거래 데이터 기반 프롬프트 생성
-- [x] `AiSummaryFragment.java` + `fragment_ai_summary.xml` — 월 네비게이션 UI 포함
-- [ ] Google AI Edge SDK 의존성 추가 (`libs.versions.toml` 주석 해제)
-- [ ] `AndroidManifest.xml`에 AICore 메타데이터 추가
-- [ ] `AiSummaryRepository.java` — Gemini Nano 호출 + 폴백 로직
-- [ ] 기기 호환성 체크 (`isAvailable()`) — 미지원 시 AI 기능 숨김
+- [x] `AiSummaryRepository.java` — 로컬 규칙 기반 분석 엔진 구현 (수입/지출 합계, 저축률, 카테고리 Top5, 일별 패턴, 절약 조언)
+- [x] `AiSummaryViewModel.java` — 월 선택 + analyze() API 연동
+- [x] `AiSummaryFragment.java` + `fragment_ai_summary.xml` — 월 네비게이션 + 분석 결과 UI
+- [x] Gemini Nano 호환성 체크 (`isGeminiAvailable()`) — 미지원 시 로컬 분석 폴백
+- [x] 다국어 문자열 추가 (`ai_local_analysis`, `ai_no_data`, `ai_analysis_failed`)
 
 ### 6-2. AI 요약 UI
 
-- [x] AI 요약 상세 화면 (scaffold)
-- [ ] 월간 소비 요약 (2~3문장 자연어) — P1
-- [ ] 절약 조언 (지출 기반 절약 항목 제안) — P1
-- [ ] 카테고리 자동 추천 (거래 메모 → AI Recommend 칩) — P2
-- [ ] 전월 대비 분석 요약 — P2
-- [ ] "다시 분석" 버튼
+- [x] AI 요약 상세 화면
+- [x] 월간 소비 요약 (수입/지출/저축률 + 이모지 피드백)
+- [x] 절약 조언 (지출 기반 절약 항목 제안)
+- [x] 카테고리별 지출 비중 분석 (Top 5)
+- [x] 일별 지출 패턴 (평균 + 최대 지출일)
+- [x] "분석 시작" 버튼
 
 ---
 

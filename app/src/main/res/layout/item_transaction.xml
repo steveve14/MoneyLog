@@ -1,71 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<!-- Transaction List Item V2 — Serene Ledger Design -->
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:background="?attr/colorSurface"
-    android:paddingHorizontal="16dp">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="14dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
 
-    <!-- 카테고리 아이콘 배경 -->
-    <View
-        android:id="@+id/view_icon_bg"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/bg_category_circle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+    <!-- Category Icon Circle -->
+    <FrameLayout
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_icon_secondary_container">
 
-    <!-- 카테고리 아이콘 -->
-    <ImageView
-        android:id="@+id/iv_category_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:tint="?attr/colorOnSurfaceVariant"
-        android:contentDescription="카테고리 아이콘"
-        app:layout_constraintStart_toStartOf="@id/view_icon_bg"
-        app:layout_constraintEnd_toEndOf="@id/view_icon_bg"
-        app:layout_constraintTop_toTopOf="@id/view_icon_bg"
-        app:layout_constraintBottom_toBottomOf="@id/view_icon_bg" />
+        <ImageView
+            android:id="@+id/ivCategoryIcon"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_cat_category"
+            android:tint="?attr/colorOnSecondaryContainer"
+            android:contentDescription="@null" />
+    </FrameLayout>
 
-    <!-- 카테고리명 -->
-    <TextView
-        android:id="@+id/tv_category"
+    <!-- Name, Badge & Subtitle -->
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="8dp"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
-        app:layout_constraintStart_toEndOf="@id/view_icon_bg"
-        app:layout_constraintEnd_toStartOf="@id/tv_amount"
-        app:layout_constraintTop_toTopOf="@id/view_icon_bg"
-        app:layout_constraintBottom_toTopOf="@id/tv_memo" />
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp">
 
-    <!-- 메모 -->
-    <TextView
-        android:id="@+id/tv_memo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="8dp"
-        android:textAppearance="?attr/textAppearanceLabelSmall"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:maxLines="1"
-        android:ellipsize="end"
-        app:layout_constraintStart_toEndOf="@id/view_icon_bg"
-        app:layout_constraintEnd_toStartOf="@id/tv_amount"
-        app:layout_constraintTop_toBottomOf="@id/tv_category"
-        app:layout_constraintBottom_toBottomOf="@id/view_icon_bg" />
+        <!-- Row: Name + [Auto] Badge -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-    <!-- 금액 -->
+            <TextView
+                android:id="@+id/tvTransactionName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvAutoBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/badge_auto"
+                android:textAllCaps="true"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02"
+                android:textColor="?attr/colorOnTertiaryContainer"
+                android:background="@drawable/bg_auto_badge"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="1dp"
+                android:layout_marginStart="8dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Subtitle: Date • Category -->
+        <TextView
+            android:id="@+id/tvTransactionSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:alpha="0.6"
+            android:layout_marginTop="2dp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!-- Amount (right-aligned) -->
     <TextView
-        android:id="@+id/tv_amount"
+        android:id="@+id/tvTransactionAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceTitleSmall"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:letterSpacing="-0.02"
+        android:layout_marginStart="12dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

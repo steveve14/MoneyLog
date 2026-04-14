@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<!-- Transaction Month Header V2 — Serene Ledger Design -->
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tv_date_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="8dp"
-    android:paddingHorizontal="4dp"
-    android:textAppearance="?attr/textAppearanceLabelMedium"
-    android:textColor="?attr/colorOnSurfaceVariant" />
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="28dp"
+    android:paddingBottom="12dp">
+
+    <!-- Month Label (e.g., "9월") -->
+    <TextView
+        android:id="@+id/tvMonthLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAllCaps="true"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.1"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:alpha="0.5" />
+
+    <!-- Month Total Amount -->
+    <TextView
+        android:id="@+id/tvMonthTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:alpha="0.5" />
+
+</LinearLayout>

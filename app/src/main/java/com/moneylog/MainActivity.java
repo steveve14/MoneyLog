@@ -1,6 +1,7 @@
 package com.moneylog;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -38,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
+
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                if (destination.getId() == R.id.onboardingFragment) {
+                    binding.bottomNavigation.setVisibility(View.GONE);
+                } else {
+                    binding.bottomNavigation.setVisibility(View.VISIBLE);
+                }
+            });
         }
     }
 }

@@ -46,4 +46,12 @@ public class CategoryRepository {
     public void delete(long id) {
         executor.execute(() -> dao.softDelete(id));
     }
+
+    public void updateSortOrders(List<CategoryEntity> categories) {
+        executor.execute(() -> {
+            for (int i = 0; i < categories.size(); i++) {
+                dao.updateSortOrder(categories.get(i).id, i);
+            }
+        });
+    }
 }

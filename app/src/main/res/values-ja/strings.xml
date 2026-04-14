@@ -37,6 +37,9 @@
     <string name="ai_reanalyze">再分析</string>
     <string name="gemini_status_supported">対応</string>
     <string name="gemini_status_unsupported">非対応</string>
+    <string name="ai_local_analysis">ローカル分析</string>
+    <string name="ai_no_data">この月の取引データがありません。</string>
+    <string name="ai_analysis_failed">分析中にエラーが発生しました。</string>
 
     <!-- ダッシュボード -->
     <string name="dashboard_financial_overview">財務概要</string>

@@ -63,17 +63,6 @@
         android:name="com.moneylog.ui.fragment.StatisticsFragment"
         android:label="@string/nav_statistics" />
 
-    <fragment
-        android:id="@+id/recurringFormFragment"
-        android:name="com.moneylog.ui.fragment.RecurringFormFragment"
-        android:label="@string/nav_recurring_form">
-
-        <argument
-            android:name="recurringId"
-            app:argType="long"
-            android:defaultValue="0L" />
-    </fragment>
-
     <!-- Phase 2: 카테고리 관리 -->
     <fragment
         android:id="@+id/categoryFragment"

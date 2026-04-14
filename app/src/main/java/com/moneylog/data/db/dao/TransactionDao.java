@@ -65,4 +65,12 @@ public interface TransactionDao {
            "WHERE date LIKE :yearMonth || '%' AND is_deleted = 0 " +
            "GROUP BY date ORDER BY date")
     LiveData<List<DailySummary>> getDailySummary(String yearMonth);
+
+    /** 모든 활성 거래 (CSV 내보내기용) */
+    @Query("SELECT * FROM transactions WHERE is_deleted = 0 ORDER BY date DESC, id DESC")
+    List<TransactionEntity> getAllForExport();
+
+    /** 특정 날짜 이전의 거래 소프트 삭제 (데이터 정리용) */
+    @Query("UPDATE transactions SET is_deleted = 1, updated_at = :now WHERE date < :beforeDate AND is_deleted = 0")
+    int softDeleteBefore(String beforeDate, long now);
 }

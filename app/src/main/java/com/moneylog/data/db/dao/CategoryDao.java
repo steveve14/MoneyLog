@@ -34,4 +34,7 @@ public interface CategoryDao {
 
     @Query("SELECT COUNT(*) FROM categories WHERE is_default = 1")
     int getDefaultCount();
+
+    @Query("UPDATE categories SET sort_order = :sortOrder WHERE id = :id")
+    void updateSortOrder(long id, int sortOrder);
 }

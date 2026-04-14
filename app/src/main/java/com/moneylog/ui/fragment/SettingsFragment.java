@@ -1,20 +1,26 @@
 package com.moneylog.ui.fragment;
 
-import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.moneylog.R;
 import com.moneylog.data.repository.BackupRepository;
 import com.moneylog.databinding.FragmentSettingsBinding;
+import com.moneylog.util.DataManagementHelper;
 import com.moneylog.util.FormatUtils;
 import com.moneylog.util.LocaleHelper;
 
@@ -28,7 +34,29 @@ public class SettingsFragment extends Fragment {
     @Inject
     BackupRepository backupRepository;
 
+    @Inject
+    DataManagementHelper dataManagementHelper;
+
     private FragmentSettingsBinding binding;
+
+    private final ActivityResultLauncher<String[]> csvPickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
+                if (uri != null) importCsv(uri);
+            });
+
+    private final ActivityResultLauncher<Intent> signInLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getData() != null) {
+                    GoogleSignIn.getSignedInAccountFromIntent(result.getData())
+                            .addOnSuccessListener(account -> {
+                                updateGdriveStatus();
+                                showGdriveDialog();
+                            })
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(requireContext(),
+                                            R.string.gdrive_sign_in_failed, Toast.LENGTH_SHORT).show());
+                }
+            });
 
     @Nullable
     @Override
@@ -45,65 +73,205 @@ public class SettingsFragment extends Fragment {
 
         updateLanguageLabel();
 
-        binding.switchAmountText.setChecked(LocaleHelper.isAmountTextMode(requireContext()));
-        binding.switchAmountText.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            LocaleHelper.setAmountTextMode(requireContext(), isChecked);
-            FormatUtils.setTextMode(isChecked);
-        });
+        // 닫기 버튼
+        binding.btnClose.setOnClickListener(v ->
+                Navigation.findNavController(v).popBackStack());
 
         binding.rowLanguage.setOnClickListener(v -> showLanguageDialog());
+
+        // 데이터 관리
+        binding.rowDataManagement.setOnClickListener(v -> showDataManagementDialog());
 
         binding.rowCategory.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.categoryFragment));
 
-        binding.rowBackupNow.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "백업 중...", Toast.LENGTH_SHORT).show();
-            backupRepository.backupToGoogleDrive(new BackupRepository.BackupCallback() {
-                @Override
-                public void onSuccess() {
-                    requireActivity().runOnUiThread(() ->
-                            Toast.makeText(requireContext(), "백업 완료", Toast.LENGTH_SHORT).show());
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    requireActivity().runOnUiThread(() ->
-                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show());
-                }
-            });
+        // 금액 표시 모드
+        binding.switchAmountText.setChecked(LocaleHelper.isAmountTextMode(requireContext()));
+        binding.switchAmountText.setOnCheckedChangeListener((btn, checked) -> {
+                LocaleHelper.setAmountTextMode(requireContext(), checked);
+                FormatUtils.setTextMode(checked);
         });
 
-        binding.rowRestore.setOnClickListener(v -> {
-            new AlertDialog.Builder(requireContext())
-                    .setTitle("데이터 복원")
-                    .setMessage("Google Drive에서 데이터를 복원합니다. 현재 데이터가 덮어쓰여집니다.")
-                    .setPositiveButton("복원", (dialog, which) -> {
-                        backupRepository.restoreFromGoogleDrive(new BackupRepository.BackupCallback() {
-                            @Override
-                            public void onSuccess() {
-                                requireActivity().runOnUiThread(() ->
-                                        Toast.makeText(requireContext(), "복원 완료", Toast.LENGTH_SHORT).show());
-                            }
-
-                            @Override
-                            public void onFailure(String message) {
-                                requireActivity().runOnUiThread(() ->
-                                        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show());
-                            }
-                        });
-                    })
-                    .setNegativeButton("취소", null)
-                    .show();
-        });
+        // Google Drive 백업 & 복원 (통합)
+        updateGdriveStatus();
+        binding.rowGdriveBackupRestore.setOnClickListener(v -> showGdriveDialog());
 
         binding.btnResetAllData.setOnClickListener(v ->
-                new AlertDialog.Builder(requireContext())
-                        .setTitle("데이터 초기화")
+                new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                        .setTitle(getString(R.string.data_reset_title))
                         .setMessage(getString(R.string.settings_reset_warning))
-                        .setPositiveButton("초기화", (dialog, which) ->
-                                Toast.makeText(requireContext(), "초기화 기능은 아직 구현되지 않았습니다.", Toast.LENGTH_SHORT).show())
-                        .setNegativeButton("취소", null)
+                        .setPositiveButton(getString(R.string.settings_reset_all_data), (dialog, which) ->
+                                Toast.makeText(requireContext(), R.string.data_reset_not_implemented, Toast.LENGTH_SHORT).show())
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show());
+    }
+
+    private void showDataManagementDialog() {
+        String[] items = {
+                getString(R.string.data_export_csv),
+                getString(R.string.data_import_csv),
+                getString(R.string.data_cleanup)
+        };
+
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                .setTitle(getString(R.string.data_management_title))
+                .setItems(items, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            dataManagementHelper.exportCsv(new DataManagementHelper.ResultCallback() {
+                                @Override
+                                public void onSuccess(String message) {
+                                    requireActivity().runOnUiThread(() ->
+                                            Toast.makeText(requireContext(),
+                                                    getString(R.string.msg_export_complete) + ": " + message,
+                                                    Toast.LENGTH_LONG).show());
+                                }
+
+                                @Override
+                                public void onFailure(String message) {
+                                    requireActivity().runOnUiThread(() ->
+                                            Toast.makeText(requireContext(),
+                                                    getString(R.string.msg_export_failed) + ": " + message,
+                                                    Toast.LENGTH_LONG).show());
+                                }
+                            });
+                            break;
+                        case 1:
+                            csvPickerLauncher.launch(new String[]{"text/csv", "text/comma-separated-values", "*/*"});
+                            break;
+                        case 2:
+                            new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                                    .setTitle(getString(R.string.data_cleanup_title))
+                                    .setMessage(getString(R.string.data_cleanup_message))
+                                    .setPositiveButton(getString(R.string.confirm), (d, w) ->
+                                            dataManagementHelper.cleanupOldData(6, new DataManagementHelper.ResultCallback() {
+                                                @Override
+                                                public void onSuccess(String message) {
+                                                    requireActivity().runOnUiThread(() ->
+                                                            Toast.makeText(requireContext(),
+                                                                    getString(R.string.msg_cleanup_complete) + " (" + message + ")",
+                                                                    Toast.LENGTH_SHORT).show());
+                                                }
+
+                                                @Override
+                                                public void onFailure(String message) {
+                                                    requireActivity().runOnUiThread(() ->
+                                                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show());
+                                                }
+                                            }))
+                                    .setNegativeButton(getString(R.string.cancel), null)
+                                    .show();
+                            break;
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    private void importCsv(Uri uri) {
+        dataManagementHelper.importCsv(uri, new DataManagementHelper.ResultCallback() {
+            @Override
+            public void onSuccess(String count) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(),
+                                getString(R.string.msg_import_complete, Integer.parseInt(count)),
+                                Toast.LENGTH_LONG).show());
+            }
+
+            @Override
+            public void onFailure(String message) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(),
+                                getString(R.string.msg_import_failed) + ": " + message,
+                                Toast.LENGTH_LONG).show());
+            }
+        });
+    }
+
+    private void updateGdriveStatus() {
+        if (backupRepository.isSignedIn()) {
+            String email = backupRepository.getSignedInEmail();
+            binding.tvGdriveStatus.setText(email != null ? email : getString(R.string.settings_gdrive_connected));
+        } else {
+            binding.tvGdriveStatus.setText(R.string.gdrive_connect);
+        }
+    }
+
+    private void showGdriveDialog() {
+        if (!backupRepository.isSignedIn()) {
+            signInLauncher.launch(backupRepository.getSignInIntent());
+            return;
+        }
+
+        String[] items = {
+                getString(R.string.gdrive_backup),
+                getString(R.string.gdrive_restore),
+                getString(R.string.gdrive_disconnect)
+        };
+
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                .setTitle(getString(R.string.settings_gdrive_backup_restore))
+                .setItems(items, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            Toast.makeText(requireContext(), R.string.msg_backup_in_progress, Toast.LENGTH_SHORT).show();
+                            backupRepository.backupToGoogleDrive(new BackupRepository.BackupCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    requireActivity().runOnUiThread(() ->
+                                            Toast.makeText(requireContext(), R.string.msg_backup_complete, Toast.LENGTH_SHORT).show());
+                                }
+
+                                @Override
+                                public void onFailure(String message) {
+                                    requireActivity().runOnUiThread(() ->
+                                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show());
+                                }
+                            });
+                            break;
+                        case 1:
+                            new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                                    .setTitle(getString(R.string.data_restore_title))
+                                    .setMessage(getString(R.string.data_restore_message))
+                                    .setPositiveButton(getString(R.string.settings_restore), (d, w) -> {
+                                        backupRepository.restoreFromGoogleDrive(new BackupRepository.BackupCallback() {
+                                            @Override
+                                            public void onSuccess() {
+                                                requireActivity().runOnUiThread(() ->
+                                                        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                                                                .setTitle(getString(R.string.msg_restore_complete))
+                                                                .setMessage(getString(R.string.gdrive_restart_message))
+                                                                .setCancelable(false)
+                                                                .setPositiveButton(getString(R.string.confirm), (rd, rw) -> {
+                                                                    Intent intent = requireActivity().getPackageManager()
+                                                                            .getLaunchIntentForPackage(requireActivity().getPackageName());
+                                                                    if (intent != null) {
+                                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                                        startActivity(intent);
+                                                                    }
+                                                                    requireActivity().finishAffinity();
+                                                                })
+                                                                .show());
+                                            }
+
+                                            @Override
+                                            public void onFailure(String message) {
+                                                requireActivity().runOnUiThread(() ->
+                                                        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show());
+                                            }
+                                        });
+                                    })
+                                    .setNegativeButton(getString(R.string.cancel), null)
+                                    .show();
+                            break;
+                        case 2:
+                            backupRepository.signOut(() ->
+                                    requireActivity().runOnUiThread(this::updateGdriveStatus));
+                            break;
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
     }
 
     private void showLanguageDialog() {
@@ -123,7 +291,7 @@ public class SettingsFragment extends Fragment {
             }
         }
 
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
                 .setTitle(R.string.language_dialog_title)
                 .setSingleChoiceItems(labels, checkedIndex, (dialog, which) -> {
                     String tag = LocaleHelper.LOCALE_TAGS[which];

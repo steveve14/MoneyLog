@@ -20,7 +20,7 @@
         android:id="@+id/tv_sheet_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="카테고리 추가"
+        android:text="@string/category_add"
         android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textColor="?attr/colorOnBackground"
         android:layout_marginBottom="20dp" />
@@ -30,7 +30,7 @@
         android:id="@+id/til_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="카테고리 이름"
+        android:hint="@string/category_name_hint"
         style="@style/Widget.MoneyLog.TextInputLayout"
         android:layout_marginBottom="16dp">
 
@@ -46,7 +46,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="아이콘 선택"
+        android:text="@string/icon_select"
         android:textAppearance="?attr/textAppearanceLabelMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:layout_marginBottom="8dp" />
@@ -55,14 +55,25 @@
         android:id="@+id/rv_icon_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:clipToPadding="false" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_show_more_icons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/show_more"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp"
+        style="@style/Widget.Material3.Button.TextButton"
+        app:icon="@drawable/ic_expand_more"
+        app:iconGravity="end" />
 
     <!-- 거래 유형 선택 -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="거래 유형"
+        android:text="@string/transaction_type"
         android:textAppearance="?attr/textAppearanceLabelMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:layout_marginBottom="8dp" />
@@ -79,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="지출"
+            android:text="@string/transaction_expense"
             style="@style/Widget.Material3.Button.OutlinedButton" />
 
         <com.google.android.material.button.MaterialButton
@@ -87,7 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="수입"
+            android:text="@string/transaction_income"
             style="@style/Widget.Material3.Button.OutlinedButton" />
     </LinearLayout>
 
@@ -96,7 +107,7 @@
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="저장"
+        android:text="@string/save"
         style="@style/Widget.MoneyLog.Button.Primary"
         android:layout_marginBottom="8dp" />
 
@@ -105,7 +116,7 @@
         android:id="@+id/btn_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="카테고리 삭제"
+        android:text="@string/category_delete"
         style="@style/Widget.Material3.Button.TextButton"
         android:textColor="@color/md_theme_error"
         android:visibility="gone" />

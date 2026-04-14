@@ -62,16 +62,16 @@ public class AiSummaryFragment extends Fragment {
         viewModel.monthlyTransactions.observe(getViewLifecycleOwner(), transactions ->
                 currentTransactions = transactions);
 
-        viewModel.getIsAvailable().observe(getViewLifecycleOwner(), available -> {
+        viewModel.getIsGeminiAvailable().observe(getViewLifecycleOwner(), available -> {
             if (Boolean.TRUE.equals(available)) {
                 binding.tvGeminiStatus.setText(R.string.gemini_status_supported);
                 binding.tvGeminiStatus.setTextColor(
                         requireContext().getColor(R.color.income_color));
             } else {
-                binding.tvGeminiStatus.setText(R.string.gemini_status_unsupported);
+                binding.tvGeminiStatus.setText(R.string.ai_local_analysis);
             }
-            binding.btnAnalyze.setEnabled(Boolean.TRUE.equals(available));
         });
+        binding.btnAnalyze.setEnabled(true);
 
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), loading -> {
             binding.progressAi.setVisibility(Boolean.TRUE.equals(loading) ? View.VISIBLE : View.GONE);

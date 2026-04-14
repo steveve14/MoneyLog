@@ -29,13 +29,13 @@ import com.moneylog.util.DateUtils;
 import com.moneylog.util.FormatUtils;
 import com.moneylog.util.YearMonthPickerDialog;
 
+import java.time.DayOfWeek;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.time.DayOfWeek;
-import java.time.YearMonth;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -69,13 +69,22 @@ public class TransactionFragment extends Fragment
         binding.recyclerTransactions.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerTransactions.setAdapter(adapter);
 
-        // 월 선택 헤더
+        // 월 네비게이션
         binding.btnPrevMonth.setOnClickListener(v -> viewModel.previousMonth());
         binding.btnNextMonth.setOnClickListener(v -> viewModel.nextMonth());
         binding.tvYearMonth.setOnClickListener(v -> {
             String current = viewModel.getSelectedYearMonth().getValue();
             if (current != null) {
                 YearMonthPickerDialog.show(requireContext(), current, viewModel::setYearMonth);
+            }
+        });
+
+        // 달력 토글
+        binding.btnToggleCalendar.setOnClickListener(v -> {
+            calendarExpanded = !calendarExpanded;
+            binding.layoutCalendar.setVisibility(calendarExpanded ? View.VISIBLE : View.GONE);
+            if (calendarExpanded) {
+                renderCalendar(viewModel.dailySummary.getValue());
             }
         });
 
@@ -89,15 +98,26 @@ public class TransactionFragment extends Fragment
         binding.fabAdd.setOnClickListener(v ->
             Navigation.findNavController(v).navigate(R.id.action_transaction_to_form));
 
-        // 달력 토글
-        binding.btnToggleCalendar.setOnClickListener(v -> {
-            calendarExpanded = !calendarExpanded;
-            binding.layoutCalendar.setVisibility(calendarExpanded ? View.VISIBLE : View.GONE);
-        });
-
         // -- Observers ---
         viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym ->
-            binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym)));
+                binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym)));
+
+        viewModel.monthlySummary.observe(getViewLifecycleOwner(), summary -> {
+            if (summary == null) {
+                binding.tvIncome.setText(getString(R.string.amount_zero));
+                binding.tvExpense.setText(getString(R.string.amount_zero));
+                binding.tvBalance.setText(getString(R.string.amount_zero));
+                return;
+            }
+            binding.tvIncome.setText(FormatUtils.formatAmountWithUnit(summary.totalIncome));
+            binding.tvExpense.setText(FormatUtils.formatAmountWithUnit(summary.totalExpense));
+            long balance = summary.totalIncome - summary.totalExpense;
+            binding.tvBalance.setText(FormatUtils.formatAmountWithUnit(balance));
+        });
+
+        viewModel.dailySummary.observe(getViewLifecycleOwner(), dailies -> {
+            if (calendarExpanded) renderCalendar(dailies);
+        });
 
         viewModel.categories.observe(getViewLifecycleOwner(), cats -> {
             categoryMap.clear();
@@ -107,20 +127,119 @@ public class TransactionFragment extends Fragment
 
         viewModel.transactions.observe(getViewLifecycleOwner(), txList -> refreshList());
 
-        viewModel.getTypeFilter().observe(getViewLifecycleOwner(), filter -> refreshList());
-
-        viewModel.monthlySummary.observe(getViewLifecycleOwner(), summary -> {
-            if (summary == null) return;
-            binding.tvIncome.setText(FormatUtils.formatAmountWithUnit(summary.totalIncome));
-            binding.tvExpense.setText(FormatUtils.formatAmountWithUnit(summary.totalExpense));
-            binding.tvBalance.setText(
-                FormatUtils.formatAmountWithUnit(summary.totalIncome - summary.totalExpense));
+        viewModel.getTypeFilter().observe(getViewLifecycleOwner(), filter -> {
+            updateChipSelection(filter);
+            refreshList();
         });
+    }
 
-        viewModel.dailySummary.observe(getViewLifecycleOwner(), dailyList -> {
-            String ym = viewModel.getSelectedYearMonth().getValue();
-            if (ym != null) renderCalendar(ym, dailyList);
-        });
+    private void updateChipSelection(String filter) {
+        if (filter == null) filter = "ALL";
+        android.util.TypedValue tv = new android.util.TypedValue();
+        android.content.res.Resources.Theme theme = requireContext().getTheme();
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, tv, true);
+        int onPrimary = tv.data;
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceVariant, tv, true);
+        int onSurfaceVariant = tv.data;
+
+        setChipState(binding.chipAll,      "ALL".equals(filter),      onPrimary, onSurfaceVariant);
+        setChipState(binding.chipExpense,  "EXPENSE".equals(filter),  onPrimary, onSurfaceVariant);
+        setChipState(binding.chipIncome,   "INCOME".equals(filter),   onPrimary, onSurfaceVariant);
+        setChipState(binding.chipRecurring,"RECURRING".equals(filter), onPrimary, onSurfaceVariant);
+    }
+
+    private void setChipState(TextView chip, boolean selected, int onPrimary, int onSurfaceVariant) {
+        chip.setBackgroundResource(selected ? R.drawable.bg_chip_selected : R.drawable.bg_chip_normal);
+        chip.setTextColor(selected ? onPrimary : onSurfaceVariant);
+    }
+
+    private void renderCalendar(List<DailySummary> dailies) {
+        binding.llCalendarGrid.removeAllViews();
+        String ym = viewModel.getSelectedYearMonth().getValue();
+        if (ym == null) return;
+
+        YearMonth yearMonth = YearMonth.parse(ym);
+        int daysInMonth = yearMonth.lengthOfMonth();
+        DayOfWeek firstDay = yearMonth.atDay(1).getDayOfWeek();
+        int startOffset = firstDay.getValue() % 7; // 일=0, 월=1...
+
+        Map<Integer, DailySummary> dayMap = new HashMap<>();
+        if (dailies != null) {
+            for (DailySummary ds : dailies) {
+                try {
+                    int day = Integer.parseInt(ds.date.substring(ds.date.lastIndexOf('-') + 1));
+                    dayMap.put(day, ds);
+                } catch (Exception ignored) {}
+            }
+        }
+
+        LinearLayout weekRow = null;
+        int cellIndex = 0;
+
+        for (int i = 0; i < startOffset + daysInMonth; i++) {
+            if (cellIndex % 7 == 0) {
+                weekRow = new LinearLayout(requireContext());
+                weekRow.setOrientation(LinearLayout.HORIZONTAL);
+                weekRow.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                binding.llCalendarGrid.addView(weekRow);
+            }
+
+            LinearLayout cell = new LinearLayout(requireContext());
+            cell.setOrientation(LinearLayout.VERTICAL);
+            cell.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams cellParams = new LinearLayout.LayoutParams(
+                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            cellParams.topMargin = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
+            cellParams.bottomMargin = cellParams.topMargin;
+            cell.setLayoutParams(cellParams);
+
+            if (i >= startOffset) {
+                int day = i - startOffset + 1;
+
+                TextView tvDay = new TextView(requireContext());
+                tvDay.setText(String.valueOf(day));
+                tvDay.setGravity(Gravity.CENTER);
+                tvDay.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                cell.addView(tvDay);
+
+                DailySummary ds = dayMap.get(day);
+                if (ds != null && ds.totalExpense > 0) {
+                    TextView tvExp = new TextView(requireContext());
+                    tvExp.setText("-" + FormatUtils.formatCompact(ds.totalExpense));
+                    tvExp.setGravity(Gravity.CENTER);
+                    tvExp.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+                    tvExp.setTextColor(requireContext().getColor(R.color.expense_color));
+                    cell.addView(tvExp);
+                }
+                if (ds != null && ds.totalIncome > 0) {
+                    TextView tvInc = new TextView(requireContext());
+                    tvInc.setText("+" + FormatUtils.formatCompact(ds.totalIncome));
+                    tvInc.setGravity(Gravity.CENTER);
+                    tvInc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+                    tvInc.setTextColor(requireContext().getColor(R.color.income_color));
+                    cell.addView(tvInc);
+                }
+            }
+
+            if (weekRow != null) weekRow.addView(cell);
+            cellIndex++;
+        }
+
+        // 마지막 주 빈 셀 채우기
+        if (weekRow != null) {
+            int remaining = 7 - (cellIndex % 7);
+            if (remaining < 7) {
+                for (int i = 0; i < remaining; i++) {
+                    LinearLayout empty = new LinearLayout(requireContext());
+                    empty.setLayoutParams(new LinearLayout.LayoutParams(
+                            0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+                    weekRow.addView(empty);
+                }
+            }
+        }
     }
 
     private void refreshList() {
@@ -157,10 +276,10 @@ public class TransactionFragment extends Fragment
     @Override
     public void onDelete(TransactionEntity tx) {
         new MaterialAlertDialogBuilder(requireContext())
-            .setTitle("거래 삭제")
-            .setMessage("이 거래를 삭제하시겠습니까?")
-            .setPositiveButton("삭제", (d, w) -> viewModel.deleteTransaction(tx.id))
-            .setNegativeButton("취소", null)
+            .setTitle(getString(R.string.transaction_delete_title))
+            .setMessage(getString(R.string.transaction_delete_message))
+            .setPositiveButton(getString(R.string.delete), (d, w) -> viewModel.deleteTransaction(tx.id))
+            .setNegativeButton(getString(R.string.cancel), null)
             .show();
     }
 
@@ -168,79 +287,5 @@ public class TransactionFragment extends Fragment
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private void renderCalendar(String yearMonthStr, List<DailySummary> dailyList) {
-        binding.llCalendarGrid.removeAllViews();
-        YearMonth ym = YearMonth.parse(yearMonthStr);
-        int daysInMonth = ym.lengthOfMonth();
-        // 1일의 요일: SUNDAY=7 → 0, MONDAY=1→1, ...
-        DayOfWeek firstDow = ym.atDay(1).getDayOfWeek();
-        int startOffset = firstDow.getValue() % 7; // SUN=0
-
-        // 일별 합계 맵: day(1~31) → DailySummary
-        Map<Integer, DailySummary> dayMap = new HashMap<>();
-        if (dailyList != null) {
-            for (DailySummary ds : dailyList) {
-                if (ds.date != null && ds.date.length() >= 10) {
-                    int day = Integer.parseInt(ds.date.substring(8, 10));
-                    dayMap.put(day, ds);
-                }
-            }
-        }
-
-        int day = 1;
-        int totalCells = startOffset + daysInMonth;
-        int weeks = (totalCells + 6) / 7;
-
-        for (int w = 0; w < weeks; w++) {
-            LinearLayout weekRow = new LinearLayout(requireContext());
-            weekRow.setOrientation(LinearLayout.HORIZONTAL);
-            weekRow.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-            for (int d = 0; d < 7; d++) {
-                int cellIndex = w * 7 + d;
-                LinearLayout cell = new LinearLayout(requireContext());
-                cell.setOrientation(LinearLayout.VERTICAL);
-                cell.setGravity(Gravity.CENTER_HORIZONTAL);
-                LinearLayout.LayoutParams cellLp = new LinearLayout.LayoutParams(
-                        0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-                cellLp.setMargins(1, 2, 1, 2);
-                cell.setLayoutParams(cellLp);
-
-                if (cellIndex >= startOffset && day <= daysInMonth) {
-                    // 날짜 텍스트
-                    TextView tvDay = new TextView(requireContext());
-                    tvDay.setText(String.valueOf(day));
-                    tvDay.setGravity(Gravity.CENTER);
-                    tvDay.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                    if (d == 0) tvDay.setTextColor(requireContext().getColor(R.color.expense_color));
-                    else if (d == 6) tvDay.setTextColor(requireContext().getColor(R.color.income_color));
-                    cell.addView(tvDay);
-
-                    // 일별 합계
-                    DailySummary ds = dayMap.get(day);
-                    if (ds != null) {
-                        long net = ds.totalIncome - ds.totalExpense;
-                        TextView tvSum = new TextView(requireContext());
-                        tvSum.setGravity(Gravity.CENTER);
-                        tvSum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
-                        tvSum.setMaxLines(1);
-                        if (net >= 0) {
-                            tvSum.setText("+" + FormatUtils.formatAmount(net));
-                            tvSum.setTextColor(requireContext().getColor(R.color.income_color));
-                        } else {
-                            tvSum.setText(FormatUtils.formatAmount(net));
-                            tvSum.setTextColor(requireContext().getColor(R.color.expense_color));
-                        }
-                        cell.addView(tvSum);
-                    }
-                    day++;
-                }
-                weekRow.addView(cell);
-            }
-            binding.llCalendarGrid.addView(weekRow);
-        }
     }
 }

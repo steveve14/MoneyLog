@@ -1,236 +1,388 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Add Transaction V2 — Serene Ledger Design -->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurface"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingBottom="100dp">
 
-        <!-- 헤더: 타이틀 + 닫기 -->
+        <!-- ── Editorial Header ─────────────────────────────── -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
+            <!-- Close Button -->
+            <ImageButton
+                android:id="@+id/btnClose"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_chevron_left_24"
+                android:contentDescription="@string/close"
+                app:tint="?attr/colorOnSurfaceVariant" />
+
+            <!-- Title -->
             <TextView
                 android:id="@+id/tv_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="거래 추가"
-                android:textAppearance="?attr/textAppearanceTitleLarge" />
-
-            <ImageButton
-                android:id="@+id/btn_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="닫기"
-                android:src="@drawable/ic_chevron_left_24"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:text="@string/new_transaction"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:letterSpacing="-0.02"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal" />
         </LinearLayout>
 
-        <!-- 거래 유형 -->
-        <LinearLayout
+        <!-- ── Type Toggle (Segmented Control) ──────────────── -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:paddingHorizontal="24dp"
             android:layout_marginBottom="16dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_expense"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="지출"
-                style="@style/Widget.Material3.Button.OutlinedButton" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_income"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="수입"
-                style="@style/Widget.Material3.Button.OutlinedButton" />
-        </LinearLayout>
-
-        <!-- 금액 입력 -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:hint="금액"
-            style="@style/Widget.MoneyLog.TextInputLayout"
-            app:suffixText="원">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- 카테고리 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="카테고리"
-            android:textAppearance="?attr/textAppearanceLabelMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:layout_marginBottom="8dp" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chip_group_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="48dp"
-            android:clipChildren="true"
-            android:clipToPadding="true"
-            app:singleSelection="true"
-            app:selectionRequired="true" />
-
-        <TextView
-            android:id="@+id/tv_expand_categories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="더보기 ▼"
-            android:textAppearance="?attr/textAppearanceLabelSmall"
-            android:textColor="?attr/colorPrimary"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="4dp"
-            android:layout_marginBottom="12dp"
-            android:visibility="gone" />
-
-        <!-- 날짜 선택 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="날짜"
-            android:textAppearance="?attr/textAppearanceLabelMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:layout_marginBottom="8dp" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="16dp">
+                android:background="@drawable/bg_segment_container"
+                android:padding="6dp"
+                android:maxWidth="320dp"
+                android:layout_gravity="center_horizontal">
 
                 <TextView
-                    android:id="@+id/tv_date"
+                    android:id="@+id/btn_expense"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="44dp"
                     android:layout_weight="1"
-                    android:textAppearance="?attr/textAppearanceBodyMedium" />
+                    android:gravity="center"
+                    android:text="@string/transaction_expense"
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorPrimary"
+                    android:background="@drawable/bg_segment_selected"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <TextView
+                    android:id="@+id/btn_income"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/transaction_income"
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- ── Amount Input (The Focal Point) ───────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingVertical="24dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="bottom">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₩"
+                    android:textSize="28sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:alpha="0.5" />
+
+                <EditText
+                    android:id="@+id/et_amount"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:hint="0"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:textSize="52sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="-0.02"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textColorHint="#20000000" />
+            </LinearLayout>
+
+            <!-- AI Recommendation Badge -->
+            <LinearLayout
+                android:id="@+id/badgeAiRecommend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_status_badge"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_calendar_24"
-                    android:tint="?attr/colorOnSurfaceVariant"
-                    android:contentDescription="날짜 선택" />
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_ai_24"
+                    android:tint="?attr/colorOnSecondaryContainer"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:id="@+id/tvAiRecommend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.05"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:layout_marginStart="8dp" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
-        <!-- 결제수단 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="결제수단"
-            android:textAppearance="?attr/textAppearanceLabelMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:layout_marginBottom="8dp" />
-
-        <com.google.android.material.chip.ChipGroup
+        <!-- ── Detail Fields ────────────────────────────────── -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:singleSelection="true"
-            app:selectionRequired="true">
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="카드"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:checked="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_cash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="현금"
-                style="@style/Widget.Material3.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_transfer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="이체"
-                style="@style/Widget.Material3.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_other"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="기타"
-                style="@style/Widget.Material3.Chip.Filter" />
-        </com.google.android.material.chip.ChipGroup>
-
-        <!-- 메모 -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:hint="메모 (선택)"
-            style="@style/Widget.MoneyLog.TextInputLayout"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_memo"
+            <!-- Transaction Date (Ghost Input) -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLines="3" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:layout_marginBottom="24dp">
 
-        <!-- 고정 거래 등록 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_date"
+                    android:textAllCaps="true"
+                    android:textSize="10sp"
+                    android:letterSpacing="0.05"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:alpha="0.6"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:id="@+id/card_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="8dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_calendar_24"
+                        android:tint="@color/md_theme_primary_dim"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginStart="12dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Description (Ghost Input) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="32dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/description"
+                    android:textAllCaps="true"
+                    android:textSize="10sp"
+                    android:letterSpacing="0.05"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:alpha="0.6"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="8dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_receipt_24"
+                        android:tint="@color/md_theme_primary_dim"
+                        android:contentDescription="@null" />
+
+                    <EditText
+                        android:id="@+id/et_memo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/memo_hint"
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="#30000000"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:layout_marginStart="12dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ── Category Bento Grid ──────────────────────── -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category"
+                android:textAllCaps="true"
+                android:textSize="10sp"
+                android:letterSpacing="0.05"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:alpha="0.6"
+                android:layout_marginBottom="24dp"
+                android:layout_gravity="center_horizontal" />
+
+            <!-- Category Grid — dynamically populated as 3-col grid -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_categories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:overScrollMode="never" />
+
+            <!-- Fallback: ChipGroup for category selection -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:singleSelection="true"
+                app:selectionRequired="true" />
+
+            <TextView
+                android:id="@+id/tvExpandCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="더보기 ▼"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <!-- ── Payment Method Chips ─────────────────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_method"
+                android:textAllCaps="true"
+                android:textSize="10sp"
+                android:letterSpacing="0.05"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:alpha="0.6"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment_card"
+                    android:checked="true"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_cash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment_cash"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_transfer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment_transfer"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_other"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment_other"
+                    style="@style/Widget.Material3.Chip.Filter" />
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
+
+        <!-- ── Recurring Toggle ─────────────────────────────── -->
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_recurring"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="24dp"
             android:text="@string/recurring_toggle_label" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chip_group_recurring_interval"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="8dp"
             android:visibility="gone"
             app:singleSelection="true"
             app:selectionRequired="true">
@@ -265,24 +417,30 @@
                 style="@style/Widget.Material3.Chip.Filter" />
         </com.google.android.material.chip.ChipGroup>
 
-        <!-- 저장 버튼 -->
+        <!-- ── Log Transaction Button ───────────────────────── -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="저장"
-            android:textAppearance="?attr/textAppearanceLabelLarge"
-            style="@style/Widget.Material3.Button" />
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/save"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnPrimary"
+            app:cornerRadius="16dp"
+            android:background="@drawable/bg_cta_gradient"
+            app:backgroundTint="@null" />
 
-        <!-- 삭제 버튼 (편집 모드에서만 표시) -->
+        <!-- Delete Button (Edit mode) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_delete"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:layout_marginHorizontal="24dp"
             android:layout_marginTop="8dp"
             android:text="@string/delete"
             android:textColor="@color/expense_color"
-            android:textAppearance="?attr/textAppearanceLabelLarge"
             android:visibility="gone"
             style="@style/Widget.Material3.Button.TextButton" />
 
