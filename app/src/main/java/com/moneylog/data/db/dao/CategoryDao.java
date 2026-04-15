@@ -42,6 +42,14 @@ public interface CategoryDao {
     @Query("SELECT * FROM categories WHERE is_default = 1 AND is_deleted = 0")
     List<CategoryEntity> getDefaultCategoriesSync();
 
+    /** 이름 + 타입으로 카테고리 조회 (CSV 가져오기 시 매핑용) */
+    @Query("SELECT * FROM categories WHERE name = :name AND type = :type AND is_deleted = 0 LIMIT 1")
+    CategoryEntity getByNameAndType(String name, String type);
+
+    /** 모든 활성 카테고리 동기 조회 */
+    @Query("SELECT * FROM categories WHERE is_deleted = 0 ORDER BY sort_order ASC")
+    List<CategoryEntity> getAllSync();
+
     /** 기본 카테고리 이름 업데이트 */
     @Query("UPDATE categories SET name = :name WHERE id = :id AND is_default = 1")
     void updateDefaultCategoryName(long id, String name);

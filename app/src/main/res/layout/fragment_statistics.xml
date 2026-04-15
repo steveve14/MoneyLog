@@ -227,11 +227,21 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Chart Placeholder (PieChart or LineChart widget) -->
-                <com.moneylog.ui.widget.PieChartView
+                <!-- Chart (PieChart — MPAndroidChart) -->
+                <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pieChart"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <!-- Pie Chart Legend -->
+                <LinearLayout
+                    android:id="@+id/llPieLegend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="16dp"
                     android:layout_gravity="center_horizontal" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

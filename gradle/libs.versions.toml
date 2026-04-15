@@ -34,6 +34,9 @@ google-drive-api = "v3-rev20240730-2.0.0"
 # --- Gemini Nano (AI Edge) — 향후 구현, 현재 비활성 ---
 # ai-edge          = "0.4.0"
 
+# --- MPAndroidChart ---
+mpandroidchart   = "v3.1.0"
+
 # --- AdMob (추후) ---
 admob            = "24.0.0"
 
@@ -93,6 +96,9 @@ google-play-services-auth = { group = "com.google.android.gms",  name = "play-se
 # --- Gemini Nano (AI Edge SDK) \u2014 \ud5a5\ud6c4 \uad6c\ud604, \ud604\uc7ac \ube44\ud65c\uc131 ---
 # \uc9c0\uc6d0 \uae30\uae30: Pixel 8 Pro+, Galaxy S24+ \ub4f1 AICore \ud0d1\uc7ac \uae30\uae30
 # google-ai-edge = { group = "com.google.ai.edge", name = "generativeai", version.ref = "ai-edge" }
+
+# --- MPAndroidChart ---
+mpandroidchart       = { group = "com.github.PhilJay",          name = "MPAndroidChart",    version.ref = "mpandroidchart" }
 
 # --- AdMob (Phase 7 추후 활성화) ---
 admob                = { group = "com.google.android.gms",      name = "play-services-ads", version.ref = "admob"   }

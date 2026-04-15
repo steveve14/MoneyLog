@@ -41,7 +41,7 @@ public class SettingsFragment extends Fragment {
 
     private final ActivityResultLauncher<String[]> csvPickerLauncher =
             registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
-                if (uri != null) importCsv(uri);
+                if (uri != null) showImportModeDialog(uri);
             });
 
     private final ActivityResultLauncher<Intent> signInLauncher =
@@ -84,6 +84,10 @@ public class SettingsFragment extends Fragment {
 
         binding.rowCategory.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.categoryFragment));
+
+        // 고정거래 관리
+        binding.rowRecurring.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.recurringFragment));
 
         // 카테고리 모두 삭제
         binding.rowCategoryDeleteAll.setOnClickListener(v ->
@@ -232,8 +236,47 @@ public class SettingsFragment extends Fragment {
                 .show();
     }
 
-    private void importCsv(Uri uri) {
-        dataManagementHelper.importCsv(uri, new DataManagementHelper.ResultCallback() {
+    private void showImportModeDialog(Uri uri) {
+        String[] items = {
+                getString(R.string.import_mode_merge),
+                getString(R.string.import_mode_clear_data),
+                getString(R.string.import_mode_clear_all)
+        };
+
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                .setTitle(getString(R.string.import_mode_title))
+                .setItems(items, (dialog, which) -> {
+                    DataManagementHelper.ImportMode mode;
+                    switch (which) {
+                        case 1:
+                            mode = DataManagementHelper.ImportMode.CLEAR_DATA;
+                            break;
+                        case 2:
+                            mode = DataManagementHelper.ImportMode.CLEAR_ALL;
+                            break;
+                        default:
+                            mode = DataManagementHelper.ImportMode.MERGE;
+                            break;
+                    }
+
+                    if (mode == DataManagementHelper.ImportMode.CLEAR_ALL) {
+                        // 카테고리까지 삭제하는 경우 한 번 더 확인
+                        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                                .setTitle(getString(R.string.import_mode_clear_all_confirm_title))
+                                .setMessage(getString(R.string.import_mode_clear_all_confirm_message))
+                                .setPositiveButton(getString(R.string.confirm), (d, w) -> importCsv(uri, mode))
+                                .setNegativeButton(getString(R.string.cancel), null)
+                                .show();
+                    } else {
+                        importCsv(uri, mode);
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    private void importCsv(Uri uri, DataManagementHelper.ImportMode mode) {
+        dataManagementHelper.importCsv(uri, mode, new DataManagementHelper.ResultCallback() {
             @Override
             public void onSuccess(String count) {
                 requireActivity().runOnUiThread(() ->

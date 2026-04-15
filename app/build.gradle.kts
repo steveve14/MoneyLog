@@ -113,6 +113,9 @@ dependencies {
     // --- AdMob (Phase 7 — 현재 비활성) ---
     // implementation(libs.admob)
 
+    // --- MPAndroidChart ---
+    implementation(libs.mpandroidchart)
+
     // --- 단위 테스트 ---
     testImplementation(libs.junit)
     testImplementation(libs.room.testing)

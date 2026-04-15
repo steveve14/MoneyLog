@@ -40,6 +40,9 @@ public class RecurringEntity {
     @ColumnInfo(name = "is_active")
     public boolean isActive = true;
 
+    @ColumnInfo(name = "sort_order", defaultValue = "0")
+    public int sortOrder = 0;
+
     /** 마지막 실행 날짜 "yyyy-MM-dd", null이면 미실행 */
     @ColumnInfo(name = "last_executed_date")
     public String lastExecutedDate;

@@ -74,6 +74,11 @@ public class TransactionFormFragment extends Fragment {
                 isEdit = true;
                 viewModel.loadTransaction(txId);
             }
+            // 고정거래 화면에서 진입 시 스위치 자동 선택
+            if (getArguments().getBoolean("autoRecurring", false)) {
+                binding.switchRecurring.setChecked(true);
+                binding.chipGroupRecurringInterval.setVisibility(View.VISIBLE);
+            }
         }
 
         binding.tvTitle.setText(isEdit ? getString(R.string.transaction_edit) : getString(R.string.add_transaction));
@@ -161,6 +166,12 @@ public class TransactionFormFragment extends Fragment {
                 binding.etMemo.setText(tx.memo);
                 selectedPaymentMethod = tx.paymentMethod;
                 updatePaymentMethodChips(tx.paymentMethod);
+
+                // 고정 거래 여부 표시 (편집 모드에서는 토글 비활성)
+                if (tx.isAuto) {
+                    binding.switchRecurring.setChecked(true);
+                    binding.switchRecurring.setEnabled(false);
+                }
             }
         });
     }
@@ -280,13 +291,14 @@ public class TransactionFormFragment extends Fragment {
             tx.createdAt = now;
         }
 
-        viewModel.saveTransaction(tx);
-
         // 고정 거래로 등록
         if (!isEdit && binding.switchRecurring.isChecked()) {
             tx.isAuto = true;
-            viewModel.saveTransaction(tx);
+        }
 
+        viewModel.saveTransaction(tx);
+
+        if (!isEdit && binding.switchRecurring.isChecked()) {
             RecurringEntity recurring = new RecurringEntity();
             recurring.type = selectedType;
             recurring.amount = amount;

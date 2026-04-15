@@ -273,8 +273,7 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:alpha="0.6"
-                android:layout_marginBottom="24dp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_marginBottom="24dp" />
 
             <!-- Category Grid — dynamically populated as 3-col grid -->
             <androidx.recyclerview.widget.RecyclerView

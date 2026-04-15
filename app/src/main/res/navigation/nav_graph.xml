@@ -56,6 +56,11 @@
             android:name="transactionId"
             app:argType="long"
             android:defaultValue="0L" />
+
+        <argument
+            android:name="autoRecurring"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 
     <fragment
@@ -81,5 +86,16 @@
         android:id="@+id/aiSummaryFragment"
         android:name="com.moneylog.ui.fragment.AiSummaryFragment"
         android:label="@string/ai_summary_title" />
+
+    <!-- 고정 거래 전용 페이지 -->
+    <fragment
+        android:id="@+id/recurringFragment"
+        android:name="com.moneylog.ui.fragment.RecurringFragment"
+        android:label="@string/dashboard_recurring_title">
+
+        <action
+            android:id="@+id/action_recurring_to_form"
+            app:destination="@id/transactionFormFragment" />
+    </fragment>
 
 </navigation>

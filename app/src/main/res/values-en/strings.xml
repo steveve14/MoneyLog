@@ -80,6 +80,15 @@
     <string name="interval_monthly">Monthly</string>
     <string name="interval_yearly">Yearly</string>
     <string name="recurring_day_hint">Day of month (1~28)</string>
+    <string name="recurring_day_hint_short">15</string>
+    <string name="recurring_day_suffix_label">th</string>
+    <string name="recurring_month_suffix_label">Mo.</string>
+    <string name="amount_hint_label">Amount</string>
+    <string name="recurring_form_add">Add Fixed Transaction</string>
+    <string name="recurring_form_edit">Edit Fixed Transaction</string>
+    <string name="recurring_delete_confirm_msg">Delete this fixed transaction?</string>
+    <string name="transaction_amount_required">Please enter an amount</string>
+    <string name="category_required">Please select a category</string>
     <string name="recurring_month_hint">Month (1~12)</string>
     <string name="recurring_toggle_label">Register as recurring</string>
     <string name="filter_recurring_expense">Recurring</string>
@@ -106,6 +115,8 @@
     <string name="settings_data_management">Data Management</string>
     <string name="settings_category_management">Category Management</string>
     <string name="settings_category_management_desc">Edit icons and colors</string>
+    <string name="settings_recurring_management">Fixed Transactions</string>
+    <string name="settings_recurring_management_desc">Manage recurring income &amp; expenses</string>
     <string name="settings_category_delete_all">Delete All Categories</string>
     <string name="settings_category_delete_all_desc">Delete all categories</string>
     <string name="settings_category_reset_default">Reset to Default</string>
@@ -158,6 +169,7 @@
     <string name="dismiss">Dismiss</string>
     <string name="no_spending_data">No spending data</string>
     <string name="no_recent_transactions">No recent transactions</string>
+    <string name="dashboard_recurring_title">Fixed Transactions</string>
 
     <!-- History -->
     <string name="statistics_financial_insight_history">History</string>
@@ -273,6 +285,12 @@
     <string name="msg_export_failed">Export failed</string>
     <string name="msg_import_complete">CSV import complete: %d items</string>
     <string name="msg_import_failed">Import failed</string>
+    <string name="import_mode_title">Select import mode</string>
+    <string name="import_mode_merge">Merge with existing data</string>
+    <string name="import_mode_clear_data">Clear transactions before import</string>
+    <string name="import_mode_clear_all">Clear categories &amp; transactions before import</string>
+    <string name="import_mode_clear_all_confirm_title">Confirm full reset</string>
+    <string name="import_mode_clear_all_confirm_message">All categories and transactions will be deleted and replaced with the CSV data. Continue?</string>
     <string name="data_cleanup_title">Data Cleanup</string>
     <string name="data_cleanup_message">Delete transaction data older than 6 months. Continue?</string>
     <string name="msg_cleanup_complete">Data cleanup complete</string>
@@ -354,4 +372,5 @@
     <string name="file_write_failed">File write failed</string>
     <string name="file_empty">Empty file</string>
     <string name="category_fallback">Other</string>
+    <string name="category_others">Others</string>
 </resources>

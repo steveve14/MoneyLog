@@ -1,0 +1,46 @@
+id,type,amount,categoryId,categoryName,date,memo,paymentMethod,isAuto
+1,EXPENSE,8500,1,"식비",2026-04-01,"아침 김밥천국",CARD,false
+2,EXPENSE,12000,1,"식비",2026-04-01,"점심 부대찌개",CARD,false
+3,EXPENSE,1500,2,"교통",2026-04-01,"버스 출근",CASH,false
+4,INCOME,3200000,11,"급여",2026-04-01,"4월 급여",TRANSFER,true
+5,EXPENSE,45000,3,"주거",2026-04-02,"관리비 납부",TRANSFER,false
+6,EXPENSE,6800,9,"카페",2026-04-02,"스타벅스 아메리카노 2잔",CARD,false
+7,EXPENSE,15000,1,"식비",2026-04-02,"저녁 삼겹살",CARD,false
+8,EXPENSE,1500,2,"교통",2026-04-03,"지하철 출근",CASH,false
+9,EXPENSE,9000,1,"식비",2026-04-03,"점심 초밥",CARD,false
+10,EXPENSE,32000,4,"엔터테인먼트",2026-04-03,"넷플릭스 연간 구독",CARD,false
+11,EXPENSE,5500,9,"카페",2026-04-04,"투썸 케이크 세트",CARD,false
+12,EXPENSE,11000,1,"식비",2026-04-04,"점심 돈까스",CARD,false
+13,EXPENSE,78000,5,"의류",2026-04-05,"봄 자켓 구매",CARD,false
+14,EXPENSE,1500,2,"교통",2026-04-05,"버스 출근",CASH,false
+15,EXPENSE,25000,8,"선물·경조사",2026-04-05,"친구 생일 선물",CARD,false
+16,INCOME,500000,12,"용돈",2026-04-05,"부모님 용돈",TRANSFER,false
+17,EXPENSE,8000,1,"식비",2026-04-06,"점심 비빔밥",CARD,false
+18,EXPENSE,15000,6,"의료·건강",2026-04-06,"약국 비타민",CASH,false
+19,EXPENSE,4500,9,"카페",2026-04-07,"이디야 라떼",CARD,false
+20,EXPENSE,22000,1,"식비",2026-04-07,"저녁 회식",CARD,false
+21,EXPENSE,3000,2,"교통",2026-04-07,"택시 귀가",CARD,false
+22,EXPENSE,1500,2,"교통",2026-04-08,"지하철 출근",CASH,false
+23,EXPENSE,10000,1,"식비",2026-04-08,"점심 쌀국수",CARD,false
+24,EXPENSE,55000,7,"교육",2026-04-08,"온라인 강의 결제",CARD,false
+25,EXPENSE,7000,1,"식비",2026-04-09,"점심 김치찌개",CARD,false
+26,EXPENSE,6000,9,"카페",2026-04-09,"할리스 커피",CARD,false
+27,INCOME,120000,14,"투자 수익",2026-04-09,"주식 배당금",TRANSFER,false
+28,EXPENSE,18000,1,"식비",2026-04-10,"저녁 치킨",CARD,false
+29,EXPENSE,850000,3,"주거",2026-04-10,"월세 납부",TRANSFER,true
+30,EXPENSE,1500,2,"교통",2026-04-10,"버스 출근",CASH,false
+31,EXPENSE,9500,1,"식비",2026-04-11,"점심 우동",CARD,false
+32,EXPENSE,35000,4,"엔터테인먼트",2026-04-11,"콘서트 티켓",CARD,false
+33,EXPENSE,4800,9,"카페",2026-04-12,"메가커피 프라푸치노",CARD,false
+34,EXPENSE,13000,1,"식비",2026-04-12,"점심 스테이크 덮밥",CARD,false
+35,EXPENSE,28000,5,"의류",2026-04-12,"운동화 구매",CARD,false
+36,EXPENSE,1500,2,"교통",2026-04-13,"지하철 출근",CASH,false
+37,EXPENSE,8500,1,"식비",2026-04-13,"점심 제육볶음",CARD,false
+38,EXPENSE,12000,6,"의료·건강",2026-04-13,"치과 검진",CARD,false
+39,EXPENSE,9000,1,"식비",2026-04-14,"점심 냉면",CARD,false
+40,EXPENSE,5000,9,"카페",2026-04-14,"카페 아이스티",CARD,false
+41,INCOME,200000,15,"기타 수입",2026-04-14,"중고 물품 판매",TRANSFER,false
+42,EXPENSE,1500,2,"교통",2026-04-15,"버스 출근",CASH,false
+43,EXPENSE,11000,1,"식비",2026-04-15,"점심 돈까스",CARD,false
+44,EXPENSE,65000,8,"선물·경조사",2026-04-15,"결혼식 축의금",TRANSFER,false
+45,EXPENSE,7500,10,"기타 지출",2026-04-15,"우산 구매",CASH,false

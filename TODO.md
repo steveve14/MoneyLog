@@ -1,7 +1,9 @@
 # MoneyLog - 개발 TODO 리스트
 
-> **최종 업데이트**: 2026-04-14
+> **최종 업데이트**: 2026-04-15
 > **디자인 시스템**: "The Sovereign Ledger" (High-End Editorial)
+> **기술 스택**: Java 17 + Material 3 XML + Data Binding (Compose 미사용)
+> **DB 버전**: 3 (budgets 테이블 제거됨)
 
 ---
 
@@ -18,8 +20,8 @@
 - [x] 화면별 디자인 목업 완성 (stitch/ — 8개 화면 HTML/이미지)
 - [x] Android Studio 프로젝트 초기 생성 (`com.moneylog`) — `settings.gradle.kts`, `build.gradle.kts`
 - [x] `gradle/libs.versions.toml` 버전 카탈로그 구성
-- [x] `app/build.gradle.kts` 의존성 설정 (Compose, Room, Hilt, Vico 등)
-- [x] 프로젝트 구조 생성 (data/db/dao, data/db/entity, data/repository, data/worker, ui/screen, ui/viewmodel, ui/component, ui/navigation, ui/theme, di, util)
+- [x] `app/build.gradle.kts` 의존성 설정 (Material 3, Room, Hilt, WorkManager 등)
+- [x] 프로젝트 구조 생성 (data/db/dao, data/db/entity, data/repository, data/worker, ui/fragment, ui/viewmodel, ui/adapter, ui/widget, di, util)
 - [x] Git 저장소 초기화 및 `.gitignore` 설정
 
 ---
@@ -28,32 +30,35 @@
 
 ### 2-1. Room 데이터베이스 설정
 
-- [x] `AppDatabase.kt` — Room Database 클래스 생성 (version=1)
-- [x] `TransactionEntity.kt` — 거래 엔티티 정의
-- [x] `CategoryEntity.kt` — 카테고리 엔티티 정의
-- [x] `BudgetEntity.kt` — 예산 엔티티 정의
-- [x] `RecurringEntity.kt` — 반복 거래 엔티티 정의
+- [x] `AppDatabase.java` — Room Database 클래스 (현재 version=3, 마이그레이션 1→2→3 포함)
+- [x] `TransactionEntity.java` — 거래 엔티티 정의 (recurring_id, is_auto 필드 포함)
+- [x] `CategoryEntity.java` — 카테고리 엔티티 정의 (icon_name, is_default, sort_order)
+- [x] ~~`BudgetEntity.java`~~ — ❌ DB v3에서 budgets 테이블 제거 (마이그레이션 2→3)
+- [x] `RecurringEntity.java` — 반복 거래 엔티티 정의 (interval_type: DAILY/WEEKLY/MONTHLY/YEARLY)
 - [x] 인덱스 설정 (`idx_tx_date`, `idx_tx_category`, `idx_tx_type`, `idx_tx_deleted`)
-- [x] `uq_budget_category_month` 유니크 인덱스 설정
+- [x] ~~`uq_budget_category_month` 유니크 인덱스~~ — budgets 테이블과 함께 제거됨
 
 ### 2-2. DAO 구현
 
-- [x] `TransactionDao.kt` — 거래 CRUD + 월별 요약 + 카테고리별 집계 쿼리
-- [x] `CategoryDao.kt` — 카테고리 CRUD + 타입별 조회
-- [x] `BudgetDao.kt` — 예산 CRUD + 월별 조회
-- [x] `RecurringDao.kt` — 반복 거래 CRUD + 미실행 조회
+- [x] `TransactionDao.java` — 거래 CRUD + 월별 요약 + 카테고리별 집계 + 일별 집계 쿼리
+- [x] `CategoryDao.java` — 카테고리 CRUD + 타입별 조회
+- [x] ~~`BudgetDao.java`~~ — ❌ budgets 테이블 제거로 삭제됨
+- [x] `RecurringDao.java` — 반복 거래 CRUD + 활성/비활성 조회 + WorkManager용 동기 조회
+- [x] `MonthlySummary.java` — 월별 합계 POJO
+- [x] `CategorySummary.java` — 카테고리별 집계 POJO
+- [x] `DailySummary.java` — 일별 합계 POJO
 
 ### 2-3. Repository 구현
 
-- [x] `TransactionRepository.kt` — 월별 조회, 생성, 수정, 소프트 삭제
-- [x] `CategoryRepository.kt` — 카테고리 관리 + 기본 카테고리 시드
-- [x] `BudgetRepository.kt` — 예산 관리
-- [x] `RecurringRepository.kt` — 반복 거래 관리 + 자동 실행 로직
+- [x] `TransactionRepository.java` — 월별 조회, 생성, 수정, 소프트 삭제
+- [x] `CategoryRepository.java` — 카테고리 관리 + 기본 카테고리 시드
+- [x] ~~`BudgetRepository.java`~~ — ❌ budgets 테이블 제거로 삭제됨
+- [x] `RecurringRepository.java` — 반복 거래 관리 + 자동 실행 로직
 
 ### 2-4. DI (Hilt) 설정
 
-- [x] `AppModule.kt` — Room DB, DAO, Repository Hilt 모듈 정의
-- [x] `Application` 클래스에 `@HiltAndroidApp` 적용
+- [x] `AppModule.java` — Room DB, DAO(Transaction/Category/Recurring), Repository Hilt 모듈 정의
+- [x] `MoneyLogApplication.java` — `@HiltAndroidApp` 적용 + HiltWorkerFactory 통합
 
 ### 2-5. 카테고리 기본 데이터
 
@@ -67,7 +72,7 @@
 
 #### 색상 팔레트 (Material 3 Surface Hierarchy)
 
-- [x] `Color.kt` — 전체 색상 토큰 정의
+- [x] `colors.xml` — 전체 색상 토큰 정의 (XML 리소스)
   - Primary: `#3525CD` / Primary Container: `#4F46E5`
   - Surface: `#F8F9FA` / Surface-Container-Low: `#F3F4F5` / Surface-Container-Lowest: `#FFFFFF`
   - Surface-Container: `#EDEEEF` / Surface-Container-High: `#E7E8E9`
@@ -81,15 +86,15 @@
 
 #### 타이포그래피 (듀얼 폰트)
 
-- [x] `Type.kt` — Manrope + Pretendard 타이포그래피 스케일
+- [x] `themes.xml` — Manrope + Pretendard 타이포그래피 스케일 (XML fontFamily 적용)
 - [x] `fonts/` 디렉토리에 Manrope(3종), Pretendard(4종) TTF 파일 추가
   - Manrope v20: manrope_semibold.ttf(600), manrope_bold.ttf(700), manrope_extrabold.ttf(800) — Google Fonts CDN
   - Pretendard v1.3.9: pretendard_regular.ttf(400), pretendard_medium.ttf(500), pretendard_semibold.ttf(600), pretendard_bold.ttf(700) — MIT License
 
 #### 테마 & 디자인 원칙
 
-- [x] `Theme.kt` — Material 3 커스텀 ColorScheme (위 색상 토큰 기반)
-  - 라이트/다크 모드 각각 정의
+- [x] `themes.xml` — Material 3 커스텀 테마 (`Theme.MoneyLog` + Widget 스타일)
+  - 라이트 모드 정의 (다크 모드 미구현)
   - Dynamic Color 비활성 (고정 브랜드 컬러 사용)
 - [x] **"No-Line" 정책 적용**: 1px 디바이더 사용 금지
   - 리스트 아이템: 16dp 수직 여백으로 분리
@@ -105,12 +110,12 @@
 
 #### 공통 컴포넌트
 
-- [x] `NavGraph.kt` — 네비게이션 그래프 (하단 5탭: 홈, 내역, 등록, 통계, 설정)
-- [x] 하단 `NavigationBar` (`BottomBar.kt`) — Material Symbols Outlined 아이콘
-- [x] `AiInsightCard.kt` — AI Insight 카드 공통 컴포넌트
-- [x] `CategoryIcon.kt` — Material Symbols Outlined 기반 카테고리 아이콘
-- [x] `OverlineLabel.kt` — 오버라인 텍스트 (Label-MD, 대문자, primary 색상)
-- [x] `GradientButton.kt` — Primary CTA 그라디언트 버튼 (primary → primary-container)
+- [x] `nav_graph.xml` — 네비게이션 그래프 (8개 destination: Onboarding, Dashboard, Transaction, TransactionForm, Statistics, Category, Settings, AiSummary)
+- [x] 하단 `NavigationBar` (`bottom_nav_menu.xml` + `activity_main.xml`) — 5탭: 홈/거래/추가/통계/AI
+- [x] `PieChartView.java` — 커스텀 원형 차트 위젯 (카테고리별 지출 시각화)
+- [x] `IconHelper.java` — Material Symbols Outlined 기반 카테고리 아이콘 매핑
+- [x] `IconPickerAdapter.java` — 아이콘 선택 그리드 RecyclerView 어댑터
+- [x] XML 스타일 기반 오버라인/그라디언트 버튼 (`Widget.MoneyLog.Button.Primary`, `bg_primary_gradient`)
 - [ ] `TopAppBar` 공통 컴포넌트 — Glassmorphism (surface_bright 80% opacity + backdrop-blur 16px)
 - [ ] `EditorialMargin` — 좌우 패딩: `max(1.5rem, 5vw)` 대응값
 
@@ -120,6 +125,7 @@
 - [x] `FormatUtils.java` — 금액 콤마 포맷, 퍼센트 포맷, 입력 파싱
 - [x] `IconHelper.java` — 카테고리 아이콘 헬퍼
 - [x] `YearMonthPickerDialog.java` — 년/월 선택 다이얼로그
+- [x] `DataManagementHelper.java` — CSV 내보내기/가져오기 헬퍼
 
 ### 2-7. 거래 관련 UI (F02)
 
@@ -142,19 +148,27 @@
 
 ---
 
-## Phase 3: 자동화 — 고정 수입·지출, WorkManager 반복 거래 (1주) ✅ 완료
+## Phase 3: 자동화 — 고정 수입·지출, WorkManager 반복 거래 (1주) ⚙️ 일부 완료
 
-### 3-1. 반복 거래 UI (F03)
+### 3-1. 반복 거래 데이터 레이어 ✅
+
+- [x] `RecurringViewModel.java` — 반복 거래 ViewModel (CRUD + loadById + setActive 토글)
+- [x] `RecurringDao.java` — 전체 조회, 타입별 조회, 활성화/비활성화, WorkManager용 동기 조회
+- [x] `RecurringRepository.java` — 반복 거래 관리 + 자동 실행 로직
+
+### 3-2. 반복 거래 UI (F03) ❌ 미구현
 
 > **디자인 참조**: stitch/fixed_transactions_serene/
 
-- [x] `RecurringViewModel.java` — 반복 거래 ViewModel
-- [x] `RecurringFormFragment.java` — 반복 거래 등록/수정 폼 (금액, 카테고리, 매월 N일, 메모, 결제수단)
-- [x] `fragment_recurring_form.xml` — 반복 거래 폼 레이아웃
-- [x] 반복 거래 수정 — 편집 모드 (loadById)
-- [x] 반복 거래 비활성화/활성화 토글
+- [ ] `RecurringFragment.java` — 반복 거래 목록 화면 (수입/지출 탭, 활성/비활성 토글)
+- [ ] `fragment_recurring.xml` — 반복 거래 목록 레이아웃
+- [ ] `RecurringFormFragment.java` — 반복 거래 등록/수정 폼 (금액, 카테고리, 주기, 메모)
+- [ ] `fragment_recurring_form.xml` — 반복 거래 폼 레이아웃
+- [ ] `RecurringAdapter.java` — 반복 거래 목록 RecyclerView 어댑터
+- [ ] `nav_graph.xml`에 반복 거래 destination 추가
+- [ ] 설정 화면에서 "반복 거래 관리" 네비게이션 링크 추가
 
-### 3-2. WorkManager 자동 실행
+### 3-3. WorkManager 자동 실행 ✅
 
 - [x] `RecurringWorker.java` — PeriodicWorkRequest (매일 1회), `@HiltWorker`
 - [x] 앱 실행 시 즉시 미처리 반복 거래 실행 (`ExistingPeriodicWorkPolicy.KEEP`)
@@ -166,57 +180,56 @@
 
 ---
 
-## Phase 4: 대시보드·통계 — 차트, 예산, 월별 분석 (1주) ✅ 완료
+## Phase 4: 대시보드·통계 — 차트, 예산, 월별 분석 (1주) ⚙️ 일부 완료
 
-### 4-1. 대시보드 (메인 화면)
+### 4-1. 대시보드 (메인 화면) ✅
 
 > **디자인 참조**: stitch/dashboard_serene/
 
-- [x] `DashboardViewModel.java` — 월별 수입/지출/잔액 + 최근 거래
+- [x] `DashboardViewModel.java` — 월별 수입/지출/잔액 + 카테고리별 지출 + 최근 거래
 - [x] `DashboardFragment.java` + `fragment_dashboard.xml` — 대시보드 레이아웃
-- [x] `StatisticsViewModel.java` + `StatisticsFragment.java` + `fragment_statistics.xml`
-- [x] `BudgetViewModel.java` + `BudgetFragment.java` + `fragment_budget.xml`
-- [ ] `DashboardScreen.kt` — 대시보드 레이아웃
-  - "FINANCIAL OVERVIEW" 오버라인 + "April 2026" Headline (에디토리얼 좌측 정렬)
-  - 월 네비게이션: "< This Month >" 화살표
-  - **Total Balance 히어로 카드**: primary 그라디언트 배경, 잔액 Display-LG (흰색), MONTHLY INCOME / MONTHLY EXPENSE 하단 표시
-  - **Pending Updates 카드**: 자동 등록 알림 — "N Auto-registered transactions detected: 항목명", "Confirm Now" 버튼
-  - **AI Summary 카드**: secondary-fixed-dim 글래스모피즘, sparkle 아이콘, 한줄 요약 + "View Details →"
-  - **Spending Distribution**: 도넛 차트 (Vico) + 중앙에 "Top Category: Dining" + 범례 리스트
-  - **Recent Transactions**: 최근 3건 + "See All" 링크, 카드별 Material Symbol 아이콘
-  - 하단 NavigationBar (5탭)
+  - 월 네비게이션 (이전/다음 달 + 년월 피커)
+  - 잔액/수입/지출 표시
+  - 카테고리별 막대 그래프 (Top 8) + 원형 차트 (`PieChartView`)
+  - 최근 거래 3건 표시
+- [x] `StatisticsViewModel.java` + `StatisticsFragment.java` + `fragment_statistics.xml` — 통계 화면 (Java/XML)
+- [ ] ~~`BudgetViewModel.java` + `BudgetFragment.java` + `fragment_budget.xml`~~ — ❌ 예산 기능 제거됨 (DB v3)
 
-### 4-2. 통계·분석 (F06)
+#### 대시보드 디자인 리뉴얼 (미적용)
+
+- [ ] "FINANCIAL OVERVIEW" 오버라인 + "April 2026" Headline (에디토리얼 좌측 정렬)
+- [ ] **Total Balance 히어로 카드**: primary 그라디언트 배경, 잔액 Display-LG (흰색)
+- [ ] **Pending Updates 카드**: 자동 등록 알림 — "N Auto-registered transactions detected", "Confirm Now" 버튼
+- [ ] **AI Summary 카드**: secondary-fixed-dim 글래스모피즘, sparkle 아이콘
+- [ ] **Spending Distribution**: 도넛 차트 + 중앙 "Top Category" + 범례 리스트
+
+### 4-2. 통계·분석 (F06) ⚙️ 기본 구현 완료
 
 > **디자인 참조**: stitch/statistics_serene/
 
-- [ ] `StatisticsViewModel.kt` — 통계 ViewModel
-- [ ] `StatisticsScreen.kt` — 통계 화면
-  - "FINANCIAL INSIGHT" 오버라인 + "Statistics" Headline + "April 2026" 날짜
-  - **AI Smart Analysis 카드**: 글래스모피즘 + sparkle 아이콘, 소비 분석 요약 텍스트, 절약 조언
-  - **전월 대비 메트릭 카드 2개**: "MONTHLY TOTAL +5.2%" / "DINING FOCUS -3.1%" (추이 아이콘 + 색상 바)
-  - **Spending Trend 차트**: 라인 차트 (Vico, "Last 6 Months" 칩), 월별 축 (Nov~Apr)
-  - **Category Breakdown**: 카테고리별 수평 바 차트 + Material Symbol 아이콘 + 퍼센트
-  - FAB (+) 하단 배치
-- [ ] `MonthlyChart.kt` — 월별 지출 추이 라인 차트 (Vico) — P1
-- [ ] 카테고리별 지출 비율 수평 바 차트 + 도넛 차트 (Vico) — P1
+- [x] `StatisticsViewModel.java` — 월별 합계 + 카테고리별 지출 집계
+- [x] `StatisticsFragment.java` + `fragment_statistics.xml` — 원형 차트 + 카테고리 분류 리스트 + 월 선택
+- [x] `item_statistics_category.xml` — 카테고리별 진행 바 + 금액/비율 표시
+
+#### 통계 디자인 리뉴얼 (미적용)
+
+- [ ] **AI Smart Analysis 카드**: 글래스모피즘 + sparkle 아이콘, 소비 분석 요약
+- [ ] **전월 대비 메트릭 카드 2개**: "MONTHLY TOTAL +5.2%" / "DINING FOCUS -3.1%"
+- [ ] **Spending Trend 차트**: 라인 차트 (월별 추이, "Last 6 Months") — P1
 - [ ] 전월 대비 카테고리별 증감 메트릭 카드 — P2
 - [ ] 일별 지출 히트맵 (캘린더 뷰) — P2
 
-### 4-3. 예산 관리 (F05)
+### 4-3. 예산 관리 (F05) ❌ 미구현 (DB에서 제거됨)
 
 > **디자인 참조**: stitch/budget_management_serene/
+> ⚠️ DB v3 마이그레이션에서 budgets 테이블이 제거됨. 재구현 시 DB v4 마이그레이션 필요.
 
-- [ ] `BudgetViewModel.kt` — 예산 ViewModel
-- [ ] `BudgetScreen.kt` — 예산 관리 화면
-  - "CURRENT OVERVIEW" 오버라인 + "Financial Health" Headline
-  - **전체 예산 카드**: 총 예산 금액 + "Remaining" 잔여액 (Tertiary 색상) + Usage Progress 바 + 퍼센트
-  - "Category Breakdown" 섹션 + "+ Add Category Budget" 그라디언트 버튼
-  - **카테고리 예산 카드**: Material Symbol 아이콘 + 카테고리명 + 태그 뱃지 (Essential/Utility/Warning)
-    - 예산 금액 + 소진율 바 (primary/tertiary/error 색상 구분) + "N used" 사용 금액
-    - Warning 상태: 예산 바 error 색상 + "Warning" 뱃지
-  - **Editorial Insight 카드** (하단): AI 기반 예산 조언 — "Your 'Cafe' spending is approaching the limit..." (sparkle 아이콘)
-- [ ] `BudgetProgress.kt` — 예산 소진율 프로그레스 바 컴포넌트 (색상 단계: primary → tertiary → error)
+- [ ] `BudgetEntity.java` — 예산 엔티티 재정의 + DB v4 마이그레이션
+- [ ] `BudgetDao.java` — 예산 CRUD + 월별 조회
+- [ ] `BudgetRepository.java` — 예산 관리 로직
+- [ ] `BudgetViewModel.java` — 예산 ViewModel
+- [ ] `BudgetFragment.java` + `fragment_budget.xml` — 예산 관리 화면
+- [ ] 예산 소진율 프로그레스 바 컴포넌트 (색상 단계: primary → tertiary → error)
 - [ ] 월별 총 예산 설정 — P1
 - [ ] 카테고리별 예산 설정 (식비 30만, 교통 10만 등) — P1
 - [ ] 카테고리 태그 분류 (Essential / Utility / Warning) — P1
@@ -246,39 +259,36 @@
 - [ ] 자동 백업 (WorkManager 주기적 실행: 매일/매주) — P2
 - [ ] 백업 파일 AES 암호화 — P2
 
-### 5-3. 설정 화면
+### 5-3. 설정 화면 ✅
 
 - [x] `SettingsFragment.java` + `fragment_settings.xml` — 설정 화면
 - [x] `BackupRepository.java` — Google Drive 백업/복원 구현
-- [x] 언어 선택 (한국어/English/日本語)
+- [x] 언어 선택 (한국어/English/日本語) — `LocaleHelper.java`
 - [x] 금액 텍스트 표시 모드 토글
-- [x] 카테고리 관리 네비게이션
-- [x] 데이터 관리 (CSV 내보내기/가져오기/정리)
+- [x] 카테고리 관리 네비게이션 (`categoryFragment`로 이동)
+- [x] 데이터 관리 (CSV 내보내기/가져오기/정리) — `DataManagementHelper.java`
 - [x] MaterialAlertDialogBuilder (Serene Ledger 28dp 라운드) 적용
 - [x] 온보딩 화면에서 하단 네비게이션 숨김
+- [x] AI Insights 섹션 (Gemini Nano 지원 상태 표시)
+- [x] 카테고리 전체 삭제 / 기본값 리셋
+- [x] 전체 데이터 리셋 기능
 
-### 5-4. 설정 화면 (F10)
+### 5-4. 설정 화면 디자인 리뉴얼 (미적용)
 
 > **디자인 참조**: stitch/settings_serene/
 
 - [ ] `SettingsViewModel.kt` — 설정 ViewModel
-- [ ] `SettingsScreen.kt` — 설정 화면 레이아웃
+- [ ] 설정 화면 디자인 리뉴얼 (에디토리얼 스타일)
   - "PREFERENCES" 오버라인 + "Control your financial footprint" Headline
   - **Data Management 섹션**:
-    - "Fixed Transactions" → RecurringScreen 연결 (calendar_month 아이콘 + "Manage your recurring bills" 설명)
-    - "Category Management" → 카테고리 관리 (category 아이콘 + "Edit icons and colors" 설명)
+    - "Fixed Transactions" → 반복 거래 관리 연결
+    - "Category Management" → 카테고리 관리 연결
   - **Backup & Sync 섹션**:
-    - Google Drive 연결 상태 표시 ("Google Drive Connected" + 마지막 백업 날짜)
     - "Backup Now" 그라디언트 버튼 + "Restore" 아웃라인 버튼
   - **AI Insights 섹션**:
-    - Gemini Nano Status 카드 (글래스모피즘) + "SUPPORTED"/"UNSUPPORTED" 뱃지
-    - "On-device processing active for enhanced privacy." 설명
-  - **Device Preferences 섹션**:
-    - "Language" 선택 (한국어/English/日本語)
-    - "Amount Text Mode" 토글
+    - Gemini Nano Status 카드 (글래스모피즘)
   - **위험 영역**:
     - "Reset All Data" 빨간 버튼 (error-container 배경)
-    - "This action is permanent and cannot be undone." 경고 텍스트
   - CSV 내보내기 (Android Share Intent) — P1
   - 알림 설정 on/off — P2
 
@@ -331,7 +341,8 @@
 - [x] `FormatUtils.java` — 금액 포맷 (1,000 단위 콤마 + "원" 단위 표시)
 - [x] `IconHelper.java` — 카테고리 아이콘 리소스 매핑
 - [x] `YearMonthPickerDialog.java` — 년/월 선택 다이얼로그 (NumberPicker 기반)
-- [x] `LocaleHelper.java` — 다국어 지원 (한국어/영어/일본어)
+- [x] `LocaleHelper.java` — 다국어 지원 (한국어/영어/일본어) + 온보딩 완료 여부 관리
+- [x] `DataManagementHelper.java` — CSV 내보내기/가져오기 + 데이터 정리
 
 ---
 
@@ -352,12 +363,11 @@
 
 - [ ] `TransactionDao` 단위 테스트 (Room in-memory DB)
 - [ ] `CategoryDao` 단위 테스트
-- [ ] `BudgetDao` 단위 테스트
 - [ ] `RecurringDao` 단위 테스트
 - [ ] `TransactionRepository` 단위 테스트
 - [ ] `RecurringRepository` — 자동 실행 로직 테스트 (밀린 달 처리)
 - [ ] `BackupRepository` — 백업 & 복원 테스트
-- [ ] Room 마이그레이션 테스트 (`room-testing`)
+- [ ] Room 마이그레이션 테스트 (`room-testing`, v1→v2→v3)
 
 ---
 
@@ -365,12 +375,45 @@
 
 | 화면 | 파일 | 설명 |
 |---|---|---|
-| 디자인 시스템 | `stitch/indigo_ledger/DESIGN.md` | "The Sovereign Ledger" 전체 디자인 규칙 |
-| 전체 명세 | `stitch/moneylog_ui_design_specification.html` | UI 설계 명세 HTML |
-| 대시보드 | `stitch/dashboard/code.html` | 메인 대시보드 |
-| 거래 등록 | `stitch/add_transaction/code.html` | 거래 등록 폼 |
-| 거래 내역 | `stitch/history/code.html` | 거래 목록 |
-| 통계 | `stitch/statistics/code.html` | 통계 + AI 분석 |
-| 예산 관리 | `stitch/budget_management/code.html` | 예산 관리 |
-| 반복 거래 | `stitch/fixed_transactions/code.html` | 고정 수입·지출 |
-| 설정 | `stitch/settings/code.html` | 설정 화면 |
+| 디자인 시스템 | `stitch/serene_ledger/DESIGN.md` | "The Sovereign Ledger" 전체 디자인 규칙 |
+| 대시보드 | `stitch/dashboard_serene/code.html` | 메인 대시보드 |
+| 거래 등록 | `stitch/add_transaction_serene/code.html` | 거래 등록 폼 |
+| 거래 내역 | `stitch/history_serene/code.html` | 거래 목록 |
+| 통계 | `stitch/statistics_serene/code.html` | 통계 + AI 분석 |
+| 예산 관리 | `stitch/budget_management_serene/code.html` | 예산 관리 |
+| 반복 거래 | `stitch/fixed_transactions_serene/code.html` | 고정 수입·지출 |
+| 설정 | `stitch/settings_serene/code.html` | 설정 화면 |
+
+---
+
+## 현재 프로젝트 요약
+
+### 구현된 소스 파일 (43개)
+
+| 분류 | 파일 | 개수 |
+|---|---|---|
+| Activity | `MainActivity.java` | 1 |
+| Application | `MoneyLogApplication.java` | 1 |
+| Fragment | Onboarding, Dashboard, Transaction, TransactionForm, Statistics, Category, Settings, AiSummary | 8 |
+| ViewModel | Dashboard, Transaction, Statistics, Category, Recurring, AiSummary | 6 |
+| Repository | Transaction, Category, Recurring, Backup, AiSummary | 5 |
+| Entity | Transaction, Category, Recurring | 3 |
+| DAO + POJO | TransactionDao, CategoryDao, RecurringDao, MonthlySummary, CategorySummary, DailySummary | 6 |
+| Adapter | TransactionAdapter, CategoryAdapter, IconPickerAdapter | 3 |
+| Widget | PieChartView | 1 |
+| Worker | RecurringWorker | 1 |
+| DI | AppModule | 1 |
+| Utility | DateUtils, FormatUtils, IconHelper, LocaleHelper, YearMonthPickerDialog, DataManagementHelper | 6 |
+| Layout XML | 18개 (Fragment 8 + Item/Component 7 + Other 3) | 18 |
+
+### 하단 네비게이션 탭 (5개)
+
+| # | ID | 레이블 | 아이콘 |
+|---|---|---|---|
+| 1 | dashboardFragment | 홈 | ic_home_24 |
+| 2 | transactionFragment | 거래 | ic_receipt_24 |
+| 3 | transactionFormFragment | 추가 | ic_add_24 |
+| 4 | statisticsFragment | 통계 | ic_bar_chart_24 |
+| 5 | aiSummaryFragment | AI | ic_ai_24 |
+
+> ⚠️ 설정(Settings)은 하단 탭이 아닌 앱 내부 네비게이션으로 접근

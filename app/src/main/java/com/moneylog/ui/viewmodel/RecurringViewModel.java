@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.moneylog.data.db.entity.CategoryEntity;
 import com.moneylog.data.db.entity.RecurringEntity;
+import com.moneylog.data.repository.CategoryRepository;
 import com.moneylog.data.repository.RecurringRepository;
 import com.moneylog.data.repository.TransactionRepository;
 
@@ -21,14 +23,16 @@ public class RecurringViewModel extends ViewModel {
 
     public final LiveData<List<RecurringEntity>> expenses;
     public final LiveData<List<RecurringEntity>> incomes;
+    public final LiveData<List<CategoryEntity>> categories;
 
     private final MutableLiveData<RecurringEntity> editingItem = new MutableLiveData<>();
 
     @Inject
-    public RecurringViewModel(RecurringRepository repo) {
+    public RecurringViewModel(RecurringRepository repo, CategoryRepository categoryRepo) {
         this.repo = repo;
         expenses = repo.getByType("EXPENSE");
         incomes  = repo.getByType("INCOME");
+        categories = categoryRepo.getAll();
     }
 
     public LiveData<RecurringEntity> getEditingItem() {

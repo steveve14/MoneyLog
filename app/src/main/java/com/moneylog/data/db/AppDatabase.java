@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
         CategoryEntity.class,
         RecurringEntity.class
     },
-    version = 3,
+    version = 4,
     exportSchema = true
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -50,6 +50,17 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("DROP TABLE IF EXISTS budgets");
+        }
+    };
+
+    // ─────────────────────────────────────────────────────────
+    // v3 → v4: recurring_transactions에 sort_order 컬럼 추가
+    // ─────────────────────────────────────────────────────────
+    public static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL(
+                "ALTER TABLE recurring_transactions ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0");
         }
     };
 

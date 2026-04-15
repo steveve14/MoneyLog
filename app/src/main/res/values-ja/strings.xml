@@ -80,6 +80,15 @@
     <string name="interval_monthly">毎月</string>
     <string name="interval_yearly">毎年</string>
     <string name="recurring_day_hint">実行日 (1~28)</string>
+    <string name="recurring_day_hint_short">15</string>
+    <string name="recurring_day_suffix_label">日</string>
+    <string name="recurring_month_suffix_label">月</string>
+    <string name="amount_hint_label">香幣</string>
+    <string name="recurring_form_add">固定取引を追加</string>
+    <string name="recurring_form_edit">固定取引を編集</string>
+    <string name="recurring_delete_confirm_msg">この固定取引を削除しますか？</string>
+    <string name="transaction_amount_required">香幣を入力してください</string>
+    <string name="category_required">カテゴリを選択してください</string>
     <string name="recurring_month_hint">実行月 (1~12)</string>
     <string name="recurring_toggle_label">固定取引として登録</string>
     <string name="filter_recurring_expense">固定</string>
@@ -106,6 +115,8 @@
     <string name="settings_data_management">データ管理</string>
     <string name="settings_category_management">カテゴリ管理</string>
     <string name="settings_category_management_desc">アイコンと色を編集します</string>
+    <string name="settings_recurring_management">固定取引管理</string>
+    <string name="settings_recurring_management_desc">固定収入・支出を管理します</string>
     <string name="settings_category_delete_all">カテゴリをすべて削除</string>
     <string name="settings_category_delete_all_desc">すべてのカテゴリを削除します</string>
     <string name="settings_category_reset_default">デフォルトに戻す</string>
@@ -158,6 +169,8 @@
     <string name="dismiss">閉じる</string>
     <string name="no_spending_data">支出データがありません</string>
     <string name="no_recent_transactions">最近の取引がありません</string>
+    <string name="no_recurring_data">固定取引がありません</string>
+    <string name="dashboard_recurring_title">固定取引</string>
 
     <!-- 履歴 -->
     <string name="statistics_financial_insight_history">履歴</string>
@@ -273,6 +286,12 @@
     <string name="msg_export_failed">エクスポート失敗</string>
     <string name="msg_import_complete">CSVインポート完了: %d件</string>
     <string name="msg_import_failed">インポート失敗</string>
+    <string name="import_mode_title">インポート方式を選択</string>
+    <string name="import_mode_merge">既存データに追加（上書き）</string>
+    <string name="import_mode_clear_data">既存取引データを削除してインポート</string>
+    <string name="import_mode_clear_all">カテゴリと取引データをすべて削除してインポート</string>
+    <string name="import_mode_clear_all_confirm_title">全削除の確認</string>
+    <string name="import_mode_clear_all_confirm_message">すべてのカテゴリと取引データが削除され、CSVファイルのデータに置き換えられます。続行しますか？</string>
     <string name="data_cleanup_title">データ整理</string>
     <string name="data_cleanup_message">6ヶ月以前の取引データを削除します。続行しますか？</string>
     <string name="msg_cleanup_complete">データ整理完了</string>
@@ -354,4 +373,5 @@
     <string name="file_write_failed">ファイル書き込み失敗</string>
     <string name="file_empty">空のファイルです</string>
     <string name="category_fallback">その他</string>
+    <string name="category_others">その他</string>
 </resources>

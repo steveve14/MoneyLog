@@ -83,6 +83,15 @@
     <string name="interval_monthly">매월</string>
     <string name="interval_yearly">매년</string>
     <string name="recurring_day_hint">실행일 (1~28)</string>
+    <string name="recurring_day_hint_short">15</string>
+    <string name="recurring_day_suffix_label">일</string>
+    <string name="recurring_month_suffix_label">월</string>
+    <string name="amount_hint_label">금액</string>
+    <string name="recurring_form_add">고정거래 추가</string>
+    <string name="recurring_form_edit">고정거래 수정</string>
+    <string name="recurring_delete_confirm_msg">이 고정거래를 삭제하시걌어요?</string>
+    <string name="transaction_amount_required">금액을 입력하세요</string>
+    <string name="category_required">카테고리를 선택하세요</string>
     <string name="recurring_month_hint">실행 월 (1~12)</string>
     <string name="recurring_toggle_label">고정 거래로 등록</string>
     <string name="filter_recurring_expense">고정</string>
@@ -109,6 +118,8 @@
     <string name="settings_data_management">데이터 관리</string>
     <string name="settings_category_management">카테고리 관리</string>
     <string name="settings_category_management_desc">아이콘과 색상을 편집합니다</string>
+    <string name="settings_recurring_management">고정거래 관리</string>
+    <string name="settings_recurring_management_desc">고정 수입·지출을 관리합니다</string>
     <string name="settings_category_delete_all">카테고리 모두 삭제</string>
     <string name="settings_category_delete_all_desc">모든 카테고리를 삭제합니다</string>
     <string name="settings_category_reset_default">카테고리 기본으로</string>
@@ -161,6 +172,8 @@
     <string name="dismiss">닫기</string>
     <string name="no_spending_data">지출 데이터가 없습니다</string>
     <string name="no_recent_transactions">최근 거래가 없습니다</string>
+    <string name="dashboard_recurring_title">고정 거래</string>
+    <string name="no_recurring_data">고정 거래가 없습니다</string>
 
     <!-- 내역 V2 -->
     <string name="history_headline">내역</string>
@@ -271,6 +284,12 @@
     <string name="msg_export_failed">내보내기 실패</string>
     <string name="msg_import_complete">CSV 가져오기 완료: %d건</string>
     <string name="msg_import_failed">가져오기 실패</string>
+    <string name="import_mode_title">가져오기 방식 선택</string>
+    <string name="import_mode_merge">기존 데이터에 추가 (덮어쓰기)</string>
+    <string name="import_mode_clear_data">기존 거래 데이터 삭제 후 가져오기</string>
+    <string name="import_mode_clear_all">카테고리 및 거래 데이터 모두 삭제 후 가져오기</string>
+    <string name="import_mode_clear_all_confirm_title">전체 삭제 확인</string>
+    <string name="import_mode_clear_all_confirm_message">카테고리와 거래 데이터가 모두 삭제된 후 CSV 파일의 데이터로 대체됩니다. 계속하시겠습니까?</string>
     <string name="data_cleanup_title">데이터 정리</string>
     <string name="data_cleanup_message">6개월 이전의 거래 데이터를 삭제합니다. 계속하시겠습니까?</string>
     <string name="msg_cleanup_complete">데이터 정리 완료</string>
@@ -352,4 +371,5 @@
     <string name="file_write_failed">파일 쓰기 실패</string>
     <string name="file_empty">빈 파일입니다</string>
     <string name="category_fallback">기타</string>
+    <string name="category_others">기타</string>
 </resources>

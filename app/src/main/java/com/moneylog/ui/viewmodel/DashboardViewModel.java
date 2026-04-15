@@ -8,8 +8,10 @@ import androidx.lifecycle.ViewModel;
 import com.moneylog.data.db.dao.CategorySummary;
 import com.moneylog.data.db.dao.MonthlySummary;
 import com.moneylog.data.db.entity.CategoryEntity;
+import com.moneylog.data.db.entity.RecurringEntity;
 import com.moneylog.data.db.entity.TransactionEntity;
 import com.moneylog.data.repository.CategoryRepository;
+import com.moneylog.data.repository.RecurringRepository;
 import com.moneylog.data.repository.TransactionRepository;
 import com.moneylog.util.DateUtils;
 
@@ -28,10 +30,15 @@ public class DashboardViewModel extends ViewModel {
     public final LiveData<List<TransactionEntity>> recentTransactions;
     public final LiveData<List<CategorySummary>> categoryExpenses;
     public final LiveData<List<CategoryEntity>> categories;
+    public final LiveData<List<RecurringEntity>> allRecurring;
+
+    private final RecurringRepository recurringRepo;
 
     @Inject
     public DashboardViewModel(TransactionRepository transactionRepo,
-                              CategoryRepository categoryRepo) {
+                              CategoryRepository categoryRepo,
+                              RecurringRepository recurringRepo) {
+        this.recurringRepo = recurringRepo;
         selectedYearMonth = new MutableLiveData<>(DateUtils.currentYearMonth());
 
         monthlySummary = Transformations.switchMap(selectedYearMonth,
@@ -40,6 +47,11 @@ public class DashboardViewModel extends ViewModel {
                 ym -> transactionRepo.getMonthlyExpenseByCategory(ym));
         recentTransactions = transactionRepo.getRecent(3);
         categories = categoryRepo.getAll();
+        allRecurring = recurringRepo.getAll();
+    }
+
+    public void setRecurringActive(long id, boolean active) {
+        recurringRepo.setActive(id, active);
     }
 
     public LiveData<String> getSelectedYearMonth() {
