@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Statistics / Monthly Insights V2 — Serene Ledger Design -->
-<ScrollView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
-    android:fillViewport="true">
+    android:background="?attr/colorSurface">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="100dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <!-- ── Header ────────────────────────────────────── -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="24dp"
-            android:paddingTop="24dp"
-            android:paddingBottom="4dp">
+            android:orientation="vertical"
+            android:paddingBottom="100dp">
 
-            <TextView
-                android:layout_width="0dp"
+            <!-- ── Header ────────────────────────────────────── -->
+            <LinearLayout
+                android:id="@+id/llHeader"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/nav_statistics"
-                android:textSize="36sp"
-                android:textStyle="bold"
-                android:letterSpacing="-0.02" />
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/nav_statistics"
+                    android:textSize="36sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="-0.02" />
+            </LinearLayout>
 
 
         <!-- ── 월 네비게이션 ────────────────────────────────── -->
@@ -70,6 +76,42 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_chevron_right_24"
                 android:contentDescription="@string/next_month" />
+        </LinearLayout>
+
+        <!-- ── 지출 / 수입 토글 ─────────────────────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_segment_container"
+            android:padding="4dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:id="@+id/btnStatExpense"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/transaction_expense"
+                android:textSize="13sp"
+                android:textColor="?attr/colorPrimary"
+                android:background="@drawable/bg_segment_selected"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/btnStatIncome"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/transaction_income"
+                android:textSize="13sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:clickable="true"
+                android:focusable="true" />
         </LinearLayout>
 
         <!-- ══ VS Last Month Comparison Card ══════════════════ -->
@@ -123,6 +165,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvComparisonLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/statistics_spending"
@@ -210,6 +253,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvChartTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/statistics_spending_trend"
@@ -243,6 +287,36 @@
                     android:gravity="center"
                     android:layout_marginTop="16dp"
                     android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ══ Monthly Trend Line Chart ═══════════════════════ -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="32dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/md_theme_surface_container_low">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp">
+                <TextView
+                    android:id="@+id/tvTrendTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/statistics_monthly_trend"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="-0.01"
+                    android:layout_marginBottom="16dp" />
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -355,4 +429,13 @@
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</FrameLayout>

@@ -33,6 +33,7 @@ public class DashboardViewModel extends ViewModel {
     public final LiveData<List<RecurringEntity>> allRecurring;
 
     private final RecurringRepository recurringRepo;
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     @Inject
     public DashboardViewModel(TransactionRepository transactionRepo,
@@ -74,5 +75,9 @@ public class DashboardViewModel extends ViewModel {
 
     public void setYearMonth(String yearMonth) {
         selectedYearMonth.setValue(yearMonth);
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 }

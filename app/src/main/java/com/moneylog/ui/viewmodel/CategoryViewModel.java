@@ -1,6 +1,7 @@
 package com.moneylog.ui.viewmodel;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.moneylog.data.db.entity.CategoryEntity;
@@ -16,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class CategoryViewModel extends ViewModel {
 
     private final CategoryRepository repo;
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     @Inject
     public CategoryViewModel(CategoryRepository repo) {
@@ -44,5 +46,9 @@ public class CategoryViewModel extends ViewModel {
 
     public void updateSortOrders(List<CategoryEntity> categories) {
         repo.updateSortOrders(categories);
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 }

@@ -58,6 +58,7 @@
     <string name="statistics_title">統計</string>
     <string name="statistics_monthly_total">月間合計</string>
     <string name="statistics_spending_trend">支出推移</string>
+    <string name="statistics_income_trend">収入推移</string>
     <string name="statistics_last_6_months">過去6ヶ月</string>
     <string name="statistics_category_breakdown">カテゴリ別分析</string>
 
@@ -183,7 +184,7 @@
     <!-- 取引入力 -->
     <string name="journal_entry">JOURNAL ENTRY</string>
     <string name="new_transaction">新しい取引</string>
-    <string name="transaction_date">取引日</string>
+    <string name="transaction_date">日付</string>
     <string name="description">説明</string>
     <string name="memo_hint">メモを入力…</string>
     <string name="category">カテゴリ</string>
@@ -210,6 +211,7 @@
     <string name="statistics_performance_review">パフォーマンスレビュー</string>
     <string name="statistics_vs_last_month">前月比</string>
     <string name="statistics_spending">支出</string>
+    <string name="statistics_income_label">収入</string>
     <string name="insight_saved">分析完了</string>
     <string name="optimization_ready">最適化可能</string>
     <string name="apply_strategy">戦略を適用</string>
@@ -230,6 +232,7 @@
 
     <!-- 共通（追加） -->
     <string name="close">閉じる</string>
+    <string name="scroll_to_top">上へ移動</string>
     <string name="amount_zero">0円</string>
     <string name="toggle_calendar">カレンダーを開く/閉じる</string>
     <string name="category_add">カテゴリを追加</string>
@@ -367,6 +370,22 @@
     <string name="cat_savings_withdrawal">貯蓄引き出し</string>
     <string name="cat_investment">投資収益</string>
     <string name="cat_other_income">その他収入</string>
+
+    <!-- UXフィードバック -->
+    <string name="recurring_activated">固定取引が有効になりました</string>
+    <string name="recurring_deactivated">固定取引が無効になりました</string>
+    <string name="msg_processing">処理中…</string>
+    <string name="empty_recurring_hint">最初の固定取引を追加してみましょう</string>
+    <string name="empty_filter_hint">選択したフィルターに一致する取引がありません</string>
+    <string name="recurring_date_hint">固定取引はスケジュールに従って自動実行されます</string>
+    <string name="category_delete_warning">%d件の取引がこのカテゴリを使用中です。\nすべて削除されます。続けますか？</string>
+    <string name="msg_undo">元に戻す</string>
+    <string name="chart_content_description">カテゴリ別取引分布チャート</string>
+    <string name="statistics_monthly_trend">月別推移</string>
+    <string name="theme_title">テーマ</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_dark">ダーク</string>
+    <string name="theme_system">システム設定</string>
 
     <!-- その他 -->
     <string name="file_create_failed">ファイル作成失敗</string>

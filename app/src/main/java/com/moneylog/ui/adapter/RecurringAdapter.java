@@ -1,8 +1,12 @@
 package com.moneylog.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,17 +19,25 @@ import com.moneylog.R;
 import com.moneylog.data.db.entity.RecurringEntity;
 import com.moneylog.util.FormatUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class RecurringAdapter extends ListAdapter<RecurringEntity, RecurringAdapter.ViewHolder> {
 
     public interface OnRecurringActionListener {
         void onToggleActive(long id, boolean active);
-        void onLongPress(RecurringEntity item);
+        void onEdit(RecurringEntity item);
         String formatSchedule(RecurringEntity item);
     }
 
+    public interface OnDragStartListener {
+        void onDragStart(RecyclerView.ViewHolder holder);
+    }
+
     private final OnRecurringActionListener listener;
+    private OnDragStartListener dragStartListener;
     private Map<Long, String> categoryNameMap;
     private String fallbackName = "";
 
@@ -40,6 +52,7 @@ public class RecurringAdapter extends ListAdapter<RecurringEntity, RecurringAdap
                 return a.amount == b.amount
                         && a.categoryId == b.categoryId
                         && a.isActive == b.isActive
+                        && a.sortOrder == b.sortOrder
                         && a.intervalType.equals(b.intervalType)
                         && a.dayOfMonth == b.dayOfMonth
                         && (a.memo == null ? b.memo == null : a.memo.equals(b.memo));
@@ -49,6 +62,10 @@ public class RecurringAdapter extends ListAdapter<RecurringEntity, RecurringAdap
     public RecurringAdapter(OnRecurringActionListener listener) {
         super(DIFF);
         this.listener = listener;
+    }
+
+    public void setDragStartListener(OnDragStartListener dragStartListener) {
+        this.dragStartListener = dragStartListener;
     }
 
     public void setCategoryNameMap(Map<Long, String> map, String fallback) {
@@ -69,22 +86,38 @@ public class RecurringAdapter extends ListAdapter<RecurringEntity, RecurringAdap
         holder.bind(getItem(position));
     }
 
+    public boolean moveItem(int from, int to) {
+        List<RecurringEntity> list = new ArrayList<>(getCurrentList());
+        Collections.swap(list, from, to);
+        submitList(list);
+        return true;
+    }
+
+    public List<RecurringEntity> getReorderedList() {
+        return new ArrayList<>(getCurrentList());
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView ivDragHandle;
         private final TextView tvCategory;
         private final TextView tvMemo;
         private final TextView tvSchedule;
         private final TextView tvAmount;
         private final MaterialSwitch switchActive;
+        private final ImageButton btnEdit;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
+            ivDragHandle = itemView.findViewById(R.id.ivDragHandle);
             tvCategory = itemView.findViewById(R.id.tvRecCategory);
             tvMemo = itemView.findViewById(R.id.tvRecMemo);
             tvSchedule = itemView.findViewById(R.id.tvRecSchedule);
             tvAmount = itemView.findViewById(R.id.tvRecAmount);
             switchActive = itemView.findViewById(R.id.switchRecActive);
+            btnEdit = itemView.findViewById(R.id.btnRecEdit);
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         void bind(RecurringEntity rec) {
             String catName = categoryNameMap != null ? categoryNameMap.get(rec.categoryId) : null;
             tvCategory.setText(catName != null ? catName : fallbackName);
@@ -115,9 +148,14 @@ public class RecurringAdapter extends ListAdapter<RecurringEntity, RecurringAdap
             switchActive.setOnCheckedChangeListener((btn, checked) ->
                     listener.onToggleActive(rec.id, checked));
 
-            itemView.setOnLongClickListener(v -> {
-                listener.onLongPress(rec);
-                return true;
+            btnEdit.setOnClickListener(v -> listener.onEdit(rec));
+            itemView.setOnClickListener(v -> listener.onEdit(rec));
+
+            ivDragHandle.setOnTouchListener((v, event) -> {
+                if (event.getActionMasked() == MotionEvent.ACTION_DOWN && dragStartListener != null) {
+                    dragStartListener.onDragStart(ViewHolder.this);
+                }
+                return false;
             });
         }
     }

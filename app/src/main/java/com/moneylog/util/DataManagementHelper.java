@@ -97,6 +97,8 @@ public class DataManagementHelper {
                     return;
                 }
 
+                List<RecurringEntity> recurrings = recurringDao.getAllSync();
+
                 try (OutputStream os = context.getContentResolver().openOutputStream(uri)) {
                     if (os == null) {
                         callback.onFailure(context.getString(R.string.file_write_failed));
@@ -114,6 +116,20 @@ public class DataManagementHelper {
                                 categoryName, tx.date, memo, tx.paymentMethod, tx.isAuto);
                         os.write(line.getBytes("UTF-8"));
                     }
+
+                    // 고정거래 섹션
+                    os.write("\n[RECURRING]\n".getBytes("UTF-8"));
+                    os.write("id,type,amount,categoryId,categoryName,intervalType,dayOfMonth,monthOfYear,memo,paymentMethod,isActive,sortOrder\n".getBytes("UTF-8"));
+                    for (RecurringEntity rec : recurrings) {
+                        String memo = rec.memo != null ? rec.memo.replace("\"", "\"\"") : "";
+                        CategoryEntity cat = categoryMap.get(rec.categoryId);
+                        String categoryName = cat != null ? cat.name.replace("\"", "\"\"") : "";
+                        String line = String.format("%d,%s,%d,%d,\"%s\",%s,%d,%d,\"%s\",%s,%b,%d\n",
+                                rec.id, rec.type, rec.amount, rec.categoryId,
+                                categoryName, rec.intervalType, rec.dayOfMonth, rec.monthOfYear,
+                                memo, rec.paymentMethod, rec.isActive, rec.sortOrder);
+                        os.write(line.getBytes("UTF-8"));
+                    }
                 }
                 callback.onSuccess(fileName);
             } catch (IOException e) {
@@ -126,8 +142,11 @@ public class DataManagementHelper {
         executor.execute(() -> {
             try {
                 List<TransactionEntity> imported = new ArrayList<>();
-                List<String[]> rawRows = new ArrayList<>();
+                List<String[]> rawTxRows = new ArrayList<>();
+                List<String[]> rawRecRows = new ArrayList<>();
                 boolean hasNameColumn = false;
+                boolean hasRecurringSection = false;
+                boolean hasRecNameColumn = false;
 
                 try (BufferedReader reader = new BufferedReader(
                         new InputStreamReader(context.getContentResolver().openInputStream(fileUri), "UTF-8"))) {
@@ -142,9 +161,27 @@ public class DataManagementHelper {
                     hasNameColumn = header.toLowerCase().contains("categoryname");
 
                     String line;
+                    boolean inRecurringSection = false;
                     while ((line = reader.readLine()) != null) {
+                        String trimmed = line.trim();
+                        if (trimmed.equals("[RECURRING]")) {
+                            inRecurringSection = true;
+                            hasRecurringSection = true;
+                            // 고정거래 섹션 헤더 읽기
+                            String recHeader = reader.readLine();
+                            if (recHeader != null) {
+                                hasRecNameColumn = recHeader.toLowerCase().contains("categoryname");
+                            }
+                            continue;
+                        }
+                        if (trimmed.isEmpty()) continue;
                         String[] parsed = parseCsvFields(line);
-                        if (parsed != null) rawRows.add(parsed);
+                        if (parsed == null) continue;
+                        if (inRecurringSection) {
+                            rawRecRows.add(parsed);
+                        } else {
+                            rawTxRows.add(parsed);
+                        }
                     }
                 }
 
@@ -161,7 +198,7 @@ public class DataManagementHelper {
                 // 카테고리 이름→ID 캐시 (DB 조회 최소화)
                 Map<String, Long> categoryCache = new HashMap<>();
 
-                for (String[] fields : rawRows) {
+                for (String[] fields : rawTxRows) {
                     TransactionEntity tx = buildTransactionFromFields(fields, hasNameColumn, categoryCache);
                     if (tx != null) imported.add(tx);
                 }
@@ -171,27 +208,39 @@ public class DataManagementHelper {
                     transactionDao.insert(tx);
                 }
 
-                // isAuto 거래에 대해 RecurringEntity 생성
-                Map<String, Boolean> recurringDupCheck = new HashMap<>();
-                for (TransactionEntity tx : imported) {
-                    if (tx.isAuto) {
-                        String key = tx.type + ":" + tx.categoryId + ":" + tx.amount;
-                        if (recurringDupCheck.containsKey(key)) continue;
-                        recurringDupCheck.put(key, true);
+                // 고정거래 가져오기
+                if (hasRecurringSection && !rawRecRows.isEmpty()) {
+                    // [RECURRING] 섹션이 있으면 직접 파싱
+                    for (String[] fields : rawRecRows) {
+                        RecurringEntity rec = buildRecurringFromFields(fields, hasRecNameColumn, categoryCache);
+                        if (rec != null) {
+                            rec.id = 0;
+                            recurringDao.insert(rec);
+                        }
+                    }
+                } else {
+                    // 구 포맷: isAuto 거래에서 RecurringEntity 추정 생성
+                    Map<String, Boolean> recurringDupCheck = new HashMap<>();
+                    for (TransactionEntity tx : imported) {
+                        if (tx.isAuto) {
+                            String key = tx.type + ":" + tx.categoryId + ":" + tx.amount;
+                            if (recurringDupCheck.containsKey(key)) continue;
+                            recurringDupCheck.put(key, true);
 
-                        RecurringEntity rec = new RecurringEntity();
-                        rec.type = tx.type;
-                        rec.amount = tx.amount;
-                        rec.categoryId = tx.categoryId;
-                        rec.memo = tx.memo;
-                        rec.paymentMethod = tx.paymentMethod;
-                        rec.intervalType = "MONTHLY";
-                        rec.dayOfMonth = 1;
-                        try {
-                            String dayStr = tx.date.substring(8, 10);
-                            rec.dayOfMonth = Math.min(Integer.parseInt(dayStr), 28);
-                        } catch (Exception ignored) { }
-                        recurringDao.insert(rec);
+                            RecurringEntity rec = new RecurringEntity();
+                            rec.type = tx.type;
+                            rec.amount = tx.amount;
+                            rec.categoryId = tx.categoryId;
+                            rec.memo = tx.memo;
+                            rec.paymentMethod = tx.paymentMethod;
+                            rec.intervalType = "MONTHLY";
+                            rec.dayOfMonth = 1;
+                            try {
+                                String dayStr = tx.date.substring(8, 10);
+                                rec.dayOfMonth = Math.min(Integer.parseInt(dayStr), 28);
+                            } catch (Exception ignored) { }
+                            recurringDao.insert(rec);
+                        }
                     }
                 }
 
@@ -238,6 +287,54 @@ public class DataManagementHelper {
             tx.createdAt = System.currentTimeMillis();
             tx.updatedAt = System.currentTimeMillis();
             return tx;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * CSV 필드 배열로부터 RecurringEntity를 생성한다.
+     * 포맷: id,type,amount,categoryId,categoryName,intervalType,dayOfMonth,monthOfYear,memo,paymentMethod,isActive,sortOrder
+     */
+    private RecurringEntity buildRecurringFromFields(String[] fields, boolean hasNameColumn,
+                                                     Map<String, Long> categoryCache) {
+        try {
+            if (hasNameColumn) {
+                // 새 포맷: id,type,amount,categoryId,categoryName,intervalType,dayOfMonth,monthOfYear,memo,paymentMethod,isActive,sortOrder
+                if (fields.length < 8) return null;
+                RecurringEntity rec = new RecurringEntity();
+                rec.type = fields[1];
+                rec.amount = Long.parseLong(fields[2]);
+                String categoryName = fields[4];
+                rec.categoryId = resolveCategoryId(categoryName, rec.type, Long.parseLong(fields[3]), categoryCache);
+                rec.intervalType = fields[5];
+                rec.dayOfMonth = Integer.parseInt(fields[6]);
+                rec.monthOfYear = Integer.parseInt(fields[7]);
+                rec.memo = fields.length > 8 ? fields[8] : "";
+                rec.paymentMethod = fields.length > 9 ? fields[9] : "CARD";
+                rec.isActive = fields.length <= 10 || Boolean.parseBoolean(fields[10]);
+                rec.sortOrder = fields.length > 11 ? Integer.parseInt(fields[11]) : 0;
+                rec.createdAt = System.currentTimeMillis();
+                rec.updatedAt = System.currentTimeMillis();
+                return rec;
+            } else {
+                // 구 포맷 (categoryName 없음): id,type,amount,categoryId,intervalType,dayOfMonth,monthOfYear,memo,paymentMethod,isActive,sortOrder
+                if (fields.length < 7) return null;
+                RecurringEntity rec = new RecurringEntity();
+                rec.type = fields[1];
+                rec.amount = Long.parseLong(fields[2]);
+                rec.categoryId = Long.parseLong(fields[3]);
+                rec.intervalType = fields[4];
+                rec.dayOfMonth = Integer.parseInt(fields[5]);
+                rec.monthOfYear = Integer.parseInt(fields[6]);
+                rec.memo = fields.length > 7 ? fields[7] : "";
+                rec.paymentMethod = fields.length > 8 ? fields[8] : "CARD";
+                rec.isActive = fields.length <= 9 || Boolean.parseBoolean(fields[9]);
+                rec.sortOrder = fields.length > 10 ? Integer.parseInt(fields[10]) : 0;
+                rec.createdAt = System.currentTimeMillis();
+                rec.updatedAt = System.currentTimeMillis();
+                return rec;
+            }
         } catch (Exception e) {
             return null;
         }
@@ -305,6 +402,18 @@ public class DataManagementHelper {
             try {
                 categoryDao.deleteAll();
                 callback.onSuccess("");
+            } catch (Exception e) {
+                callback.onFailure(e.getMessage());
+            }
+        });
+    }
+
+    /** 활성 거래 수 조회 (카테고리 삭제 경고용) */
+    public void countActiveTransactions(ResultCallback callback) {
+        executor.execute(() -> {
+            try {
+                int count = transactionDao.countActive();
+                callback.onSuccess(String.valueOf(count));
             } catch (Exception e) {
                 callback.onFailure(e.getMessage());
             }

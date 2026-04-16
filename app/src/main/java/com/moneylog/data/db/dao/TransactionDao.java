@@ -32,7 +32,7 @@ public interface TransactionDao {
            "ORDER BY date DESC, id DESC")
     LiveData<List<TransactionEntity>> getByMonth(String yearMonth);
 
-    /** 월별 수입·지출 합계 */
+    /** 월별 수익·지출 합계 */
     @Query("SELECT " +
            "COALESCE(SUM(CASE WHEN type = 'INCOME'  THEN amount ELSE 0 END), 0) AS totalIncome, " +
            "COALESCE(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END), 0) AS totalExpense " +
@@ -40,7 +40,7 @@ public interface TransactionDao {
            "WHERE date LIKE :yearMonth || '%' AND is_deleted = 0")
     LiveData<MonthlySummary> getMonthlySummary(String yearMonth);
 
-    /** 월별 카테고리별 거래 합계 (지출+수입) */
+    /** 월별 카테고리별 거래 합계 (지출+수익) */
     @Query("SELECT t.category_id AS categoryId, c.name AS categoryName, t.type AS type, SUM(t.amount) AS total " +
            "FROM transactions t LEFT JOIN categories c ON t.category_id = c.id " +
            "WHERE t.date LIKE :yearMonth || '%' AND t.is_deleted = 0 " +
@@ -73,6 +73,18 @@ public interface TransactionDao {
     /** 특정 날짜 이전의 거래 소프트 삭제 (데이터 정리용) */
     @Query("UPDATE transactions SET is_deleted = 1, updated_at = :now WHERE date < :beforeDate AND is_deleted = 0")
     int softDeleteBefore(String beforeDate, long now);
+
+    /** 활성 거래 수 (카테고리 삭제 경고용) */
+    @Query("SELECT COUNT(*) FROM transactions WHERE is_deleted = 0")
+    int countActive();
+
+    /** 월별 추이 (최근 6개월) */
+    @Query("SELECT SUBSTR(date, 1, 7) AS yearMonth, " +
+           "COALESCE(SUM(CASE WHEN type = 'INCOME'  THEN amount ELSE 0 END), 0) AS totalIncome, " +
+           "COALESCE(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END), 0) AS totalExpense " +
+           "FROM transactions WHERE is_deleted = 0 AND date >= :fromDate " +
+           "GROUP BY SUBSTR(date, 1, 7) ORDER BY yearMonth")
+    LiveData<List<MonthlyTrend>> getMonthlyTrend(String fromDate);
 
     /** 전체 거래 삭제 (데이터 초기화용) */
     @Query("DELETE FROM transactions")

@@ -1,6 +1,7 @@
 package com.moneylog.ui.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -72,12 +74,15 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         updateLanguageLabel();
+        updateThemeLabel();
 
         // 닫기 버튼
         binding.btnClose.setOnClickListener(v ->
                 Navigation.findNavController(v).popBackStack());
 
         binding.rowLanguage.setOnClickListener(v -> showLanguageDialog());
+
+        binding.rowTheme.setOnClickListener(v -> showThemeDialog());
 
         // 데이터 관리
         binding.rowDataManagement.setOnClickListener(v -> showDataManagementDialog());
@@ -89,29 +94,66 @@ public class SettingsFragment extends Fragment {
         binding.rowRecurring.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.recurringFragment));
 
-        // 카테고리 모두 삭제
+        // 카테고리 모두 삭제 (거래 수 경고 포함)
         binding.rowCategoryDeleteAll.setOnClickListener(v ->
-                new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
-                        .setTitle(R.string.category_delete_all_title)
-                        .setMessage(R.string.category_delete_all_message)
-                        .setPositiveButton(R.string.confirm, (dialog, which) ->
-                                dataManagementHelper.deleteAllCategories(new DataManagementHelper.ResultCallback() {
-                                    @Override
-                                    public void onSuccess(String message) {
-                                        requireActivity().runOnUiThread(() ->
-                                                Toast.makeText(requireContext(),
-                                                        R.string.category_delete_all_complete,
-                                                        Toast.LENGTH_SHORT).show());
-                                    }
+                dataManagementHelper.countActiveTransactions(new DataManagementHelper.ResultCallback() {
+                    @Override
+                    public void onSuccess(String countStr) {
+                        requireActivity().runOnUiThread(() -> {
+                            int count = Integer.parseInt(countStr);
+                            String msg = count > 0
+                                    ? getString(R.string.category_delete_warning, count)
+                                    : getString(R.string.category_delete_all_message);
+                            new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                                    .setTitle(R.string.category_delete_all_title)
+                                    .setMessage(msg)
+                                    .setPositiveButton(R.string.confirm, (dialog, which) ->
+                                            dataManagementHelper.deleteAllCategories(new DataManagementHelper.ResultCallback() {
+                                                @Override
+                                                public void onSuccess(String message) {
+                                                    requireActivity().runOnUiThread(() ->
+                                                            Toast.makeText(requireContext(),
+                                                                    R.string.category_delete_all_complete,
+                                                                    Toast.LENGTH_SHORT).show());
+                                                }
 
-                                    @Override
-                                    public void onFailure(String message) {
-                                        requireActivity().runOnUiThread(() ->
-                                                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show());
-                                    }
-                                }))
-                        .setNegativeButton(R.string.cancel, null)
-                        .show());
+                                                @Override
+                                                public void onFailure(String message) {
+                                                    requireActivity().runOnUiThread(() ->
+                                                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show());
+                                                }
+                                            }))
+                                    .setNegativeButton(R.string.cancel, null)
+                                    .show();
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        requireActivity().runOnUiThread(() ->
+                                new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                                        .setTitle(R.string.category_delete_all_title)
+                                        .setMessage(R.string.category_delete_all_message)
+                                        .setPositiveButton(R.string.confirm, (dialog, which) ->
+                                                dataManagementHelper.deleteAllCategories(new DataManagementHelper.ResultCallback() {
+                                                    @Override
+                                                    public void onSuccess(String m) {
+                                                        requireActivity().runOnUiThread(() ->
+                                                                Toast.makeText(requireContext(),
+                                                                        R.string.category_delete_all_complete,
+                                                                        Toast.LENGTH_SHORT).show());
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(String m) {
+                                                        requireActivity().runOnUiThread(() ->
+                                                                Toast.makeText(requireContext(), m, Toast.LENGTH_LONG).show());
+                                                    }
+                                                }))
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .show());
+                    }
+                }));
 
         // 카테고리 기본으로
         binding.rowCategoryResetDefault.setOnClickListener(v ->
@@ -186,21 +228,26 @@ public class SettingsFragment extends Fragment {
                 .setItems(items, (dialog, which) -> {
                     switch (which) {
                         case 0:
+                            binding.layoutProcessing.setVisibility(View.VISIBLE);
                             dataManagementHelper.exportCsv(new DataManagementHelper.ResultCallback() {
                                 @Override
                                 public void onSuccess(String message) {
-                                    requireActivity().runOnUiThread(() ->
+                                    requireActivity().runOnUiThread(() -> {
+                                            binding.layoutProcessing.setVisibility(View.GONE);
                                             Toast.makeText(requireContext(),
                                                     getString(R.string.msg_export_complete) + ": " + message,
-                                                    Toast.LENGTH_LONG).show());
+                                                    Toast.LENGTH_LONG).show();
+                                    });
                                 }
 
                                 @Override
                                 public void onFailure(String message) {
-                                    requireActivity().runOnUiThread(() ->
+                                    requireActivity().runOnUiThread(() -> {
+                                            binding.layoutProcessing.setVisibility(View.GONE);
                                             Toast.makeText(requireContext(),
                                                     getString(R.string.msg_export_failed) + ": " + message,
-                                                    Toast.LENGTH_LONG).show());
+                                                    Toast.LENGTH_LONG).show();
+                                    });
                                 }
                             });
                             break;
@@ -276,21 +323,26 @@ public class SettingsFragment extends Fragment {
     }
 
     private void importCsv(Uri uri, DataManagementHelper.ImportMode mode) {
+        binding.layoutProcessing.setVisibility(View.VISIBLE);
         dataManagementHelper.importCsv(uri, mode, new DataManagementHelper.ResultCallback() {
             @Override
             public void onSuccess(String count) {
-                requireActivity().runOnUiThread(() ->
+                requireActivity().runOnUiThread(() -> {
+                        binding.layoutProcessing.setVisibility(View.GONE);
                         Toast.makeText(requireContext(),
                                 getString(R.string.msg_import_complete, Integer.parseInt(count)),
-                                Toast.LENGTH_LONG).show());
+                                Toast.LENGTH_LONG).show();
+                });
             }
 
             @Override
             public void onFailure(String message) {
-                requireActivity().runOnUiThread(() ->
+                requireActivity().runOnUiThread(() -> {
+                        binding.layoutProcessing.setVisibility(View.GONE);
                         Toast.makeText(requireContext(),
                                 getString(R.string.msg_import_failed) + ": " + message,
-                                Toast.LENGTH_LONG).show());
+                                Toast.LENGTH_LONG).show();
+                });
             }
         });
     }
@@ -428,6 +480,56 @@ public class SettingsFragment extends Fragment {
                 break;
         }
         binding.tvCurrentLanguage.setText(label);
+    }
+
+    private static final String PREF_THEME = "app_theme_mode";
+
+    private void showThemeDialog() {
+        String[] labels = {
+                getString(R.string.theme_light),
+                getString(R.string.theme_dark),
+                getString(R.string.theme_system)
+        };
+        int[] modes = {
+                AppCompatDelegate.MODE_NIGHT_NO,
+                AppCompatDelegate.MODE_NIGHT_YES,
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        };
+
+        int currentMode = requireContext().getSharedPreferences("settings", 0)
+                .getInt(PREF_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        int checkedIndex = 2;
+        for (int i = 0; i < modes.length; i++) {
+            if (modes[i] == currentMode) { checkedIndex = i; break; }
+        }
+
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
+                .setTitle(R.string.theme_title)
+                .setSingleChoiceItems(labels, checkedIndex, (dialog, which) -> {
+                    int mode = modes[which];
+                    requireContext().getSharedPreferences("settings", 0)
+                            .edit().putInt(PREF_THEME, mode).apply();
+                    AppCompatDelegate.setDefaultNightMode(mode);
+                    updateThemeLabel();
+                    dialog.dismiss();
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void updateThemeLabel() {
+        int mode = requireContext().getSharedPreferences("settings", 0)
+                .getInt(PREF_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        String label;
+        switch (mode) {
+            case AppCompatDelegate.MODE_NIGHT_NO:
+                label = getString(R.string.theme_light); break;
+            case AppCompatDelegate.MODE_NIGHT_YES:
+                label = getString(R.string.theme_dark); break;
+            default:
+                label = getString(R.string.theme_system); break;
+        }
+        binding.tvCurrentTheme.setText(label);
     }
 
     @Override

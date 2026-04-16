@@ -140,7 +140,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 {"용돈",      "account_balance_wallet"},
                 {"저축 인출", "savings"},
                 {"투자 수익", "trending_up"},
-                {"기타 수입", "inventory_2"},
+                {"기타 수익", "inventory_2"},
             };
         }
 

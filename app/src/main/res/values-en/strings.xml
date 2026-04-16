@@ -58,6 +58,7 @@
     <string name="statistics_title">Statistics</string>
     <string name="statistics_monthly_total">MONTHLY TOTAL</string>
     <string name="statistics_spending_trend">Spending Trend</string>
+    <string name="statistics_income_trend">Income Trend</string>
     <string name="statistics_last_6_months">Last 6 Months</string>
     <string name="statistics_category_breakdown">Category Breakdown</string>
 
@@ -182,7 +183,7 @@
     <!-- Transaction Input -->
     <string name="journal_entry">JOURNAL ENTRY</string>
     <string name="new_transaction">New Transaction</string>
-    <string name="transaction_date">Transaction Date</string>
+    <string name="transaction_date">Date</string>
     <string name="description">Description</string>
     <string name="memo_hint">Add a note…</string>
     <string name="category">Category</string>
@@ -209,6 +210,7 @@
     <string name="statistics_performance_review">PERFORMANCE REVIEW</string>
     <string name="statistics_vs_last_month">VS LAST MONTH</string>
     <string name="statistics_spending">Spending</string>
+    <string name="statistics_income_label">Income</string>
     <string name="insight_saved">Analysis Complete</string>
     <string name="optimization_ready">Optimization Available</string>
     <string name="apply_strategy">Apply Strategy</string>
@@ -229,6 +231,7 @@
 
     <!-- Common (Additional) -->
     <string name="close">Close</string>
+    <string name="scroll_to_top">Scroll to top</string>
     <string name="amount_zero">$0</string>
     <string name="toggle_calendar">Toggle Calendar</string>
     <string name="category_add">Add Category</string>
@@ -366,6 +369,22 @@
     <string name="cat_savings_withdrawal">Savings</string>
     <string name="cat_investment">Investment</string>
     <string name="cat_other_income">Other Income</string>
+
+    <!-- UX Feedback -->
+    <string name="recurring_activated">Recurring transaction activated</string>
+    <string name="recurring_deactivated">Recurring transaction deactivated</string>
+    <string name="msg_processing">Processing…</string>
+    <string name="empty_recurring_hint">Add your first recurring transaction</string>
+    <string name="empty_filter_hint">No transactions match the selected filter</string>
+    <string name="recurring_date_hint">Recurring transactions run automatically on schedule</string>
+    <string name="category_delete_warning">%d transactions use this category.\nAll will be deleted. Continue?</string>
+    <string name="msg_undo">Undo</string>
+    <string name="chart_content_description">Transaction distribution chart by category</string>
+    <string name="statistics_monthly_trend">Monthly Trend</string>
+    <string name="theme_title">Theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System Default</string>
 
     <!-- Misc -->
     <string name="file_create_failed">File creation failed</string>

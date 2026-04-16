@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.moneylog.data.db.dao.CategorySummary;
+import com.moneylog.data.db.dao.MonthlyTrend;
 import com.moneylog.data.db.dao.MonthlySummary;
 import com.moneylog.data.db.entity.CategoryEntity;
 import com.moneylog.data.repository.CategoryRepository;
@@ -26,6 +27,8 @@ public class StatisticsViewModel extends ViewModel {
     public final LiveData<MonthlySummary> monthlySummary;
     public final LiveData<List<CategorySummary>> categoryExpenses;
     public final LiveData<List<CategoryEntity>> categories;
+    public final LiveData<List<MonthlyTrend>> monthlyTrend;
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     @Inject
     public StatisticsViewModel(TransactionRepository transactionRepo,
@@ -37,6 +40,12 @@ public class StatisticsViewModel extends ViewModel {
         categoryExpenses = Transformations.switchMap(selectedYearMonth,
                 ym -> transactionRepo.getMonthlyExpenseByCategory(ym));
         categories = categoryRepo.getAll();
+
+        // 월별 추이: 선택된 월 기준 6개월 전부터
+        monthlyTrend = Transformations.switchMap(selectedYearMonth, ym -> {
+            String fromDate = DateUtils.monthsAgo(ym, 5);
+            return transactionRepo.getMonthlyTrend(fromDate);
+        });
     }
 
     public LiveData<String> getSelectedYearMonth() {
@@ -59,5 +68,9 @@ public class StatisticsViewModel extends ViewModel {
 
     public void setYearMonth(String yearMonth) {
         selectedYearMonth.setValue(yearMonth);
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 }

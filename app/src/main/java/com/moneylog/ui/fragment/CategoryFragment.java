@@ -187,6 +187,9 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnCate
                 sheet.tilName.setError(getString(R.string.input_name_required));
                 return;
             }
+            if (name.length() > 30) {
+                name = name.substring(0, 30);
+            }
             sheet.tilName.setError(null);
 
             CategoryEntity cat = isEdit ? existing : new CategoryEntity();

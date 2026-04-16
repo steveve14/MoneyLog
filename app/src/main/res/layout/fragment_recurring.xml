@@ -114,6 +114,13 @@
         android:paddingVertical="24dp"
         android:visibility="gone" />
 
+    <ProgressBar
+        android:id="@+id/progressLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabAddRecurring"
         android:layout_width="wrap_content"

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.moneylog.data.db.dao.CategorySummary;
 import com.moneylog.data.db.dao.DailySummary;
+import com.moneylog.data.db.dao.MonthlyTrend;
 import com.moneylog.data.db.dao.MonthlySummary;
 import com.moneylog.data.db.dao.TransactionDao;
 import com.moneylog.data.db.entity.TransactionEntity;
@@ -60,6 +61,10 @@ public class TransactionRepository {
 
     public LiveData<List<DailySummary>> getDailySummary(String yearMonth) {
         return dao.getDailySummary(yearMonth);
+    }
+
+    public LiveData<List<MonthlyTrend>> getMonthlyTrend(String fromDate) {
+        return dao.getMonthlyTrend(fromDate);
     }
 
     public interface Callback<T> {

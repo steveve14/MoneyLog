@@ -15,30 +15,45 @@
             android:id="@+id/action_onboarding_to_dashboard"
             app:destination="@id/dashboardFragment"
             app:popUpTo="@id/onboardingFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.moneylog.ui.fragment.DashboardFragment"
-        android:label="@string/nav_home" />
+        android:label="@string/nav_home">
+        <deepLink app:uri="moneylog://dashboard" />
+    </fragment>
 
     <fragment
         android:id="@+id/transactionFragment"
         android:name="com.moneylog.ui.fragment.TransactionFragment"
         android:label="@string/nav_transactions">
+        <deepLink app:uri="moneylog://transactions" />
 
         <action
             android:id="@+id/action_transaction_to_form"
             app:destination="@id/transactionFormFragment"
             app:popUpTo="@id/transactionFragment"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="false"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_transaction_to_edit"
             app:destination="@id/transactionFormFragment"
             app:popUpTo="@id/transactionFragment"
-            app:popUpToInclusive="false">
+            app:popUpToInclusive="false"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
 
             <argument
                 android:name="transactionId"
@@ -51,6 +66,7 @@
         android:id="@+id/transactionFormFragment"
         android:name="com.moneylog.ui.fragment.TransactionFormFragment"
         android:label="@string/nav_add">
+        <deepLink app:uri="moneylog://add" />
 
         <argument
             android:name="transactionId"
@@ -61,12 +77,19 @@
             android:name="autoRecurring"
             app:argType="boolean"
             android:defaultValue="false" />
+
+        <argument
+            android:name="recurringId"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
 
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.moneylog.ui.fragment.StatisticsFragment"
-        android:label="@string/nav_statistics" />
+        android:label="@string/nav_statistics">
+        <deepLink app:uri="moneylog://statistics" />
+    </fragment>
 
     <!-- Phase 2: 카테고리 관리 -->
     <fragment
@@ -79,7 +102,9 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.moneylog.ui.fragment.SettingsFragment"
-        android:label="@string/nav_settings" />
+        android:label="@string/nav_settings">
+        <deepLink app:uri="moneylog://settings" />
+    </fragment>
 
     <!-- Phase 6: AI 요약 -->
     <fragment
@@ -95,7 +120,11 @@
 
         <action
             android:id="@+id/action_recurring_to_form"
-            app:destination="@id/transactionFormFragment" />
+            app:destination="@id/transactionFormFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
 </navigation>

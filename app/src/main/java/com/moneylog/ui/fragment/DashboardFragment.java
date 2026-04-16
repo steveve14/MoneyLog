@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.snackbar.Snackbar;
 import com.moneylog.R;
 import com.moneylog.data.db.dao.CategorySummary;
 import com.moneylog.data.db.entity.CategoryEntity;
@@ -222,8 +223,7 @@ public class DashboardFragment extends Fragment {
         });
 
         binding.pieChart.invalidate();
-
-        // --- 카테고리 범례 (10% 초과 항목) ---
+        binding.pieChart.setContentDescription(getString(R.string.chart_content_description));
         for (int i = 0; i < legendItems.size(); i++) {
             CategorySummary cs = legendItems.get(i);
             View row = LayoutInflater.from(requireContext())
@@ -350,8 +350,12 @@ public class DashboardFragment extends Fragment {
             }
 
             switchActive.setChecked(rec.isActive);
-            switchActive.setOnCheckedChangeListener((btn, checked) ->
-                    viewModel.setRecurringActive(rec.id, checked));
+            switchActive.setOnCheckedChangeListener((btn, checked) -> {
+                    viewModel.setRecurringActive(rec.id, checked);
+                    Snackbar.make(binding.getRoot(),
+                            checked ? R.string.recurring_activated : R.string.recurring_deactivated,
+                            Snackbar.LENGTH_SHORT).show();
+            });
 
             binding.llRecurringItems.addView(row);
         }

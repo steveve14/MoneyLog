@@ -51,6 +51,15 @@ public class RecurringRepository {
         executor.execute(() -> dao.setActive(id, active, System.currentTimeMillis()));
     }
 
+    public void updateSortOrders(List<RecurringEntity> items) {
+        executor.execute(() -> {
+            long now = System.currentTimeMillis();
+            for (int i = 0; i < items.size(); i++) {
+                dao.updateSortOrder(items.get(i).id, i, now);
+            }
+        });
+    }
+
     public void getAllActiveInBackground(TransactionRepository.Callback<List<RecurringEntity>> cb) {
         executor.execute(() -> cb.onResult(dao.getAllActiveSync()));
     }

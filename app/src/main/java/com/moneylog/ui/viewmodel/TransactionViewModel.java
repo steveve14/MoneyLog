@@ -50,6 +50,9 @@ public class TransactionViewModel extends ViewModel {
     // ── 편집 중인 거래 ────────────────────────────────────────
     private final MutableLiveData<TransactionEntity> editingTransaction;
 
+    // ── 에러 메시지 ──────────────────────────────────────────
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
+
     @Inject
     public TransactionViewModel(TransactionRepository transactionRepo,
                                 CategoryRepository categoryRepo) {
@@ -83,6 +86,10 @@ public class TransactionViewModel extends ViewModel {
 
     public LiveData<TransactionEntity> getEditingTransaction() {
         return editingTransaction;
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 
     // ── 이벤트 ────────────────────────────────────────────────

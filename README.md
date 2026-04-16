@@ -10,16 +10,16 @@
 
 | 기능 | 설명 |
 |---|---|
-| **거래 관리** | 수입·지출 등록, 수정, 삭제, 검색 (카테고리·메모·결제수단) |
-| **반복 거래** | WorkManager 기반 자동 등록 (매월 N일) |
-| **카테고리** | 기본 15종 (지출 10 + 수입 5), 커스텀 추가, 드래그 앤 드롭 정렬 |
-| **예산** | 월별 총예산·카테고리별 예산, 소진율 표시 |
-| **통계** | 월별 요약, 도넛 차트, 카테고리 비중, 캘린더 히트맵 |
+| **거래 관리** | 수익·지출 등록, 수정, 삭제, 검색 (카테고리·메모·결제수단) |
+| **반복 거래** | WorkManager 기반 자동 등록 (DAILY/WEEKLY/MONTHLY/YEARLY), 드래그 정렬 |
+| **카테고리** | 기본 15종 (지출 10 + 수익 5), 커스텀 추가 |
+| **통계** | 월별 요약, 도넛 차트, 카테고리 비중, 지출/수익 토글, 전월 대비 |
 | **AI 요약** | 온디바이스 규칙 기반 분석 (저축률, 패턴, 절약 팁), Gemini Nano 확장 예정 |
 | **Google Drive 백업** | 수동·자동 백업/복원, 암호화 |
 | **다국어** | 한국어(기본), English, 日本語 |
 | **다크 모드** | 시스템 설정 연동 |
-| **CSV 내보내기** | Downloads 폴더로 내보내기/가져오기 |
+| **CSV 내보내기** | 거래 + 반복거래 섹션 포함 내보내기/가져오기 |
+| **스크롤 UX** | 글로벌 스크롤 탑 FAB, 헤더 숨김, 부드러운 애니메이션 |
 
 ## 기술 스택
 
@@ -29,7 +29,8 @@
 | UI | XML + ViewBinding + Material Design 3 |
 | 아키텍처 | Single-Activity, Fragment Navigation, ViewModel + LiveData |
 | DI | Hilt 2.56 |
-| DB | Room 2.7.1 (SQLite) |
+| DB | Room 2.7.1 (SQLite), v4 |
+| 차트 | MPAndroidChart 3.1.0 |
 | 비동기 | Executor + LiveData |
 | 백업 | Google Drive API v3 |
 | 인증 | Google Sign-In (Credential Manager) |
@@ -69,17 +70,18 @@
 ```
 app/src/main/java/com/moneylog/
 ├── data/
-│   ├── db/           # Room Database, Entity, DAO, Migration
-│   └── repository/   # Repository (AI, Category, Transaction 등)
+│   ├── db/           # Room Database, Entity, DAO, Migration (v1→v4)
+│   └── repository/   # Repository (AI, Category, Transaction, Recurring, Backup)
 ├── di/               # Hilt AppModule
 ├── ui/
-│   ├── adapter/      # RecyclerView Adapters
-│   ├── fragment/     # UI Fragments (Dashboard, Transaction, Statistics 등)
+│   ├── adapter/      # RecyclerView Adapters (Transaction, Category, Recurring, IconPicker)
+│   ├── fragment/     # UI Fragments (Dashboard, Transaction, TransactionForm, Statistics, Recurring, Category, Settings, AiSummary, Onboarding)
 │   └── viewmodel/    # ViewModels
-├── util/             # FormatUtils, DateUtils, IconHelper 등
+├── util/             # FormatUtils, DateUtils, IconHelper, DataManagementHelper 등
 └── worker/           # WorkManager Workers
 
 app/src/main/res/
+├── layout/           # 21개 레이아웃 XML
 ├── values/           # 한국어 (기본)
 ├── values-en/        # English
 └── values-ja/        # 日本語

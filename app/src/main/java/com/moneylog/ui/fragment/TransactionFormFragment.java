@@ -18,6 +18,7 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.moneylog.R;
 import com.moneylog.data.db.entity.CategoryEntity;
 import com.moneylog.data.db.entity.RecurringEntity;
@@ -46,8 +47,13 @@ public class TransactionFormFragment extends Fragment {
     private String selectedDate = DateUtils.today();
     private String selectedPaymentMethod = "CARD";
     private String selectedRecurringInterval = "MONTHLY";
+    private int selectedDayOfWeek = 1;   // 1=월 ~ 7=일
+    private int selectedDayOfMonth = 1;
+    private int selectedMonth = 1;
     private boolean isEdit = false;
+    private boolean isRecurringEdit = false;
     private TransactionEntity editingTx = null;
+    private RecurringEntity editingRecurring = null;
     private boolean categoriesExpanded = false;
     private int collapsedHeight = 0;
 
@@ -70,9 +76,14 @@ public class TransactionFormFragment extends Fragment {
         // 편집 모드 확인
         if (getArguments() != null) {
             long txId = getArguments().getLong("transactionId", 0L);
+            long recId = getArguments().getLong("recurringId", 0L);
             if (txId > 0) {
                 isEdit = true;
                 viewModel.loadTransaction(txId);
+            } else if (recId > 0) {
+                isEdit = true;
+                isRecurringEdit = true;
+                recurringViewModel.loadById(recId);
             }
             // 고정거래 화면에서 진입 시 스위치 자동 선택
             if (getArguments().getBoolean("autoRecurring", false)) {
@@ -81,7 +92,9 @@ public class TransactionFormFragment extends Fragment {
             }
         }
 
-        binding.tvTitle.setText(isEdit ? getString(R.string.transaction_edit) : getString(R.string.add_transaction));
+        binding.tvTitle.setText(isRecurringEdit
+                ? getString(R.string.recurring_form_edit)
+                : (isEdit ? getString(R.string.transaction_edit) : getString(R.string.add_transaction)));
         binding.tvDate.setText(DateUtils.toDisplayDate(selectedDate, requireContext()));
 
         // 닫기 버튼
@@ -103,12 +116,46 @@ public class TransactionFormFragment extends Fragment {
         binding.chipOther.setOnClickListener(v -> selectedPaymentMethod = "OTHER");
 
         // 고정 거래 토글
-        binding.switchRecurring.setOnCheckedChangeListener((btn, checked) ->
-            binding.chipGroupRecurringInterval.setVisibility(checked ? View.VISIBLE : View.GONE));
-        binding.chipRDaily.setOnClickListener(v -> selectedRecurringInterval = "DAILY");
-        binding.chipRWeekly.setOnClickListener(v -> selectedRecurringInterval = "WEEKLY");
-        binding.chipRMonthly.setOnClickListener(v -> selectedRecurringInterval = "MONTHLY");
-        binding.chipRYearly.setOnClickListener(v -> selectedRecurringInterval = "YEARLY");
+        binding.switchRecurring.setOnCheckedChangeListener((btn, checked) -> {
+            binding.chipGroupRecurringInterval.setVisibility(checked ? View.VISIBLE : View.GONE);
+            binding.tvRecurringHint.setVisibility(checked ? View.VISIBLE : View.GONE);
+            if (checked) {
+                binding.cardDate.setEnabled(false);
+                binding.cardDate.setClickable(false);
+                binding.cardDate.setAlpha(0.4f);
+                updateScheduleInputVisibility(selectedRecurringInterval);
+            } else {
+                binding.cardDate.setEnabled(true);
+                binding.cardDate.setClickable(true);
+                binding.cardDate.setAlpha(1.0f);
+                hideAllScheduleInputs();
+            }
+        });
+        binding.chipRDaily.setOnClickListener(v -> {
+            selectedRecurringInterval = "DAILY";
+            updateScheduleInputVisibility("DAILY");
+        });
+        binding.chipRWeekly.setOnClickListener(v -> {
+            selectedRecurringInterval = "WEEKLY";
+            updateScheduleInputVisibility("WEEKLY");
+        });
+        binding.chipRMonthly.setOnClickListener(v -> {
+            selectedRecurringInterval = "MONTHLY";
+            updateScheduleInputVisibility("MONTHLY");
+        });
+        binding.chipRYearly.setOnClickListener(v -> {
+            selectedRecurringInterval = "YEARLY";
+            updateScheduleInputVisibility("YEARLY");
+        });
+
+        // 요일 선택 칩
+        binding.chipDowMon.setOnClickListener(v -> selectedDayOfWeek = 1);
+        binding.chipDowTue.setOnClickListener(v -> selectedDayOfWeek = 2);
+        binding.chipDowWed.setOnClickListener(v -> selectedDayOfWeek = 3);
+        binding.chipDowThu.setOnClickListener(v -> selectedDayOfWeek = 4);
+        binding.chipDowFri.setOnClickListener(v -> selectedDayOfWeek = 5);
+        binding.chipDowSat.setOnClickListener(v -> selectedDayOfWeek = 6);
+        binding.chipDowSun.setOnClickListener(v -> selectedDayOfWeek = 7);
 
         // 금액 입력 자동 포맷
         binding.etAmount.addTextChangedListener(new TextWatcher() {
@@ -133,18 +180,28 @@ public class TransactionFormFragment extends Fragment {
         // 삭제 버튼 (편집 모드에서만)
         if (isEdit) {
             binding.btnDelete.setVisibility(View.VISIBLE);
-            binding.btnDelete.setOnClickListener(v ->
+            binding.btnDelete.setOnClickListener(v -> {
+                String title = isRecurringEdit
+                        ? getString(R.string.delete)
+                        : getString(R.string.transaction_delete_title);
+                String message = isRecurringEdit
+                        ? getString(R.string.recurring_delete_confirm_msg)
+                        : getString(R.string.transaction_delete_message);
                 new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.transaction_delete_title))
-                    .setMessage(getString(R.string.transaction_delete_message))
+                    .setTitle(title)
+                    .setMessage(message)
                     .setPositiveButton(getString(R.string.delete), (d, w) -> {
-                        if (editingTx != null) {
+                        if (isRecurringEdit && editingRecurring != null) {
+                            recurringViewModel.delete(editingRecurring.id);
+                        } else if (editingTx != null) {
                             viewModel.deleteTransaction(editingTx.id);
                         }
+                        Snackbar.make(binding.getRoot(), R.string.msg_deleted, Snackbar.LENGTH_SHORT).show();
                         Navigation.findNavController(requireView()).popBackStack();
                     })
                     .setNegativeButton(getString(R.string.cancel), null)
-                    .show());
+                    .show();
+            });
         }
 
 
@@ -154,9 +211,14 @@ public class TransactionFormFragment extends Fragment {
             if (cats != null) buildCategoryChips(cats);
         });
 
+        // 내역에서 거래수정으로 진입 시 고정 거래 스위치 비활성화
+        if (isEdit && !isRecurringEdit) {
+            binding.switchRecurring.setEnabled(false);
+        }
+
         // 편집 데이터 로드
         viewModel.getEditingTransaction().observe(getViewLifecycleOwner(), tx -> {
-            if (tx != null && isEdit && editingTx == null) {
+            if (tx != null && isEdit && !isRecurringEdit && editingTx == null) {
                 editingTx = tx;
                 setType(tx.type);
                 binding.etAmount.setText(FormatUtils.formatAmountInput(tx.amount));
@@ -166,11 +228,49 @@ public class TransactionFormFragment extends Fragment {
                 binding.etMemo.setText(tx.memo);
                 selectedPaymentMethod = tx.paymentMethod;
                 updatePaymentMethodChips(tx.paymentMethod);
+            }
+        });
 
-                // 고정 거래 여부 표시 (편집 모드에서는 토글 비활성)
-                if (tx.isAuto) {
-                    binding.switchRecurring.setChecked(true);
-                    binding.switchRecurring.setEnabled(false);
+        // 고정거래 편집 데이터 로드
+        recurringViewModel.getEditingItem().observe(getViewLifecycleOwner(), rec -> {
+            if (rec != null && isRecurringEdit && editingRecurring == null) {
+                editingRecurring = rec;
+                setType(rec.type);
+                binding.etAmount.setText(FormatUtils.formatAmountInput(rec.amount));
+                selectedCategoryId = rec.categoryId;
+                binding.etMemo.setText(rec.memo);
+                if (rec.paymentMethod != null) {
+                    selectedPaymentMethod = rec.paymentMethod;
+                    updatePaymentMethodChips(rec.paymentMethod);
+                }
+
+                // 고정거래 스위치 & 반복 주기 표시
+                binding.switchRecurring.setChecked(true);
+                binding.switchRecurring.setEnabled(false);
+                binding.chipGroupRecurringInterval.setVisibility(View.VISIBLE);
+                binding.cardDate.setEnabled(false);
+                binding.cardDate.setClickable(false);
+                binding.cardDate.setAlpha(0.4f);
+                selectedRecurringInterval = rec.intervalType;
+                updateRecurringIntervalChips(rec.intervalType);
+                updateScheduleInputVisibility(rec.intervalType);
+
+                // 스케줄 값 복원
+                switch (rec.intervalType) {
+                    case "WEEKLY":
+                        selectedDayOfWeek = rec.dayOfMonth;
+                        updateDayOfWeekChips(rec.dayOfMonth);
+                        break;
+                    case "MONTHLY":
+                        selectedDayOfMonth = rec.dayOfMonth;
+                        binding.etRecurringDay.setText(String.valueOf(rec.dayOfMonth));
+                        break;
+                    case "YEARLY":
+                        selectedMonth = rec.monthOfYear;
+                        selectedDayOfMonth = rec.dayOfMonth;
+                        binding.etRecurringMonth.setText(String.valueOf(rec.monthOfYear));
+                        binding.etRecurringDay.setText(String.valueOf(rec.dayOfMonth));
+                        break;
                 }
             }
         });
@@ -273,12 +373,103 @@ public class TransactionFormFragment extends Fragment {
         binding.chipOther.setChecked("OTHER".equals(method));
     }
 
+    private void updateRecurringIntervalChips(String interval) {
+        binding.chipRDaily.setChecked("DAILY".equals(interval));
+        binding.chipRWeekly.setChecked("WEEKLY".equals(interval));
+        binding.chipRMonthly.setChecked("MONTHLY".equals(interval));
+        binding.chipRYearly.setChecked("YEARLY".equals(interval));
+    }
+
+    private void hideAllScheduleInputs() {
+        binding.chipGroupDayOfWeek.setVisibility(View.GONE);
+        binding.llRecurringDayInput.setVisibility(View.GONE);
+    }
+
+    private void updateScheduleInputVisibility(String interval) {
+        binding.chipGroupDayOfWeek.setVisibility(View.GONE);
+        binding.llRecurringDayInput.setVisibility(View.GONE);
+        binding.tilRecurringMonth.setVisibility(View.GONE);
+
+        switch (interval) {
+            case "DAILY":
+                // 입력 없음
+                break;
+            case "WEEKLY":
+                binding.chipGroupDayOfWeek.setVisibility(View.VISIBLE);
+                break;
+            case "MONTHLY":
+                binding.llRecurringDayInput.setVisibility(View.VISIBLE);
+                binding.tilRecurringDay.setVisibility(View.VISIBLE);
+                break;
+            case "YEARLY":
+                binding.llRecurringDayInput.setVisibility(View.VISIBLE);
+                binding.tilRecurringMonth.setVisibility(View.VISIBLE);
+                binding.tilRecurringDay.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    private void updateDayOfWeekChips(int dayOfWeek) {
+        binding.chipDowMon.setChecked(dayOfWeek == 1);
+        binding.chipDowTue.setChecked(dayOfWeek == 2);
+        binding.chipDowWed.setChecked(dayOfWeek == 3);
+        binding.chipDowThu.setChecked(dayOfWeek == 4);
+        binding.chipDowFri.setChecked(dayOfWeek == 5);
+        binding.chipDowSat.setChecked(dayOfWeek == 6);
+        binding.chipDowSun.setChecked(dayOfWeek == 7);
+    }
+
+    private int readDayInput() {
+        String s = binding.etRecurringDay.getText() != null
+                ? binding.etRecurringDay.getText().toString().trim() : "";
+        if (s.isEmpty()) return 1;
+        try {
+            int day = Integer.parseInt(s);
+            return Math.max(1, Math.min(28, day));
+        } catch (NumberFormatException e) { return 1; }
+    }
+
+    private int readMonthInput() {
+        String s = binding.etRecurringMonth.getText() != null
+                ? binding.etRecurringMonth.getText().toString().trim() : "";
+        if (s.isEmpty()) return 1;
+        try {
+            int month = Integer.parseInt(s);
+            return Math.max(1, Math.min(12, month));
+        } catch (NumberFormatException e) { return 1; }
+    }
+
     private void submit() {
         long amount = FormatUtils.parseAmountInput(
             binding.etAmount.getText().toString());
-        if (amount <= 0 || selectedCategoryId == 0) return;
+        if (amount <= 0 || amount > 999_999_999_999L) {
+            Snackbar.make(binding.getRoot(), R.string.transaction_amount_required, Snackbar.LENGTH_SHORT).show();
+            binding.etAmount.requestFocus();
+            return;
+        }
+        if (selectedCategoryId == 0) {
+            Snackbar.make(binding.getRoot(), R.string.category_required, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
 
         long now = System.currentTimeMillis();
+
+        // 고정거래 편집 모드
+        if (isRecurringEdit && editingRecurring != null) {
+            editingRecurring.type = selectedType;
+            editingRecurring.amount = amount;
+            editingRecurring.categoryId = selectedCategoryId;
+            editingRecurring.memo = binding.etMemo.getText().toString().trim();
+            editingRecurring.paymentMethod = selectedPaymentMethod;
+            editingRecurring.intervalType = selectedRecurringInterval;
+            applyScheduleToRecurring(editingRecurring);
+            editingRecurring.updatedAt = now;
+            recurringViewModel.save(editingRecurring);
+            Snackbar.make(binding.getRoot(), R.string.msg_updated, Snackbar.LENGTH_SHORT).show();
+            Navigation.findNavController(requireView()).popBackStack();
+            return;
+        }
+
         TransactionEntity tx = (isEdit && editingTx != null) ? editingTx : new TransactionEntity();
         tx.type          = selectedType;
         tx.amount        = amount;
@@ -306,27 +497,34 @@ public class TransactionFormFragment extends Fragment {
             recurring.intervalType = selectedRecurringInterval;
             recurring.memo = tx.memo;
             recurring.paymentMethod = selectedPaymentMethod;
-
-            LocalDate date = DateUtils.parseDate(selectedDate);
-            switch (selectedRecurringInterval) {
-                case "WEEKLY":
-                    recurring.dayOfMonth = date.getDayOfWeek().getValue(); // 1=월~7=일
-                    break;
-                case "YEARLY":
-                    recurring.monthOfYear = date.getMonthValue();
-                    recurring.dayOfMonth = date.getDayOfMonth();
-                    break;
-                case "MONTHLY":
-                    recurring.dayOfMonth = Math.min(date.getDayOfMonth(), 28);
-                    break;
-                case "DAILY":
-                default:
-                    break;
-            }
+            applyScheduleToRecurring(recurring);
             recurringViewModel.save(recurring);
         }
 
+        Snackbar.make(binding.getRoot(), isEdit ? R.string.msg_updated : R.string.msg_added, Snackbar.LENGTH_SHORT).show();
         Navigation.findNavController(requireView()).popBackStack();
+    }
+
+    private void applyScheduleToRecurring(RecurringEntity rec) {
+        switch (rec.intervalType) {
+            case "WEEKLY":
+                rec.dayOfMonth = selectedDayOfWeek;
+                rec.monthOfYear = 0;
+                break;
+            case "YEARLY":
+                rec.monthOfYear = readMonthInput();
+                rec.dayOfMonth = readDayInput();
+                break;
+            case "MONTHLY":
+                rec.dayOfMonth = readDayInput();
+                rec.monthOfYear = 0;
+                break;
+            case "DAILY":
+            default:
+                rec.dayOfMonth = 0;
+                rec.monthOfYear = 0;
+                break;
+        }
     }
 
     @Override

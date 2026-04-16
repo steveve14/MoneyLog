@@ -14,7 +14,7 @@
     <string name="nav_category">카테고리</string>
 
     <!-- 거래 -->
-    <string name="transaction_income">수입</string>
+    <string name="transaction_income">수익</string>
     <string name="transaction_expense">지출</string>
     <string name="transaction_save">거래 저장</string>
     <string name="transaction_amount_hint">0</string>
@@ -44,7 +44,7 @@
     <!-- 대시보드 -->
     <string name="dashboard_financial_overview">홈</string>
     <string name="dashboard_total_balance">총 잔액</string>
-    <string name="dashboard_monthly_income">월 수입</string>
+    <string name="dashboard_monthly_income">월 수익</string>
     <string name="dashboard_monthly_expense">월 지출</string>
     <string name="dashboard_pending_updates">대기 중인 업데이트</string>
     <string name="dashboard_confirm_now">지금 확인</string>
@@ -58,6 +58,7 @@
     <string name="statistics_title">통계</string>
     <string name="statistics_monthly_total">월간 합계</string>
     <string name="statistics_spending_trend">지출 추이</string>
+    <string name="statistics_income_trend">수익 추이</string>
     <string name="statistics_last_6_months">최근 6개월</string>
     <string name="statistics_category_breakdown">카테고리별 분석</string>
 
@@ -68,8 +69,8 @@
     <string name="recurring_monthly_commitment">월간 고정 항목</string>
     <string name="recurring_items_scheduled">건 예정</string>
     <string name="recurring_fixed_expenses">고정 지출</string>
-    <string name="recurring_fixed_income">고정 수입</string>
-    <string name="recurring_add">+ 고정 거래 추가</string>
+    <string name="recurring_fixed_income">고정 수익</string>
+    <string name="recurring_add">고정 거래 추가</string>
     <string name="recurring_label_debit">출금</string>
     <string name="recurring_label_credit">입금</string>
     <string name="recurring_label_inactive">비활성</string>
@@ -119,7 +120,7 @@
     <string name="settings_category_management">카테고리 관리</string>
     <string name="settings_category_management_desc">아이콘과 색상을 편집합니다</string>
     <string name="settings_recurring_management">고정거래 관리</string>
-    <string name="settings_recurring_management_desc">고정 수입·지출을 관리합니다</string>
+    <string name="settings_recurring_management_desc">고정 수익·지출을 관리합니다</string>
     <string name="settings_category_delete_all">카테고리 모두 삭제</string>
     <string name="settings_category_delete_all_desc">모든 카테고리를 삭제합니다</string>
     <string name="settings_category_reset_default">카테고리 기본으로</string>
@@ -185,7 +186,7 @@
     <!-- 거래 입력 V2 -->
     <string name="journal_entry">JOURNAL ENTRY</string>
     <string name="new_transaction">새 거래</string>
-    <string name="transaction_date">거래일</string>
+    <string name="transaction_date">날짜</string>
     <string name="description">설명</string>
     <string name="memo_hint">메모를 입력하세요…</string>
     <string name="category">카테고리</string>
@@ -202,7 +203,7 @@
     <!-- 고정 거래 V2 -->
     <string name="recurring_commitment_desc">매월 자동 처리되는 거래입니다</string>
     <string name="recurring_fixed_expenses_desc">매월 고정 지출 항목</string>
-    <string name="recurring_fixed_income_desc">매월 고정 수입 항목</string>
+    <string name="recurring_fixed_income_desc">매월 고정 수익 항목</string>
     <string name="recurring_savings_potential">SAVINGS POTENTIAL</string>
     <string name="recurring_savings_desc">고정 비용을 줄이면 절약이 가능합니다</string>
     <string name="ai_financial_insight">AI 재정 인사이트</string>
@@ -212,6 +213,7 @@
     <string name="statistics_performance_review">PERFORMANCE REVIEW</string>
     <string name="statistics_vs_last_month">VS LAST MONTH</string>
     <string name="statistics_spending">지출</string>
+    <string name="statistics_income_label">수익</string>
     <string name="insight_saved">분석 완료</string>
     <string name="optimization_ready">최적화 가능</string>
     <string name="apply_strategy">전략 적용하기</string>
@@ -232,6 +234,7 @@
 
     <!-- 공통 (추가) -->
     <string name="close">닫기</string>
+    <string name="scroll_to_top">위로 이동</string>
     <string name="amount_zero">0원</string>
     <string name="toggle_calendar">달력 열기/닫기</string>
     <string name="category_add">카테고리 추가</string>
@@ -329,7 +332,7 @@
 
     <!-- AI 분석 결과 -->
     <string name="ai_title_analysis">📊 %1$s 재정 분석\n\n</string>
-    <string name="ai_total_income">총 수입: %1$s (%2$d건)\n</string>
+    <string name="ai_total_income">총 수익: %1$s (%2$d건)\n</string>
     <string name="ai_total_expense">총 지출: %1$s (%2$d건)\n</string>
     <string name="ai_balance_positive">잔액: +%s ✅\n</string>
     <string name="ai_balance_negative">잔액: %s ⚠️\n</string>
@@ -337,7 +340,7 @@
     <string name="ai_savings_excellent"> — 훌륭합니다! 안정적인 재정 관리입니다.</string>
     <string name="ai_savings_good"> — 양호합니다. 조금 더 절약해보세요.</string>
     <string name="ai_savings_warning"> — 지출을 줄일 필요가 있습니다.</string>
-    <string name="ai_savings_danger"> — 수입보다 지출이 많습니다. 지출 점검이 필요합니다.</string>
+    <string name="ai_savings_danger"> — 수익보다 지출이 많습니다. 지출 점검이 필요합니다.</string>
     <string name="ai_category_title">\n📌 카테고리별 지출 분석\n</string>
     <string name="ai_category_row">%1$d. %2$s: %3$s (%4$d%%, %5$d건)\n</string>
     <string name="ai_pattern_title">\n📅 소비 패턴\n</string>
@@ -345,7 +348,7 @@
     <string name="ai_pattern_max">최대 지출일: %1$s (%2$s)\n</string>
     <string name="ai_pattern_spike">⚠️ 최대 지출일이 평균의 %d배입니다. 큰 지출을 점검해보세요.\n</string>
     <string name="ai_tips_title">\n💡 절약 팁\n</string>
-    <string name="ai_tip_overspend">• 수입 대비 지출이 초과되었습니다. 고정 지출 항목을 점검해보세요.\n</string>
+    <string name="ai_tip_overspend">• 수익 대비 지출이 초과되었습니다. 고정 지출 항목을 점검해보세요.\n</string>
     <string name="ai_tip_small_expenses">• 소액 지출이 많습니다 (평균 %s). 소비 습관을 점검해보세요.\n</string>
     <string name="ai_tip_diverse_categories">• 지출 카테고리가 다양합니다. 주요 카테고리에 예산을 설정해보세요.\n</string>
 
@@ -364,7 +367,23 @@
     <string name="cat_allowance">용돈</string>
     <string name="cat_savings_withdrawal">저축 인출</string>
     <string name="cat_investment">투자 수익</string>
-    <string name="cat_other_income">기타 수입</string>
+    <string name="cat_other_income">기타 수익</string>
+
+    <!-- UX 피드백 -->
+    <string name="recurring_activated">고정거래가 활성화되었습니다</string>
+    <string name="recurring_deactivated">고정거래가 비활성화되었습니다</string>
+    <string name="msg_processing">처리 중…</string>
+    <string name="empty_recurring_hint">첫 고정거래를 등록해보세요</string>
+    <string name="empty_filter_hint">선택한 필터에 해당하는 거래가 없습니다</string>
+    <string name="recurring_date_hint">고정거래는 설정된 주기에 따라 자동 실행됩니다</string>
+    <string name="category_delete_warning">%d건의 거래가 이 카테고리를 사용 중입니다.\n모든 카테고리가 삭제됩니다. 계속하시겠습니까?</string>
+    <string name="msg_undo">실행 취소</string>
+    <string name="chart_content_description">카테고리별 거래 분포 차트</string>
+    <string name="statistics_monthly_trend">월별 추이</string>
+    <string name="theme_title">테마</string>
+    <string name="theme_light">라이트</string>
+    <string name="theme_dark">다크</string>
+    <string name="theme_system">시스템 설정</string>
 
     <!-- 기타 누락 -->
     <string name="file_create_failed">파일 생성 실패</string>

@@ -1,5 +1,7 @@
 package com.moneylog.ui.fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -17,6 +19,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.moneylog.R;
 import com.moneylog.data.db.dao.DailySummary;
 import com.moneylog.data.db.dao.MonthlySummary;
@@ -48,6 +51,7 @@ public class TransactionFragment extends Fragment
     private TransactionAdapter adapter;
     private Map<Long, CategoryEntity> categoryMap = new HashMap<>();
     private boolean calendarExpanded = false;
+    private String searchQuery = "";
 
     @Nullable
     @Override
@@ -94,10 +98,6 @@ public class TransactionFragment extends Fragment
         binding.chipIncome.setOnClickListener(v -> viewModel.setTypeFilter("INCOME"));
         binding.chipRecurring.setOnClickListener(v -> viewModel.setTypeFilter("RECURRING"));
 
-        // FAB → TransactionFormFragment
-        binding.fabAdd.setOnClickListener(v ->
-            Navigation.findNavController(v).navigate(R.id.action_transaction_to_form));
-
         // -- Observers ---
         viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym ->
                 binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym, requireContext())));
@@ -130,6 +130,17 @@ public class TransactionFragment extends Fragment
         viewModel.getTypeFilter().observe(getViewLifecycleOwner(), filter -> {
             updateChipSelection(filter);
             refreshList();
+        });
+
+        // 검색 필터
+        binding.etSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchQuery = s.toString().trim().toLowerCase();
+                refreshList();
+            }
         });
     }
 
@@ -258,11 +269,30 @@ public class TransactionFragment extends Fragment
                 filtered.add(tx);
             }
         }
+
+        // 검색 필터 적용
+        if (!searchQuery.isEmpty()) {
+            List<TransactionEntity> searched = new ArrayList<>();
+            for (TransactionEntity tx : filtered) {
+                String memo = tx.memo != null ? tx.memo.toLowerCase() : "";
+                CategoryEntity cat = categoryMap.get(tx.categoryId);
+                String catName = cat != null ? cat.name.toLowerCase() : "";
+                if (memo.contains(searchQuery) || catName.contains(searchQuery)
+                        || String.valueOf(tx.amount).contains(searchQuery)) {
+                    searched.add(tx);
+                }
+            }
+            filtered = searched;
+        }
+
         adapter.submitTransactions(filtered, categoryMap, requireContext());
 
         boolean empty = filtered.isEmpty();
         binding.recyclerTransactions.setVisibility(empty ? View.GONE : View.VISIBLE);
         binding.tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+        if (empty && (!"ALL".equals(filter) || !searchQuery.isEmpty())) {
+            binding.tvEmpty.setText(R.string.empty_filter_hint);
+        }
     }
 
     @Override
@@ -278,7 +308,12 @@ public class TransactionFragment extends Fragment
         new MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.transaction_delete_title))
             .setMessage(getString(R.string.transaction_delete_message))
-            .setPositiveButton(getString(R.string.delete), (d, w) -> viewModel.deleteTransaction(tx.id))
+            .setPositiveButton(getString(R.string.delete), (d, w) -> {
+                viewModel.deleteTransaction(tx.id);
+                Snackbar.make(binding.getRoot(), R.string.msg_deleted, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.msg_undo, v -> viewModel.saveTransaction(tx))
+                    .show();
+            })
             .setNegativeButton(getString(R.string.cancel), null)
             .show();
     }

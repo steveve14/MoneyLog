@@ -14,11 +14,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.moneylog.R;
 import com.moneylog.data.db.dao.CategorySummary;
+import com.moneylog.data.db.dao.MonthlyTrend;
 import com.moneylog.data.db.entity.CategoryEntity;
 import com.moneylog.databinding.FragmentStatisticsBinding;
 import com.moneylog.ui.viewmodel.StatisticsViewModel;
@@ -44,6 +53,7 @@ public class StatisticsFragment extends Fragment {
     private FragmentStatisticsBinding binding;
     private StatisticsViewModel viewModel;
     private Map<Long, String> categoryNameMap = new HashMap<>();
+    private String chartType = "EXPENSE";
 
     @Nullable
     @Override
@@ -68,6 +78,19 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
+        // 지출/수입 토글
+        updateToggle();
+        binding.btnStatExpense.setOnClickListener(v -> {
+            chartType = "EXPENSE";
+            updateToggle();
+            refreshAll();
+        });
+        binding.btnStatIncome.setOnClickListener(v -> {
+            chartType = "INCOME";
+            updateToggle();
+            refreshAll();
+        });
+
         viewModel.getSelectedYearMonth().observe(getViewLifecycleOwner(), ym ->
                 binding.tvYearMonth.setText(DateUtils.toDisplayYearMonth(ym, requireContext())));
 
@@ -86,12 +109,37 @@ public class StatisticsFragment extends Fragment {
             if (cats != null) {
                 for (CategoryEntity c : cats) categoryNameMap.put(c.id, c.name);
             }
-            // 카테고리 로드 후 breakdown 갱신
-            List<CategorySummary> summaries = viewModel.categoryExpenses.getValue();
-            if (summaries != null) renderBreakdown(summaries);
+            refreshAll();
         });
 
-        viewModel.categoryExpenses.observe(getViewLifecycleOwner(), this::renderBreakdown);
+        viewModel.categoryExpenses.observe(getViewLifecycleOwner(), summaries -> refreshAll());
+
+        viewModel.monthlyTrend.observe(getViewLifecycleOwner(), this::renderTrendChart);
+
+        // 스크롤 리스너: 헤더 숨김
+        binding.scrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
+            if (binding == null) return;
+            int scrollY = binding.scrollView.getScrollY();
+            int headerH = binding.llHeader.getHeight();
+
+            // 헤더: 아래 스크롤 시 숨기고 위 스크롤 시 표시
+            if (scrollY > headerH) {
+                binding.llHeader.setVisibility(View.GONE);
+            } else {
+                binding.llHeader.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void refreshAll() {
+        List<CategorySummary> summaries = viewModel.categoryExpenses.getValue();
+        if (summaries == null) return;
+        // chartType으로 필터링
+        List<CategorySummary> filtered = new ArrayList<>();
+        for (CategorySummary cs : summaries) {
+            if (chartType.equals(cs.type)) filtered.add(cs);
+        }
+        renderBreakdown(filtered);
     }
 
     private void renderBreakdown(List<CategorySummary> summaries) {
@@ -156,9 +204,29 @@ public class StatisticsFragment extends Fragment {
         binding.pieChart.setRotationEnabled(false);
         binding.pieChart.setDrawEntryLabels(false);
         binding.pieChart.animateY(700);
-        binding.pieChart.invalidate();
 
-        // --- 파이차트 하단 범례 (색상 + 카테고리명) ---
+        // 차트 클릭: 도넛 중앙에 카테고리명 + 금액 표시
+        binding.pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(com.github.mikephil.charting.data.Entry e, Highlight h) {
+                if (e instanceof PieEntry) {
+                    PieEntry pe = (PieEntry) e;
+                    String prefix = "INCOME".equals(chartType) ? "+" : "-";
+                    binding.pieChart.setCenterText(pe.getLabel() + "\n"
+                            + prefix + FormatUtils.formatAmountWithUnit((long) pe.getValue(), requireContext()));
+                    binding.pieChart.setCenterTextSize(12f);
+                    binding.pieChart.setCenterTextColor(requireContext().getColor(
+                            "INCOME".equals(chartType) ? R.color.income_color : R.color.expense_color));
+                }
+            }
+            @Override
+            public void onNothingSelected() {
+                binding.pieChart.setCenterText("");
+            }
+        });
+
+        binding.pieChart.invalidate();
+        binding.pieChart.setContentDescription(getString(R.string.chart_content_description));
         binding.llPieLegend.removeAllViews();
         for (int i = 0; i < mainItems.size(); i++) {
             CategorySummary cs = mainItems.get(i);
@@ -275,6 +343,79 @@ public class StatisticsFragment extends Fragment {
             binding.llCategoryBreakdown.addView(headerRow);
             binding.llCategoryBreakdown.addView(subContainer);
         }
+    }
+
+    private void renderTrendChart(List<MonthlyTrend> trends) {
+        LineChart chart = binding.lineChart;
+        if (trends == null || trends.isEmpty()) {
+            chart.clear();
+            chart.invalidate();
+            return;
+        }
+
+        List<Entry> expenseEntries = new ArrayList<>();
+        List<Entry> incomeEntries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        for (int i = 0; i < trends.size(); i++) {
+            MonthlyTrend t = trends.get(i);
+            expenseEntries.add(new Entry(i, t.totalExpense));
+            incomeEntries.add(new Entry(i, t.totalIncome));
+            // "MM" 형식 라벨
+            labels.add(t.yearMonth.length() >= 7 ? t.yearMonth.substring(5) : t.yearMonth);
+        }
+
+        LineDataSet expenseDs = new LineDataSet(expenseEntries, getString(R.string.transaction_expense));
+        expenseDs.setColor(requireContext().getColor(R.color.expense_color));
+        expenseDs.setCircleColor(requireContext().getColor(R.color.expense_color));
+        expenseDs.setLineWidth(2f);
+        expenseDs.setCircleRadius(3f);
+        expenseDs.setDrawValues(false);
+        expenseDs.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
+        LineDataSet incomeDs = new LineDataSet(incomeEntries, getString(R.string.transaction_income));
+        incomeDs.setColor(requireContext().getColor(R.color.income_color));
+        incomeDs.setCircleColor(requireContext().getColor(R.color.income_color));
+        incomeDs.setLineWidth(2f);
+        incomeDs.setCircleRadius(3f);
+        incomeDs.setDrawValues(false);
+        incomeDs.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
+        LineData data = new LineData(expenseDs, incomeDs);
+        chart.setData(data);
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setDrawGridLines(false);
+
+        chart.getAxisRight().setEnabled(false);
+        chart.getAxisLeft().setDrawGridLines(true);
+        chart.getAxisLeft().setGridColor(requireContext().getColor(R.color.md_theme_outline_variant));
+        chart.getDescription().setEnabled(false);
+        chart.getLegend().setEnabled(true);
+        chart.setTouchEnabled(true);
+        chart.setDragEnabled(false);
+        chart.setScaleEnabled(false);
+        chart.animateX(500);
+        chart.invalidate();
+    }
+
+    private void updateToggle() {
+        boolean isExpense = "EXPENSE".equals(chartType);
+        binding.btnStatExpense.setBackgroundResource(isExpense ? R.drawable.bg_segment_selected : 0);
+        binding.btnStatIncome.setBackgroundResource(!isExpense ? R.drawable.bg_segment_selected : 0);
+        binding.btnStatExpense.setTextColor(requireContext().getColor(
+                isExpense ? R.color.md_theme_primary : R.color.md_theme_on_surface_variant));
+        binding.btnStatIncome.setTextColor(requireContext().getColor(
+                !isExpense ? R.color.md_theme_primary : R.color.md_theme_on_surface_variant));
+
+        // 차트 타이틀 & 비교 카드 라벨 동기화
+        binding.tvChartTitle.setText(isExpense
+                ? R.string.statistics_spending_trend : R.string.statistics_income_trend);
+        binding.tvComparisonLabel.setText(isExpense
+                ? R.string.statistics_spending : R.string.statistics_income_label);
     }
 
     @Override

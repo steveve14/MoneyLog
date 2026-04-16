@@ -11,18 +11,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.moneylog.R;
 import com.moneylog.data.db.entity.CategoryEntity;
 import com.moneylog.data.db.entity.RecurringEntity;
 import com.moneylog.ui.adapter.RecurringAdapter;
 import com.moneylog.ui.viewmodel.RecurringViewModel;
-import com.moneylog.util.FormatUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ public class RecurringFragment extends Fragment implements RecurringAdapter.OnRe
 
     private RecurringViewModel viewModel;
     private RecurringAdapter adapter;
+    private ItemTouchHelper itemTouchHelper;
     private RecyclerView rvRecurring;
     private TextView tvEmpty;
     private TextView btnExpense;
@@ -67,6 +69,34 @@ public class RecurringFragment extends Fragment implements RecurringAdapter.OnRe
         adapter = new RecurringAdapter(this);
         rvRecurring.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvRecurring.setAdapter(adapter);
+
+        // 드래그 앤 드롭
+        ItemTouchHelper.SimpleCallback touchCallback = new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView rv,
+                                  @NonNull RecyclerView.ViewHolder from,
+                                  @NonNull RecyclerView.ViewHolder to) {
+                return adapter.moveItem(from.getAdapterPosition(), to.getAdapterPosition());
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder holder, int direction) { }
+
+            @Override
+            public void clearView(@NonNull RecyclerView rv, @NonNull RecyclerView.ViewHolder h) {
+                super.clearView(rv, h);
+                viewModel.updateSortOrders(adapter.getReorderedList());
+            }
+
+            @Override
+            public boolean isLongPressDragEnabled() {
+                return false;
+            }
+        };
+        itemTouchHelper = new ItemTouchHelper(touchCallback);
+        itemTouchHelper.attachToRecyclerView(rvRecurring);
+        adapter.setDragStartListener(holder -> itemTouchHelper.startDrag(holder));
 
         // Segment toggle
         updateSegmentToggle();
@@ -123,6 +153,7 @@ public class RecurringFragment extends Fragment implements RecurringAdapter.OnRe
 
     private void submitList(List<RecurringEntity> items) {
         if (items == null || items.isEmpty()) {
+            tvEmpty.setText(R.string.empty_recurring_hint);
             tvEmpty.setVisibility(View.VISIBLE);
             rvRecurring.setVisibility(View.GONE);
         } else {
@@ -145,16 +176,17 @@ public class RecurringFragment extends Fragment implements RecurringAdapter.OnRe
     @Override
     public void onToggleActive(long id, boolean active) {
         viewModel.setActive(id, active);
+        Snackbar.make(requireView(),
+                active ? R.string.recurring_activated : R.string.recurring_deactivated,
+                Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onLongPress(RecurringEntity item) {
-        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MoneyLog_Dialog)
-                .setTitle(R.string.delete)
-                .setMessage(R.string.recurring_delete_confirm_msg)
-                .setPositiveButton(R.string.delete, (d, w) -> viewModel.delete(item.id))
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+    public void onEdit(RecurringEntity item) {
+        Bundle args = new Bundle();
+        args.putLong("recurringId", item.id);
+        Navigation.findNavController(requireView())
+                .navigate(R.id.action_recurring_to_form, args);
     }
 
     @Override

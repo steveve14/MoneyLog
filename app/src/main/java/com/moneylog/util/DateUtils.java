@@ -66,4 +66,9 @@ public final class DateUtils {
     public static String nextMonth(String yearMonth) {
         return YearMonth.parse(yearMonth, YEAR_MONTH_FMT).plusMonths(1).format(YEAR_MONTH_FMT);
     }
+
+    /** N개월 전 1일 → "yyyy-MM-01" (쿼리 시작 날짜용) */
+    public static String monthsAgo(String yearMonth, int months) {
+        return YearMonth.parse(yearMonth, YEAR_MONTH_FMT).minusMonths(months).atDay(1).format(DATE_FMT);
+    }
 }

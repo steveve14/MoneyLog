@@ -1,9 +1,9 @@
 # MoneyLog - 개발 TODO 리스트
 
-> **최종 업데이트**: 2026-04-15
+> **최종 업데이트**: 2026-04-16
 > **디자인 시스템**: "The Sovereign Ledger" (High-End Editorial)
-> **기술 스택**: Java 17 + Material 3 XML + Data Binding (Compose 미사용)
-> **DB 버전**: 3 (budgets 테이블 제거됨)
+> **기술 스택**: Java 17 + Material 3 XML + ViewBinding (Compose 미사용)
+> **DB 버전**: 4 (v3→v4: recurring_transactions에 sort_order 추가)
 
 ---
 
@@ -134,7 +134,7 @@
 - [x] `TransactionFormFragment.java` + `fragment_transaction_form.xml` — 거래 등록/수정 폼
 - [x] `TransactionAdapter.java` — 거래 목록 RecyclerView 어댑터
 - [x] `MainActivity.java` — NavController + BottomNavigationView 연결
-- [ ] 거래 검색 (메모 키워드, 금액 범위, 카테고리 필터) — P1
+- [x] 거래 검색 (메모 키워드, 금액 범위, 카테고리 필터) — `TransactionFragment`에서 메모/금액/카테고리명 필터링 구현
 
 ### 2-8. 카테고리 관리 UI (F04)
 
@@ -144,11 +144,11 @@
 - [x] 커스텀 카테고리 추가 — BottomSheetDialog (`bottom_sheet_category.xml`)
 - [x] 카테고리 수정·삭제 (아이콘, 이름)
 - [x] 지출/수입 세그먼트 토글 배경색 분리 (`surface_container`로 구분)
-- [ ] 카테고리 드래그 앤 드롭 정렬 — P2
+- [x] 카테고리 드래그 앤 드롭 정렬 — `ItemTouchHelper` + `CategoryViewModel.updateSortOrders()` 구현
 
 ---
 
-## Phase 3: 자동화 — 고정 수입·지출, WorkManager 반복 거래 (1주) ⚙️ 일부 완료
+## Phase 3: 자동화 — 고정 수익·지출, WorkManager 반복 거래 (1주) ✅ 완료
 
 ### 3-1. 반복 거래 데이터 레이어 ✅
 
@@ -156,17 +156,21 @@
 - [x] `RecurringDao.java` — 전체 조회, 타입별 조회, 활성화/비활성화, WorkManager용 동기 조회
 - [x] `RecurringRepository.java` — 반복 거래 관리 + 자동 실행 로직
 
-### 3-2. 반복 거래 UI (F03) ❌ 미구현
+### 3-2. 반복 거래 UI (F03) ✅
 
 > **디자인 참조**: stitch/fixed_transactions_serene/
 
-- [ ] `RecurringFragment.java` — 반복 거래 목록 화면 (수입/지출 탭, 활성/비활성 토글)
-- [ ] `fragment_recurring.xml` — 반복 거래 목록 레이아웃
-- [ ] `RecurringFormFragment.java` — 반복 거래 등록/수정 폼 (금액, 카테고리, 주기, 메모)
-- [ ] `fragment_recurring_form.xml` — 반복 거래 폼 레이아웃
-- [ ] `RecurringAdapter.java` — 반복 거래 목록 RecyclerView 어댑터
-- [ ] `nav_graph.xml`에 반복 거래 destination 추가
-- [ ] 설정 화면에서 "반복 거래 관리" 네비게이션 링크 추가
+- [x] `RecurringFragment.java` + `fragment_recurring.xml` — 반복 거래 목록 화면 (활성/비활성 토글, 드래그 앤 드롭 정렬)
+- [x] `RecurringAdapter.java` — 반복 거래 목록 RecyclerView 어댑터 (드래그 핸들, ItemTouchHelper)
+- [x] ~~`RecurringFormFragment.java`~~ — 별도 폼 없이 `TransactionFormFragment`에서 고정거래 등록/수정 통합 처리
+  - `recurringId` NavArg로 편집 모드 진입
+  - 반복 주기 선택: DAILY / WEEKLY / MONTHLY / YEARLY 칩 그룹
+  - 스케줄 입력: 요일 칩(WEEKLY), 일(MONTHLY), 월+일(YEARLY)
+  - 고정거래 토글 시 날짜 입력 비활성화 (alpha 0.4)
+  - 기존 거래 수정 시 고정거래 스위치 비활성화
+- [x] `nav_graph.xml`에 `recurringFragment` destination 추가
+- [x] 설정 화면에서 "고정거래 관리" 네비게이션 링크 추가
+- [x] RecurringViewModel에 `updateSortOrders()` — 드래그 후 DB sort_order 동기화
 
 ### 3-3. WorkManager 자동 실행 ✅
 
@@ -193,7 +197,6 @@
   - 카테고리별 막대 그래프 (Top 8) + 원형 차트 (`PieChartView`)
   - 최근 거래 3건 표시
 - [x] `StatisticsViewModel.java` + `StatisticsFragment.java` + `fragment_statistics.xml` — 통계 화면 (Java/XML)
-- [ ] ~~`BudgetViewModel.java` + `BudgetFragment.java` + `fragment_budget.xml`~~ — ❌ 예산 기능 제거됨 (DB v3)
 
 #### 대시보드 디자인 리뉴얼 (미적용)
 
@@ -203,13 +206,18 @@
 - [ ] **AI Summary 카드**: secondary-fixed-dim 글래스모피즘, sparkle 아이콘
 - [ ] **Spending Distribution**: 도넛 차트 + 중앙 "Top Category" + 범례 리스트
 
-### 4-2. 통계·분석 (F06) ⚙️ 기본 구현 완료
+### 4-2. 통계·분석 (F06) ✅ 기본 + 확장 구현 완료
 
 > **디자인 참조**: stitch/statistics_serene/
 
-- [x] `StatisticsViewModel.java` — 월별 합계 + 카테고리별 지출 집계
+- [x] `StatisticsViewModel.java` — 월별 합계 + 카테고리별 지출/수익 집계 (type 필드 동적 필터)
 - [x] `StatisticsFragment.java` + `fragment_statistics.xml` — 원형 차트 + 카테고리 분류 리스트 + 월 선택
 - [x] `item_statistics_category.xml` — 카테고리별 진행 바 + 금액/비율 표시
+- [x] 지출/수익 토글 — 월 네비게이션 하단 세그먼트 버튼 (`btnStatExpense` / `btnStatIncome`)
+- [x] 토글에 따른 동적 레이블 변경 ("지출 추이" ↔ "수익 추이", "지출" ↔ "수익")
+- [x] MPAndroidChart 도넛 차트 클릭 시 중앙 금액 표시 (Dashboard와 동일 패턴)
+- [x] 전월 대비 비교 카드 (증감액, 증감률)
+- [x] 헤더 숨김 — 스크롤 시 `llHeader` 숨김/표시 (ViewTreeObserver)
 
 #### 통계 디자인 리뉴얼 (미적용)
 
@@ -272,6 +280,7 @@
 - [x] AI Insights 섹션 (Gemini Nano 지원 상태 표시)
 - [x] 카테고리 전체 삭제 / 기본값 리셋
 - [x] 전체 데이터 리셋 기능
+- [x] 고정거래 관리 네비게이션 링크 추가
 
 ### 5-4. 설정 화면 디자인 리뉴얼 (미적용)
 
@@ -343,6 +352,8 @@
 - [x] `YearMonthPickerDialog.java` — 년/월 선택 다이얼로그 (NumberPicker 기반)
 - [x] `LocaleHelper.java` — 다국어 지원 (한국어/영어/일본어) + 온보딩 완료 여부 관리
 - [x] `DataManagementHelper.java` — CSV 내보내기/가져오기 + 데이터 정리
+  - [x] CSV 내보내기에 `[RECURRING]` 섹션 포함 (intervalType/dayOfMonth/monthOfYear/isActive/sortOrder)
+  - [x] CSV 가져오기에서 `[RECURRING]` 섹션 파싱 (구 형식 isAuto 기반 수정 호환)
 
 ---
 
@@ -367,7 +378,7 @@
 - [ ] `TransactionRepository` 단위 테스트
 - [ ] `RecurringRepository` — 자동 실행 로직 테스트 (밀린 달 처리)
 - [ ] `BackupRepository` — 백업 & 복원 테스트
-- [ ] Room 마이그레이션 테스트 (`room-testing`, v1→v2→v3)
+- [ ] Room 마이그레이션 테스트 (`room-testing`, v1→v2→v3→v4)
 
 ---
 
@@ -386,25 +397,150 @@
 
 ---
 
+## UX 개선 ✅ 완료
+
+### 용어 통일
+
+- [x] "수입" → "수익" 전체 리네이밍 (ko/en/ja strings.xml 포함)
+  - `transaction_income`, `dashboard_monthly_income`, `recurring_fixed_income`, `ai_total_income` 등
+
+### 차트 개선
+
+- [x] MPAndroidChart 도넛 차트 범례: 색상 + 카테고리명만 표시 (금액/비율 제거)
+- [x] 차트 범례 하단 마진 추가
+- [x] 대시보드 ↔ 통계 도넛 차트 클릭 동작 통일 (center text 금액 표시)
+
+### 스크롤 UX
+
+- [x] 글로벌 스크롤 탑 FAB — `activity_main.xml` + `MainActivity.java`
+  - 모든 메인 탭에서 동일 위치에 표시 (BottomNav 상단 24dp)
+  - ScrollView / RecyclerView 자동 감지
+  - 400px 이상 스크롤 시 fade-in, 돌아갈 때 fade-out
+  - 페이지 전환 시 리스너 자동 재연결
+- [x] 통계 화면 헤더 숨김 — 스크롤 시 `llHeader` 숨김/표시
+- [x] 거래내역 추가(fab_add) FAB 제거 (하단 네비 "추가" 탭으로 통합)
+
+### 거래 폼 개선
+
+- [x] "거래일" → "날짜" 레이블 변경
+- [x] 고정거래 토글 시 날짜 입력 비활성화 (alpha 0.4, 클릭 불가)
+- [x] 거래 수정 모드에서 고정거래 스위치 비활성화 (switchRecurring.setEnabled(false))
+- [x] 중복 거래 등록 방지 로직
+
+---
+
+## 미완료 목록
+
+> 전체 TODO에서 완료되지 않은 항목을 Phase/섹션별로 정리
+
+### Phase 2: 코어 기능
+
+#### 디자인 시스템 & 테마
+
+- [ ] **Ambient Shadow**: FAB/Modal용 — blur 32px, opacity 4%, Indigo 틴트
+- [ ] `TopAppBar` 공통 컴포넌트 — Glassmorphism (surface_bright 80% opacity + backdrop-blur 16px)
+- [ ] `EditorialMargin` — 좌우 패딩: `max(1.5rem, 5vw)` 대응값
+
+### Phase 3: 자동화
+
+- [ ] 대시보드 "Pending Updates" 카드에 자동 등록 알림 + "Confirm Now" 버튼 — Phase 4
+
+### Phase 4: 대시보드·통계
+
+#### 대시보드 디자인 리뉴얼 (미적용)
+
+- [ ] "FINANCIAL OVERVIEW" 오버라인 + "April 2026" Headline (에디토리얼 좌측 정렬)
+- [ ] **Total Balance 히어로 카드**: primary 그라디언트 배경, 잔액 Display-LG (흰색)
+- [ ] **Pending Updates 카드**: 자동 등록 알림 — "N Auto-registered transactions detected", "Confirm Now" 버튼
+- [ ] **AI Summary 카드**: secondary-fixed-dim 글래스모피즘, sparkle 아이콘
+- [ ] **Spending Distribution**: 도넛 차트 + 중앙 "Top Category" + 범례 리스트
+
+#### 통계 디자인 리뉴얼 (미적용)
+
+- [ ] **AI Smart Analysis 카드**: 글래스모피즘 + sparkle 아이콘, 소비 분석 요약
+- [ ] **전월 대비 메트릭 카드 2개**: "MONTHLY TOTAL +5.2%" / "DINING FOCUS -3.1%"
+- [ ] **Spending Trend 차트**: 라인 차트 (월별 추이, "Last 6 Months") — P1
+- [ ] 전월 대비 카테고리별 증감 메트릭 카드 — P2
+- [ ] 일별 지출 히트맵 (캘린더 뷰) — P2
+
+#### 예산 관리 (F05) ❌ 미구현
+
+- [ ] `BudgetEntity.java` — 예산 엔티티 재정의 + DB v4 마이그레이션
+- [ ] `BudgetDao.java` — 예산 CRUD + 월별 조회
+- [ ] `BudgetRepository.java` — 예산 관리 로직
+- [ ] `BudgetViewModel.java` — 예산 ViewModel
+- [ ] `BudgetFragment.java` + `fragment_budget.xml` — 예산 관리 화면
+- [ ] 예산 소진율 프로그레스 바 컴포넌트 (색상 단계: primary → tertiary → error)
+- [ ] 월별 총 예산 설정 — P1
+- [ ] 카테고리별 예산 설정 (식비 30만, 교통 10만 등) — P1
+- [ ] 카테고리 태그 분류 (Essential / Utility / Warning) — P1
+- [ ] 예산 초과 알림 (80%/100%) — Android Notification — P2
+
+### Phase 5: 백업 & 배포
+
+#### Google 인증
+
+- [ ] Google Cloud Console OAuth 2.0 클라이언트 ID 등록
+- [ ] SHA-1 지문 등록 (debug + release)
+
+#### Google Drive 백업·복원 (F07)
+
+- [ ] 백업 목록 조회 (날짜·크기 확인) — P2
+- [ ] 자동 백업 (WorkManager 주기적 실행: 매일/매주) — P2
+- [ ] 백업 파일 AES 암호화 — P2
+
+#### 설정 화면 디자인 리뉴얼 (미적용)
+
+- [ ] `SettingsViewModel.kt` — 설정 ViewModel
+- [ ] 설정 화면 디자인 리뉴얼 (에디토리얼 스타일)
+
+#### 배포 준비
+
+- [ ] 릴리스 서명 키 생성
+- [ ] `app/build.gradle.kts` release 빌드 설정
+- [ ] ProGuard/R8 난독화 규칙
+- [ ] Google Play Console 앱 등록
+- [ ] 스크린샷 / 스토어 설명 준비
+- [ ] GitHub Actions CI/CD (main → 자동 빌드 → Play Store 업로드)
+
+### Phase 7: 수익화 — AdMob
+
+- [ ] Google AdMob 계정 + 앱 등록
+- [ ] `AdBanner.kt` — 하단 네비 바 위 320x50 배너 광고 컴포넌트 — P2
+- [ ] 인터스티셜 광고 (통계 페이지 진입 시) — P2
+- [ ] 광고 제거 옵션 (향후 유료 기능) — P2
+
+### 테스트
+
+- [ ] `TransactionDao` 단위 테스트 (Room in-memory DB)
+- [ ] `CategoryDao` 단위 테스트
+- [ ] `RecurringDao` 단위 테스트
+- [ ] `TransactionRepository` 단위 테스트
+- [ ] `RecurringRepository` — 자동 실행 로직 테스트 (밀린 달 처리)
+- [ ] `BackupRepository` — 백업 & 복원 테스트
+- [ ] Room 마이그레이션 테스트 (`room-testing`, v1→v2→v3→v4)
+
+---
+
 ## 현재 프로젝트 요약
 
-### 구현된 소스 파일 (43개)
+### 구현된 소스 파일 (45개)
 
 | 분류 | 파일 | 개수 |
 |---|---|---|
 | Activity | `MainActivity.java` | 1 |
 | Application | `MoneyLogApplication.java` | 1 |
-| Fragment | Onboarding, Dashboard, Transaction, TransactionForm, Statistics, Category, Settings, AiSummary | 8 |
+| Fragment | Onboarding, Dashboard, Transaction, TransactionForm, Statistics, Category, Settings, AiSummary, Recurring | 9 |
 | ViewModel | Dashboard, Transaction, Statistics, Category, Recurring, AiSummary | 6 |
 | Repository | Transaction, Category, Recurring, Backup, AiSummary | 5 |
 | Entity | Transaction, Category, Recurring | 3 |
 | DAO + POJO | TransactionDao, CategoryDao, RecurringDao, MonthlySummary, CategorySummary, DailySummary | 6 |
-| Adapter | TransactionAdapter, CategoryAdapter, IconPickerAdapter | 3 |
+| Adapter | TransactionAdapter, CategoryAdapter, IconPickerAdapter, RecurringAdapter | 4 |
 | Widget | PieChartView | 1 |
 | Worker | RecurringWorker | 1 |
 | DI | AppModule | 1 |
 | Utility | DateUtils, FormatUtils, IconHelper, LocaleHelper, YearMonthPickerDialog, DataManagementHelper | 6 |
-| Layout XML | 18개 (Fragment 8 + Item/Component 7 + Other 3) | 18 |
+| Layout XML | 21개 (Fragment 9 + Item/Component 9 + Other 3) | 21 |
 
 ### 하단 네비게이션 탭 (5개)
 

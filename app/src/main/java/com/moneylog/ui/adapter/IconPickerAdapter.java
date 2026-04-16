@@ -92,6 +92,7 @@ public class IconPickerAdapter extends RecyclerView.Adapter<IconPickerAdapter.Vi
 
         void bind(String iconName, int drawableRes) {
             ivIcon.setImageResource(drawableRes);
+            itemView.setContentDescription(iconName);
 
             boolean selected = iconName.equals(selectedIconName);
             if (selected) {

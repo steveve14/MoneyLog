@@ -26,6 +26,7 @@ public class RecurringViewModel extends ViewModel {
     public final LiveData<List<CategoryEntity>> categories;
 
     private final MutableLiveData<RecurringEntity> editingItem = new MutableLiveData<>();
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     @Inject
     public RecurringViewModel(RecurringRepository repo, CategoryRepository categoryRepo) {
@@ -57,5 +58,13 @@ public class RecurringViewModel extends ViewModel {
 
     public void setActive(long id, boolean active) {
         repo.setActive(id, active);
+    }
+
+    public void updateSortOrders(List<RecurringEntity> items) {
+        repo.updateSortOrders(items);
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 }
