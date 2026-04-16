@@ -118,9 +118,10 @@ dependencies {
 
     // --- 단위 테스트 ---
     testImplementation(libs.junit)
-    testImplementation(libs.room.testing)
 
     // --- Instrumented 테스트 ---
     androidTestImplementation(libs.junit.android.ext)
     androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.room.testing)
+    androidTestImplementation(libs.core.testing)
 }

@@ -107,3 +107,4 @@ admob                = { group = "com.google.android.gms",      name = "play-ser
 junit                = { group = "junit",                    name = "junit",          version.ref = "junit"        }
 junit-android-ext    = { group = "androidx.test.ext",        name = "junit",          version.ref = "junit-android" }
 espresso-core        = { group = "androidx.test.espresso",   name = "espresso-core",  version.ref = "espresso"     }
+core-testing         = { group = "androidx.arch.core",       name = "core-testing",   version = "2.2.0"            }

@@ -1,6 +1,6 @@
 # MoneyLog - 개발 TODO 리스트
 
-> **최종 업데이트**: 2026-04-16
+> **최종 업데이트**: 2026-04-17
 > **디자인 시스템**: "The Sovereign Ledger" (High-End Editorial)
 > **기술 스택**: Java 17 + Material 3 XML + ViewBinding (Compose 미사용)
 > **DB 버전**: 4 (v3→v4: recurring_transactions에 sort_order 추가)
@@ -101,7 +101,6 @@
   - 섹션 구분: 배경색 변화 (surface ↔ surface-container-low)
 - [x] **Tonal Layering**: 카드 = surface-container-lowest(#FFFFFF) on surface-container-low(#F3F4F5)
 - [x] **카드 스타일**: xxl (1.5rem = 24dp) 라운드 코너, 드롭 섀도 없음 (`Widget.MoneyLog.Card`)
-- [ ] **Ambient Shadow**: FAB/Modal용 — blur 32px, opacity 4%, Indigo 틴트
 - [x] **버튼 스타일**:
   - Primary: `Widget.MoneyLog.Button.Primary` (full 999dp 라운딩)
   - Secondary: `Widget.MoneyLog.Button.Outlined`
@@ -116,8 +115,6 @@
 - [x] `IconHelper.java` — Material Symbols Outlined 기반 카테고리 아이콘 매핑
 - [x] `IconPickerAdapter.java` — 아이콘 선택 그리드 RecyclerView 어댑터
 - [x] XML 스타일 기반 오버라인/그라디언트 버튼 (`Widget.MoneyLog.Button.Primary`, `bg_primary_gradient`)
-- [ ] `TopAppBar` 공통 컴포넌트 — Glassmorphism (surface_bright 80% opacity + backdrop-blur 16px)
-- [ ] `EditorialMargin` — 좌우 패딩: `max(1.5rem, 5vw)` 대응값
 
 #### 유틸리티
 
@@ -180,11 +177,10 @@
 - [x] 자동 등록된 거래에 `is_auto = true` 표시
 - [x] `MoneyLogApplication.java` — HiltWorkerFactory 통합 + WorkManager 스케줄링
 - [x] AndroidManifest.xml — WorkManager 자동 초기화 비활성화 (Hilt 수동 초기화)
-- [ ] 대시보드 "Pending Updates" 카드에 자동 등록 알림 + "Confirm Now" 버튼 — Phase 4
 
 ---
 
-## Phase 4: 대시보드·통계 — 차트, 예산, 월별 분석 (1주) ⚙️ 일부 완료
+## Phase 4: 대시보드·통계 — 차트, 월별 분석 (1주) ✅ 완료
 
 ### 4-1. 대시보드 (메인 화면) ✅
 
@@ -198,14 +194,6 @@
   - 최근 거래 3건 표시
 - [x] `StatisticsViewModel.java` + `StatisticsFragment.java` + `fragment_statistics.xml` — 통계 화면 (Java/XML)
 
-#### 대시보드 디자인 리뉴얼 (미적용)
-
-- [ ] "FINANCIAL OVERVIEW" 오버라인 + "April 2026" Headline (에디토리얼 좌측 정렬)
-- [ ] **Total Balance 히어로 카드**: primary 그라디언트 배경, 잔액 Display-LG (흰색)
-- [ ] **Pending Updates 카드**: 자동 등록 알림 — "N Auto-registered transactions detected", "Confirm Now" 버튼
-- [ ] **AI Summary 카드**: secondary-fixed-dim 글래스모피즘, sparkle 아이콘
-- [ ] **Spending Distribution**: 도넛 차트 + 중앙 "Top Category" + 범례 리스트
-
 ### 4-2. 통계·분석 (F06) ✅ 기본 + 확장 구현 완료
 
 > **디자인 참조**: stitch/statistics_serene/
@@ -218,30 +206,6 @@
 - [x] MPAndroidChart 도넛 차트 클릭 시 중앙 금액 표시 (Dashboard와 동일 패턴)
 - [x] 전월 대비 비교 카드 (증감액, 증감률)
 - [x] 헤더 숨김 — 스크롤 시 `llHeader` 숨김/표시 (ViewTreeObserver)
-
-#### 통계 디자인 리뉴얼 (미적용)
-
-- [ ] **AI Smart Analysis 카드**: 글래스모피즘 + sparkle 아이콘, 소비 분석 요약
-- [ ] **전월 대비 메트릭 카드 2개**: "MONTHLY TOTAL +5.2%" / "DINING FOCUS -3.1%"
-- [ ] **Spending Trend 차트**: 라인 차트 (월별 추이, "Last 6 Months") — P1
-- [ ] 전월 대비 카테고리별 증감 메트릭 카드 — P2
-- [ ] 일별 지출 히트맵 (캘린더 뷰) — P2
-
-### 4-3. 예산 관리 (F05) ❌ 미구현 (DB에서 제거됨)
-
-> **디자인 참조**: stitch/budget_management_serene/
-> ⚠️ DB v3 마이그레이션에서 budgets 테이블이 제거됨. 재구현 시 DB v4 마이그레이션 필요.
-
-- [ ] `BudgetEntity.java` — 예산 엔티티 재정의 + DB v4 마이그레이션
-- [ ] `BudgetDao.java` — 예산 CRUD + 월별 조회
-- [ ] `BudgetRepository.java` — 예산 관리 로직
-- [ ] `BudgetViewModel.java` — 예산 ViewModel
-- [ ] `BudgetFragment.java` + `fragment_budget.xml` — 예산 관리 화면
-- [ ] 예산 소진율 프로그레스 바 컴포넌트 (색상 단계: primary → tertiary → error)
-- [ ] 월별 총 예산 설정 — P1
-- [ ] 카테고리별 예산 설정 (식비 30만, 교통 10만 등) — P1
-- [ ] 카테고리 태그 분류 (Essential / Utility / Warning) — P1
-- [ ] 예산 초과 알림 (80%/100%) — Android Notification — P2
 
 ---
 
@@ -432,49 +396,6 @@
 ## 미완료 목록
 
 > 전체 TODO에서 완료되지 않은 항목을 Phase/섹션별로 정리
-
-### Phase 2: 코어 기능
-
-#### 디자인 시스템 & 테마
-
-- [ ] **Ambient Shadow**: FAB/Modal용 — blur 32px, opacity 4%, Indigo 틴트
-- [ ] `TopAppBar` 공통 컴포넌트 — Glassmorphism (surface_bright 80% opacity + backdrop-blur 16px)
-- [ ] `EditorialMargin` — 좌우 패딩: `max(1.5rem, 5vw)` 대응값
-
-### Phase 3: 자동화
-
-- [ ] 대시보드 "Pending Updates" 카드에 자동 등록 알림 + "Confirm Now" 버튼 — Phase 4
-
-### Phase 4: 대시보드·통계
-
-#### 대시보드 디자인 리뉴얼 (미적용)
-
-- [ ] "FINANCIAL OVERVIEW" 오버라인 + "April 2026" Headline (에디토리얼 좌측 정렬)
-- [ ] **Total Balance 히어로 카드**: primary 그라디언트 배경, 잔액 Display-LG (흰색)
-- [ ] **Pending Updates 카드**: 자동 등록 알림 — "N Auto-registered transactions detected", "Confirm Now" 버튼
-- [ ] **AI Summary 카드**: secondary-fixed-dim 글래스모피즘, sparkle 아이콘
-- [ ] **Spending Distribution**: 도넛 차트 + 중앙 "Top Category" + 범례 리스트
-
-#### 통계 디자인 리뉴얼 (미적용)
-
-- [ ] **AI Smart Analysis 카드**: 글래스모피즘 + sparkle 아이콘, 소비 분석 요약
-- [ ] **전월 대비 메트릭 카드 2개**: "MONTHLY TOTAL +5.2%" / "DINING FOCUS -3.1%"
-- [ ] **Spending Trend 차트**: 라인 차트 (월별 추이, "Last 6 Months") — P1
-- [ ] 전월 대비 카테고리별 증감 메트릭 카드 — P2
-- [ ] 일별 지출 히트맵 (캘린더 뷰) — P2
-
-#### 예산 관리 (F05) ❌ 미구현
-
-- [ ] `BudgetEntity.java` — 예산 엔티티 재정의 + DB v4 마이그레이션
-- [ ] `BudgetDao.java` — 예산 CRUD + 월별 조회
-- [ ] `BudgetRepository.java` — 예산 관리 로직
-- [ ] `BudgetViewModel.java` — 예산 ViewModel
-- [ ] `BudgetFragment.java` + `fragment_budget.xml` — 예산 관리 화면
-- [ ] 예산 소진율 프로그레스 바 컴포넌트 (색상 단계: primary → tertiary → error)
-- [ ] 월별 총 예산 설정 — P1
-- [ ] 카테고리별 예산 설정 (식비 30만, 교통 10만 등) — P1
-- [ ] 카테고리 태그 분류 (Essential / Utility / Warning) — P1
-- [ ] 예산 초과 알림 (80%/100%) — Android Notification — P2
 
 ### Phase 5: 백업 & 배포
 
